@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ViewModels.Utility", "ViewM
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ViewModels.Utility.Tests", "ViewModels.Utility.Tests\ViewModels.Utility.Tests.csproj", "{6D8EA9DE-F46B-4B81-805F-0BFBDEAB2F14}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Views.Utility", "Views.Utility\Views.Utility.csproj", "{6B9279A9-C6A6-4CEC-B0D1-32E09C8F97A2}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{6D8EA9DE-F46B-4B81-805F-0BFBDEAB2F14}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6D8EA9DE-F46B-4B81-805F-0BFBDEAB2F14}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6D8EA9DE-F46B-4B81-805F-0BFBDEAB2F14}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6B9279A9-C6A6-4CEC-B0D1-32E09C8F97A2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6B9279A9-C6A6-4CEC-B0D1-32E09C8F97A2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6B9279A9-C6A6-4CEC-B0D1-32E09C8F97A2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6B9279A9-C6A6-4CEC-B0D1-32E09C8F97A2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
