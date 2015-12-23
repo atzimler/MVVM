@@ -70,7 +70,7 @@ namespace ViewModels.Utility
             {
                 IsValidChanged(this, EventArgs.Empty);
             }
-            OnPropertyChanged(vm => vm.IsValid);
+            OnPropertyChanged(nameof(IsValid));
         }
         
         protected abstract void UnbindModel();

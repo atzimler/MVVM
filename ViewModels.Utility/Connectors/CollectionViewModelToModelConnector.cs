@@ -183,7 +183,7 @@ namespace ViewModels.Utility.Connectors
             {
                 IsValidChanged(this, EventArgs.Empty);
             }
-            OnPropertyChanged(obj => obj.IsValid);
+            OnPropertyChanged(nameof(IsValid));
         }
         #endregion
 
