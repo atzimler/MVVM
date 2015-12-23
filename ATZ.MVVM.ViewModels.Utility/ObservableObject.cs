@@ -6,7 +6,7 @@ using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ViewModels.Utility
+namespace ATZ.MVVM.ViewModels.Utility
 {
     public abstract class ObservableObject<T> : INotifyPropertyChanged
     {

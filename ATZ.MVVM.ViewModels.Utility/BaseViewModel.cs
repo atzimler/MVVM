@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ViewModels.Utility
+namespace ATZ.MVVM.ViewModels.Utility
 {
     public abstract class BaseViewModel<T> : ObservableObject<BaseViewModel<T>>, IVerifiable
         where T : class

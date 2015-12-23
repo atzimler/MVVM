@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ViewModels.Utility.Connectors
+namespace ATZ.MVVM.ViewModels.Utility.Connectors
 {
     public class CollectionViewModelToModelConnector<VM, M> : ObservableObject<CollectionViewModelToModelConnector<VM, M>>, IVerifiable
         where VM : BaseViewModel<M>, new()

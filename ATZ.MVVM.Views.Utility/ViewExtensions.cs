@@ -1,11 +1,8 @@
-﻿using Views.Utility.Interfaces;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using ATZ.MVVM.Views.Utility.Interfaces;
 
-namespace Views.Utility
+namespace ATZ.MVVM.Views.Utility
 {
     public static class ViewExtensions
     {

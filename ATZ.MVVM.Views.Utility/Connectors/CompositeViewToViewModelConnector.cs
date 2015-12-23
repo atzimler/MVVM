@@ -1,12 +1,8 @@
-﻿using ViewModels.Utility;
-using Views.Utility.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System;
+using ATZ.MVVM.ViewModels.Utility;
+using ATZ.MVVM.Views.Utility.Interfaces;
 
-namespace Views.Utility.Connectors
+namespace ATZ.MVVM.Views.Utility.Connectors
 {
     public class CompositeViewToViewModelConnector<V, VM, M, CV, CVM, CM>
         where CV : IView<CVM>

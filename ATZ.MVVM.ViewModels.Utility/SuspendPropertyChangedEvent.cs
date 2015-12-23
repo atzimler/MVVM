@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ViewModels.Utility
+namespace ATZ.MVVM.ViewModels.Utility
 {
     public class SuspendPropertyChangedEvent : IDisposable
     {

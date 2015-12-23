@@ -1,15 +1,12 @@
-﻿using ViewModels.Utility.Connectors;
-using NUnit.Framework;
+﻿using NUnit.Framework;
 using System;
-using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using ATZ.MVVM.ViewModels.Utility.Connectors;
 
-namespace ViewModels.Utility.Tests
+namespace ATZ.MVVM.ViewModels.Utility.Tests
 {
-    using System.Collections.ObjectModel;
-    using System.ComponentModel;
     using TConnector = CollectionViewModelToModelConnector<TestViewModel, TestModel>;
 
     [TestFixture]

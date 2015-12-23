@@ -1,16 +1,11 @@
-﻿using ViewModels.Utility;
-using Views.Utility.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using System.Collections.Specialized;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using ATZ.MVVM.ViewModels.Utility;
+using ATZ.MVVM.Views.Utility.Interfaces;
 
-namespace Views.Utility.Connectors
+namespace ATZ.MVVM.Views.Utility.Connectors
 {
     public class CollectionViewToViewModelConnector<V, VM, M>
         where V : UIElement, IView<VM>, new ()
