@@ -1,0 +1,7 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<project name="ATZ.MVVM" default="help">
+  <description>Build file for ATZ.MVVM library.</description>
+
+  <property name="project.name" value="MVVM" />
+  <include buildfile="../NAnt/ATZ.Build.xml" />
+</project>
