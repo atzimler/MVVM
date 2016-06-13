@@ -37,5 +37,10 @@ namespace ATZ.MVVM.ViewModels.Utility.Tests
         {
             return base.SuspendPropertyChangedEvent(eventHandler);
         }
+
+        public void SetWith2Parameters(int value)
+        {
+            Set(ref _propertyRaisingChangeNotification, value);
+        }
     }
 }

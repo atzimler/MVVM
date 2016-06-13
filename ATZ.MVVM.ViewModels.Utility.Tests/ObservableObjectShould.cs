@@ -21,6 +21,25 @@ namespace ATZ.MVVM.ViewModels.Utility.Tests
         }
 
         [Test]
+        public void FirePropertyChangeNotificationWhenUsingSetWithTwoParameters()
+        {
+            var eventFired = false;
+
+            var vm = new TestViewModel();
+            vm.PropertyChanged += (obj, e) =>
+            {
+                Assert.AreEqual("SetWith2Parameters", e.PropertyName);
+                eventFired = true;
+            };
+
+            Assert.AreNotEqual(13, vm.PropertyRaisingChangeNotification);
+
+            vm.SetWith2Parameters(13);
+
+            Assert.IsTrue(eventFired);
+        }
+
+        [Test]
         public void NotFirePropertyChangedWhenValueSetIsTheSame()
         {
             var vm = new TestViewModel();
