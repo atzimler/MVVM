@@ -15,7 +15,7 @@ namespace ATZ.MVVM.ViewModels.Utility.Tests
             get { return _propertyRaisingChangeNotification; }
             set
             {
-                Set(nameof(PropertyRaisingChangeNotification), ref _propertyRaisingChangeNotification, value);
+                Set(ref _propertyRaisingChangeNotification, value);
             }
         }
 

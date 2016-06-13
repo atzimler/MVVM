@@ -11,6 +11,7 @@ namespace ATZ.MVVM.ViewModels.Utility.Tests
         private void CallCounter(object sender, PropertyChangedEventArgs e)
         {
             _callCounter++;
+            Assert.AreEqual("PropertyRaisingChangeNotification", e.PropertyName);
         }
 
         [SetUp]
