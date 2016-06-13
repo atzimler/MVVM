@@ -1,11 +1,10 @@
 ﻿using System.ComponentModel;
 using NUnit.Framework;
-using ATZ.MVVM.ViewModels.Utility;
 
 namespace ATZ.MVVM.ViewModels.Utility.Tests
 {
     [TestFixture]
-    public class ObservableObjectTests
+    public class ObservableObjectShould
     {
         private int _callCounter;
 
@@ -14,10 +13,30 @@ namespace ATZ.MVVM.ViewModels.Utility.Tests
             _callCounter++;
         }
 
-        [Test]
-        public void PropertyChangedEventIsProperlySuspended()
+        [SetUp]
+        public void SetUp()
         {
-            TestViewModel vm = new TestViewModel();
+            _callCounter = 0;
+        }
+
+        [Test]
+        public void NotFirePropertyChangedWhenValueSetIsTheSame()
+        {
+            var vm = new TestViewModel();
+            vm.PropertyChanged += CallCounter;
+
+            Assert.AreEqual(0, _callCounter);
+
+            var value = vm.PropertyRaisingChangeNotification;
+            vm.PropertyRaisingChangeNotification = value;
+
+            Assert.AreEqual(0, _callCounter);
+        }
+
+        [Test]
+        public void ProperlySuspendPropertyChangedEvent()
+        {
+            var vm = new TestViewModel();
             vm.PropertyChanged += CallCounter;
 
             Assert.AreEqual(0, _callCounter);
@@ -31,5 +50,7 @@ namespace ATZ.MVVM.ViewModels.Utility.Tests
             vm.PropertyRaisingChangeNotification++;
             Assert.AreEqual(1, _callCounter);
         }
+
+
     }
 }
