@@ -26,9 +26,6 @@ namespace ATZ.MVVM.ViewModels.Utility.Tests
         [Test]
         public void FireAdditionalPropertyChangedProperly()
         {
-            _callCounterAssertion = e => { };
-
-
             var eventAFired = false;
             var eventBFired = false;
 
@@ -65,6 +62,26 @@ namespace ATZ.MVVM.ViewModels.Utility.Tests
             vm.SetWith2Parameters(13);
 
             Assert.IsTrue(eventFired);
+        }
+
+        [Test]
+        public void NotCrashFromANullableProperty()
+        {
+            var value = 13;
+            var oo = new ObservableObjectWithPropertyOfType<int?>();
+            Assert.DoesNotThrow(() => oo.Property = value);
+
+            Assert.AreEqual(value, oo.Property);
+        }
+
+        [Test]
+        public void NotCrashFromAStringProperty()
+        {
+            var value = "Property";
+            var oo = new ObservableObjectWithPropertyOfType<string>();
+            Assert.DoesNotThrow(() => oo.Property = value);
+
+            Assert.AreEqual(value, oo.Property);
         }
 
         [Test]
@@ -105,7 +122,5 @@ namespace ATZ.MVVM.ViewModels.Utility.Tests
             vm.PropertyRaisingChangeNotification++;
             Assert.AreEqual(1, _callCounter);
         }
-
-
     }
 }

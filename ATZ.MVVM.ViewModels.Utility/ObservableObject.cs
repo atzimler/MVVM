@@ -9,6 +9,16 @@ namespace ATZ.MVVM.ViewModels.Utility
     {
         public event PropertyChangedEventHandler PropertyChanged;
 
+        private static bool SafeEqualityCheck<T>(ref T propertyStorage, T value)
+        {
+            if (typeof(T).IsValueType)
+            {
+                return propertyStorage.Equals(value);
+            }
+
+            return ReferenceEquals(propertyStorage, value);
+        }
+
         protected void OnPropertyChanged(string propertyName)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
@@ -17,7 +27,7 @@ namespace ATZ.MVVM.ViewModels.Utility
         // ReSharper disable once MemberCanBePrivate.Global => Part of the API
         protected void Set<T>(string propertyName, ref T propertyStorage, T newValue)
         {
-            if (propertyStorage.Equals(newValue)) return;
+            if (SafeEqualityCheck(ref propertyStorage, newValue)) return;
 
             propertyStorage = newValue;
             OnPropertyChanged(propertyName);
