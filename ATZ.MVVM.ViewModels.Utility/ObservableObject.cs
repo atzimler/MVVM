@@ -1,26 +1,22 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Linq.Expressions;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel;
 
 namespace ATZ.MVVM.ViewModels.Utility
 {
-    public abstract class ObservableObject<T> : INotifyPropertyChanged
+    public abstract class ObservableObject : INotifyPropertyChanged
     {
-        #region Public Events
         public event PropertyChangedEventHandler PropertyChanged;
-        #endregion
 
-        #region Protected Methods
-        protected virtual void OnPropertyChanged(string property)
+        protected void OnPropertyChanged(string property)
         {
-            if (PropertyChanged != null)
-            {
-                PropertyChanged(this, new PropertyChangedEventArgs(property));
-            }
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(property));
+        }
+
+        protected void Set<T>(string propertyName, ref T propertyStorage, T newValue)
+        {
+            if (propertyStorage.Equals(newValue)) return;
+
+            propertyStorage = newValue;
+            OnPropertyChanged(propertyName);
         }
 
         protected SuspendPropertyChangedEvent SuspendPropertyChangedEvent(PropertyChangedEventHandler eventHandler)
@@ -28,6 +24,5 @@ namespace ATZ.MVVM.ViewModels.Utility
             PropertyChanged -= eventHandler;
             return new SuspendPropertyChangedEvent(() => PropertyChanged += eventHandler);
         }
-        #endregion
     }
 }

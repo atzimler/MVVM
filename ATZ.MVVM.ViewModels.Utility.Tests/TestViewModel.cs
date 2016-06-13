@@ -1,20 +1,29 @@
 ﻿using System;
+using System.ComponentModel;
 
 namespace ATZ.MVVM.ViewModels.Utility.Tests
 {
-    class TestViewModel : BaseViewModel<TestModel>
+    internal class TestViewModel : BaseViewModel<TestModel>
     {
-        #region Public Properties
-        public bool UpdateValidityCalled { get; set; }
-        #endregion
+        private int _propertyRaisingChangeNotification;
 
-        #region Protected Methods
+        public bool UnbindModelCalled { get; private set; }
+        public bool UpdateValidityCalled { get; private set; }
+
+        public int PropertyRaisingChangeNotification
+        {
+            get { return _propertyRaisingChangeNotification; }
+            set
+            {
+                Set(nameof(PropertyRaisingChangeNotification), ref _propertyRaisingChangeNotification, value);
+            }
+        }
+
         protected override void UnbindModel()
         {
+            UnbindModelCalled = true;
         }
-        #endregion
 
-        #region Public Methods
         public override void UpdateValidity(object sender, EventArgs e)
         {
             UpdateValidityCalled = true;
@@ -23,7 +32,10 @@ namespace ATZ.MVVM.ViewModels.Utility.Tests
         public override void BindModel()
         {
         }
-        #endregion
 
+        public new SuspendPropertyChangedEvent SuspendPropertyChangedEvent(PropertyChangedEventHandler eventHandler)
+        {
+            return base.SuspendPropertyChangedEvent(eventHandler);
+        }
     }
 }

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ATZ.MVVM.ViewModels.Utility
 {
-    public abstract class BaseViewModel<T> : ObservableObject<BaseViewModel<T>>, IVerifiable
+    public abstract class BaseViewModel<T> : ObservableObject, IVerifiable
         where T : class
     {
         #region Private Variables

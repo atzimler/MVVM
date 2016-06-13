@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace ATZ.MVVM.ViewModels.Utility.Connectors
 {
-    public class CollectionViewModelToModelConnector<VM, M> : ObservableObject<CollectionViewModelToModelConnector<VM, M>>, IVerifiable
+    public class CollectionViewModelToModelConnector<VM, M> : ObservableObject, IVerifiable
         where VM : BaseViewModel<M>, new()
         where M : class
     {

@@ -41,6 +41,20 @@ namespace ATZ.MVVM.ViewModels.Utility.Tests
         }
 
         [Test]
+        public void ModelIsUnboundWhenItIsNotNull()
+        {
+            TestViewModel vm = new TestViewModel();
+            TestModel model = new TestModel();
+            Assert.IsFalse(vm.UnbindModelCalled);
+
+            vm.Model = model;
+            Assert.IsFalse(vm.UnbindModelCalled);
+
+            vm.Model = null;
+            Assert.IsTrue(vm.UnbindModelCalled);
+        }
+
+        [Test]
         public void OnPropertyChangedOnlyFiredWhenRealChangeOccurs()
         {
             TestViewModel vm = new TestViewModel();
@@ -76,6 +90,18 @@ namespace ATZ.MVVM.ViewModels.Utility.Tests
             vm.IsValid = false;
 
             Assert.IsFalse(vm.IsValid);
+        }
+
+        [Test]
+        public void RetainsModel()
+        {
+            TestViewModel vm = new TestViewModel();
+            TestModel model = new TestModel();
+
+            Assert.IsNull(vm.Model);
+
+            vm.Model = model;
+            Assert.AreEqual(model, vm.Model);
         }
     }
 }
