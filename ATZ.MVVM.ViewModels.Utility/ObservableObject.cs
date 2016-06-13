@@ -1,4 +1,6 @@
-﻿using System.ComponentModel;
+﻿using System.Collections.Generic;
+using System.ComponentModel;
+using System.Linq;
 using System.Runtime.CompilerServices;
 
 namespace ATZ.MVVM.ViewModels.Utility
@@ -21,9 +23,10 @@ namespace ATZ.MVVM.ViewModels.Utility
             OnPropertyChanged(propertyName);
         }
 
-        protected void Set<T>(ref T propertyStorage, T newValue, [CallerMemberName] string propertyName = null)
+        protected void Set<T>(ref T propertyStorage, T newValue, IEnumerable<string> additionalPropertiesChanged = null, [CallerMemberName] string propertyName = null)
         {
             Set(propertyName, ref propertyStorage, newValue);
+            additionalPropertiesChanged?.ToList().ForEach(OnPropertyChanged);
         }
 
         protected SuspendPropertyChangedEvent SuspendPropertyChangedEvent(PropertyChangedEventHandler eventHandler)

@@ -1,14 +1,22 @@
 ﻿using System;
 using System.ComponentModel;
+using NUnit.Framework;
 
 namespace ATZ.MVVM.ViewModels.Utility.Tests
 {
     internal class TestViewModel : BaseViewModel<TestModel>
     {
+        private int _a;
         private int _propertyRaisingChangeNotification;
 
         public bool UnbindModelCalled { get; private set; }
         public bool UpdateValidityCalled { get; private set; }
+
+        public int A
+        {
+            get { return _a; }
+            set { Set(ref _a, value, new[] {"B"}); }
+        }
 
         public int PropertyRaisingChangeNotification
         {
@@ -33,14 +41,20 @@ namespace ATZ.MVVM.ViewModels.Utility.Tests
         {
         }
 
-        public new SuspendPropertyChangedEvent SuspendPropertyChangedEvent(PropertyChangedEventHandler eventHandler)
+        public void NullAdditionalProperties()
         {
-            return base.SuspendPropertyChangedEvent(eventHandler);
+            Set(ref _propertyRaisingChangeNotification, _propertyRaisingChangeNotification + 1, null);
         }
 
         public void SetWith2Parameters(int value)
         {
             Set(ref _propertyRaisingChangeNotification, value);
         }
+
+        public new SuspendPropertyChangedEvent SuspendPropertyChangedEvent(PropertyChangedEventHandler eventHandler)
+        {
+            return base.SuspendPropertyChangedEvent(eventHandler);
+        }
+
     }
 }

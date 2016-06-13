@@ -1,4 +1,5 @@
-﻿using System.ComponentModel;
+﻿using System;
+using System.ComponentModel;
 using NUnit.Framework;
 
 namespace ATZ.MVVM.ViewModels.Utility.Tests
@@ -7,17 +8,44 @@ namespace ATZ.MVVM.ViewModels.Utility.Tests
     public class ObservableObjectShould
     {
         private int _callCounter;
+        private Action<PropertyChangedEventArgs> _callCounterAssertion;
 
         private void CallCounter(object sender, PropertyChangedEventArgs e)
         {
             _callCounter++;
-            Assert.AreEqual("PropertyRaisingChangeNotification", e.PropertyName);
+            _callCounterAssertion(e);
         }
 
         [SetUp]
         public void SetUp()
         {
             _callCounter = 0;
+            _callCounterAssertion = e => Assert.AreEqual("PropertyRaisingChangeNotification", e.PropertyName);
+        }
+
+        [Test]
+        public void FireAdditionalPropertyChangedProperly()
+        {
+            _callCounterAssertion = e => { };
+
+
+            var eventAFired = false;
+            var eventBFired = false;
+
+            var vm = new TestViewModel();
+            vm.PropertyChanged += (obj, e) =>
+            {
+                if (e.PropertyName == "A") eventAFired = true;
+            };
+            vm.PropertyChanged += (obj, e) =>
+            {
+                if (e.PropertyName == "B") eventBFired = true;
+            };
+
+            vm.A++;
+
+            Assert.IsTrue(eventAFired);
+            Assert.IsTrue(eventBFired);
         }
 
         [Test]
@@ -37,6 +65,13 @@ namespace ATZ.MVVM.ViewModels.Utility.Tests
             vm.SetWith2Parameters(13);
 
             Assert.IsTrue(eventFired);
+        }
+
+        [Test]
+        public void NotCrashIfAdditionalPropertiesChangedIsNull()
+        {
+            var vm = new TestViewModel();
+            Assert.DoesNotThrow(() => vm.NullAdditionalProperties());
         }
 
         [Test]
