@@ -1,6 +1,4 @@
 ﻿using NUnit.Framework;
-using System;
-using System.ComponentModel;
 
 namespace ATZ.MVVM.ViewModels.Utility.Tests
 {
@@ -10,9 +8,9 @@ namespace ATZ.MVVM.ViewModels.Utility.Tests
         [Test]
         public void IsValidChangedOnlyFiredWhenRealChangeOccurs()
         {
-            TestViewModel vm = new TestViewModel();
-            bool fired = false;
-            vm.IsValidChanged += (object obj, EventArgs e) => { fired = true; };
+            var vm = new TestViewModel();
+            var fired = false;
+            vm.IsValidChanged += (obj, e) => { fired = true; };
 
             Assert.IsFalse(vm.IsValid);
 
@@ -43,8 +41,8 @@ namespace ATZ.MVVM.ViewModels.Utility.Tests
         [Test]
         public void ModelIsUnboundWhenItIsNotNull()
         {
-            TestViewModel vm = new TestViewModel();
-            TestModel model = new TestModel();
+            var vm = new TestViewModel();
+            var model = new TestModel();
             Assert.IsFalse(vm.UnbindModelCalled);
 
             vm.Model = model;
@@ -57,9 +55,9 @@ namespace ATZ.MVVM.ViewModels.Utility.Tests
         [Test]
         public void OnPropertyChangedOnlyFiredWhenRealChangeOccurs()
         {
-            TestViewModel vm = new TestViewModel();
-            bool fired = false;
-            vm.PropertyChanged += (object obj, PropertyChangedEventArgs e) =>
+            var vm = new TestViewModel();
+            var fired = false;
+            vm.PropertyChanged += (obj, e) =>
             {
                 fired = true;
             };
