@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
+using System.Linq;
+using static System.Collections.Specialized.NotifyCollectionChangedAction;
 
 namespace ATZ.MVVM.Views.Utility.Connectors
 {
@@ -18,11 +20,6 @@ namespace ATZ.MVVM.Views.Utility.Connectors
             get { return _sourceCollection; }
             set
             {
-                if (_sourceCollection == value)
-                {
-                    return;
-                }
-
                 if (_sourceCollection != null)
                 {
                     _sourceCollection.CollectionChanged -= SourceCollectionChanged;
@@ -66,14 +63,17 @@ namespace ATZ.MVVM.Views.Utility.Connectors
         {
             _transformSourceToTarget = transformSourceToTarget;
         }
-        #endregion
 
-        #region Private Methods
+        private void CopyObjects()
+        {
+            _sourceCollection.ToList().ForEach(obj => _targetCollection.Add(_transformSourceToTarget(obj)));
+        }
+
         private void SourceCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
             switch (e.Action)
             {
-                case NotifyCollectionChangedAction.Add:
+                case Add:
                     int insertPosition = e.NewStartingIndex;
                     foreach (S obj in e.NewItems)
                     {
@@ -81,11 +81,24 @@ namespace ATZ.MVVM.Views.Utility.Connectors
                     }
                     break;
 
-                case NotifyCollectionChangedAction.Remove:
+                case Move:
+                    {
+                        var obj = _targetCollection[e.OldStartingIndex];
+                        _targetCollection.RemoveAt(e.OldStartingIndex);
+                        _targetCollection.Insert(e.NewStartingIndex, obj);
+                    }
+                    break;
+
+                case Remove:
                     foreach (S obj in e.OldItems)
                     {
                         _targetCollection.RemoveAt(e.OldStartingIndex);
                     }
+                    break;
+
+                case Reset:
+                    _targetCollection.Clear();
+                    CopyObjects();
                     break;
 
                 default:
