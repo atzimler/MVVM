@@ -143,6 +143,12 @@ namespace ATZ.MVVM.ViewModels.Utility.Connectors
                         _viewModelCollection.Add(CreateViewModelForModel(model));
                     }
                     break;
+                case NotifyCollectionChangedAction.Replace:
+                    DetachViewModel(_viewModelCollection[e.OldStartingIndex]);
+                    _viewModelCollection[e.OldStartingIndex] =
+                        CreateViewModelForModel(_modelCollection[e.OldStartingIndex]);
+                    break;
+
                 default:
                     System.Diagnostics.Debug.WriteLine("CollectionViewModelToModelConnector: {0}", e.Action);
                     break;

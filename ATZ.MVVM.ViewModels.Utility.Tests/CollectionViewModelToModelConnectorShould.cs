@@ -246,5 +246,21 @@ namespace ATZ.MVVM.ViewModels.Utility.Tests
             };
             Assert.DoesNotThrow(() => connector.AddModelWithViewModel(new TestModel(), new TestViewModel()));
         }
+
+        [Test]
+        public void BeAbleToHandleCollectionItemReplace()
+        {
+            var connector = new TConnector
+            {
+                ModelCollection = new ObservableCollection<TestModel>(),
+                ViewModelCollection = new ObservableCollection<TestViewModel>()
+            };
+            connector.ModelCollection.Add(new TestModel());
+
+            var vm = connector.ViewModelCollection[0];
+
+            connector.ModelCollection[0] = new TestModel();
+            Assert.AreNotSame(vm, connector.ViewModelCollection[0]);
+        }
     }
 }
