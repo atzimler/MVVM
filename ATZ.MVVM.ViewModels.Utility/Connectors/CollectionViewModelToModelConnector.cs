@@ -1,28 +1,20 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ATZ.MVVM.ViewModels.Utility.Connectors
 {
-    public class CollectionViewModelToModelConnector<VM, M> : ObservableObject, IVerifiable
-        where VM : BaseViewModel<M>, new()
-        where M : class
+    public class CollectionViewModelToModelConnector<TViewModel, TModel> : ObservableObject, IVerifiable
+        where TViewModel : BaseViewModel<TModel>, new()
+        where TModel : class
     {
-        #region Public Delegates
-        public delegate void ViewModelBinder(VM vm);
-        #endregion
+        public delegate void ViewModelBinder(TViewModel vm);
 
-        #region Private Variables
         private bool _isValid;
-        private ObservableCollection<M> _modelCollection;
-        private ObservableCollection<VM> _viewModelCollection;
-        #endregion
+        private ObservableCollection<TModel> _modelCollection;
+        private ObservableCollection<TViewModel> _viewModelCollection;
 
-        #region Public Properties
         public ViewModelBinder BindViewModel { get; set; }
 
         public bool IsValid
@@ -30,56 +22,62 @@ namespace ATZ.MVVM.ViewModels.Utility.Connectors
             get { return _isValid; }
             set 
             {
-                if (_isValid != value)
+                if (_isValid == value)
                 {
-                    _isValid = value;
-                    OnIsValidChanged();
+                    return;
                 }
+
+                _isValid = value;
+                OnIsValidChanged();
             }
         }
 
         public event EventHandler IsValidChanged;
 
-        public ObservableCollection<M> ModelCollection
+        public ObservableCollection<TModel> ModelCollection
         {
             get { return _modelCollection; }
             set
             {
-                if (_modelCollection != value)
+                if (_modelCollection == value)
                 {
-                    UnbindModelCollection();
-
-                    _modelCollection = value;
-
-                    BindModelCollection();
+                    return;
                 }
+
+                UnbindModelCollection();
+
+                _modelCollection = value;
+
+                BindModelCollection();
             }
         }
 
         public ViewModelBinder UnbindViewModel { get; set; }
 
-        public ObservableCollection<VM> ViewModelCollection
+        public ObservableCollection<TViewModel> ViewModelCollection
         {
             get { return _viewModelCollection; }
             set
             {
-                if (_viewModelCollection != value)
+                if (_viewModelCollection == value)
                 {
-                    _viewModelCollection = value;
-                    ResetViewModelCollectionToModelCollection();
+                    return;
                 }
-            }
-        }
-        #endregion
 
-        #region Private Methods
-        private void BindModelCollection()
-        {
-            if (_modelCollection != null)
-            {
-                _modelCollection.CollectionChanged += ModelCollectionChanged;
+                _viewModelCollection = value;
                 ResetViewModelCollectionToModelCollection();
             }
+        }
+
+        private void BindModelCollection()
+        {
+            if (_modelCollection == null)
+            {
+                return;
+            }
+
+            _modelCollection.CollectionChanged += ModelCollectionChanged;
+            ResetViewModelCollectionToModelCollection();
         }
 
         private void ClearViewModelCollection()
@@ -88,10 +86,9 @@ namespace ATZ.MVVM.ViewModels.Utility.Connectors
             _viewModelCollection.Clear();
         }
 
-        private VM CreateViewModelForModel(M model)
+        private TViewModel CreateViewModelForModel(TModel model)
         {
-            VM viewModel = new VM();
-            viewModel.Model = model;
+            var viewModel = new TViewModel { Model = model };
             // TODO: Replacing the viewModel.Model (above) actually executes the BindModel() below (check) and this is the only result why BindModel() is public on BaseViewModel. However,
             // the other reason could be that in this case it is similar - but results in duplicate BindModel() which could cause problems (at least performance).
             viewModel.BindModel();
@@ -105,7 +102,7 @@ namespace ATZ.MVVM.ViewModels.Utility.Connectors
             return viewModel;
         }
 
-        private void DetachViewModel(VM viewModel)
+        private void DetachViewModel(TViewModel viewModel)
         {
             viewModel.IsValidChanged -= UpdateValidity;
             if (UnbindViewModel != null)
@@ -127,7 +124,7 @@ namespace ATZ.MVVM.ViewModels.Utility.Connectors
             {
                 case NotifyCollectionChangedAction.Add:
                     int insertPosition = e.NewStartingIndex;
-                    foreach (M model in e.NewItems)
+                    foreach (TModel model in e.NewItems)
                     {
                         _viewModelCollection.Insert(insertPosition++, CreateViewModelForModel(model));
                     }
@@ -136,7 +133,7 @@ namespace ATZ.MVVM.ViewModels.Utility.Connectors
                     _viewModelCollection.Move(e.OldStartingIndex, e.NewStartingIndex);
                     break;
                 case NotifyCollectionChangedAction.Remove:
-                    foreach (M model in e.OldItems)
+                    foreach (TModel model in e.OldItems)
                     {
                         DetachViewModel(_viewModelCollection[e.OldStartingIndex]);
                         _viewModelCollection.RemoveAt(e.OldStartingIndex);
@@ -144,7 +141,7 @@ namespace ATZ.MVVM.ViewModels.Utility.Connectors
                     break;
                 case NotifyCollectionChangedAction.Reset:
                     ClearViewModelCollection();
-                    foreach (M model in _modelCollection)
+                    foreach (TModel model in _modelCollection)
                     {
                         _viewModelCollection.Add(CreateViewModelForModel(model));
                     }
@@ -174,9 +171,7 @@ namespace ATZ.MVVM.ViewModels.Utility.Connectors
         {
             IsValid = _viewModelCollection == null ? true : _viewModelCollection.ToList().TrueForAll(vm => vm.IsValid);
         }
-        #endregion
 
-        #region Protected Methods
         protected virtual void OnIsValidChanged()
         {
             if (IsValidChanged != null)
@@ -185,10 +180,8 @@ namespace ATZ.MVVM.ViewModels.Utility.Connectors
             }
             OnPropertyChanged(nameof(IsValid));
         }
-        #endregion
 
-        #region Public Methods
-        public void AddModelWithViewModel(M model, VM viewModel)
+        public void AddModelWithViewModel(TModel model, TViewModel viewModel)
         {
             if (_modelCollection == null || _viewModelCollection == null)
             {
@@ -211,7 +204,7 @@ namespace ATZ.MVVM.ViewModels.Utility.Connectors
             }
         }
 
-        public void Sort(Comparison<M> comparison)
+        public void Sort(Comparison<TModel> comparison)
         {
             bool swapped;
             do
@@ -232,6 +225,5 @@ namespace ATZ.MVVM.ViewModels.Utility.Connectors
         {
             UpdateValidity();
         }
-        #endregion
     }
 }
