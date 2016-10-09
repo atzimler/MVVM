@@ -1,8 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Configuration;
 using System.Linq;
 using ATZ.MVVM.Views.Utility.Connectors;
 using NUnit.Framework;
+using NUnit.Framework.Constraints;
 
 namespace ATZ.MVVM.Views.Utility.Tests
 {
@@ -133,6 +135,55 @@ namespace ATZ.MVVM.Views.Utility.Tests
             sc.Remove(2);
 
             AssertCollectionsAreEqual(sc, tc);
+        }
+
+        [Test]
+        public void ReplaceItemInTargetWhenReplacedInSourceCollection()
+        {
+            var sc = new ObservableCollection<int> {1, 2, 3};
+            var tc = new ObservableCollection<int>();
+
+            var conn = new ObservableCollectionCopierConnector<int, int>(n => n)
+            {
+                SourceCollection = sc,
+                TargetCollection = tc
+            };
+            AssertCollectionsAreEqual(sc, tc);
+
+            sc[0] = 4;
+
+            AssertCollectionsAreEqual(sc, tc);
+        }
+
+        [Test]
+        public void ProperlyCopyTheObjectsWhenSourceCollectionIsChanged()
+        {
+            var sc1 = new ObservableCollection<int> {1, 2, 3};
+            var sc2 = new ObservableCollection<int> {2, 3, 4};
+            var tc = new ObservableCollection<int>();
+
+            var conn = new ObservableCollectionCopierConnector<int, int>(n => n)
+            {
+                SourceCollection = sc1,
+                TargetCollection = tc
+            };
+            AssertCollectionsAreEqual(sc1, tc);
+
+            conn.SourceCollection = sc2;
+
+            AssertCollectionsAreEqual(sc2, tc);
+        }
+
+        [Test]
+        public void RetainTargetCollection()
+        {
+            var tc = new ObservableCollection<int>();
+
+            var conn = new ObservableCollectionCopierConnector<int, int>(n => n);
+            Assert.IsNull(conn.TargetCollection);
+
+            conn.TargetCollection = tc;
+            Assert.AreSame(tc, conn.TargetCollection);
         }
     }
 }

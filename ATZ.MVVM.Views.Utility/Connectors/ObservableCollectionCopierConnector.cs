@@ -26,6 +26,7 @@ namespace ATZ.MVVM.Views.Utility.Connectors
                 }
 
                 _sourceCollection = value;
+                CopyObjects();
 
                 if (_sourceCollection != null)
                 {
@@ -48,11 +49,7 @@ namespace ATZ.MVVM.Views.Utility.Connectors
 
                 if (_targetCollection != null)
                 {
-                    _targetCollection.Clear();
-                    foreach (S obj in _sourceCollection)
-                    {
-                        _targetCollection.Add(_transformSourceToTarget(obj));
-                    }
+                    CopyObjects();
                 }
             }
         }
@@ -66,7 +63,17 @@ namespace ATZ.MVVM.Views.Utility.Connectors
 
         private void CopyObjects()
         {
-            _sourceCollection.ToList().ForEach(obj => _targetCollection.Add(_transformSourceToTarget(obj)));
+            if (_sourceCollection == null || _targetCollection == null)
+            {
+                return;
+            }
+
+            _targetCollection.Clear();
+            foreach (var item in _sourceCollection)
+            {
+                _targetCollection.Add(_transformSourceToTarget(item));
+
+            }
         }
 
         private void SourceCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
@@ -96,13 +103,14 @@ namespace ATZ.MVVM.Views.Utility.Connectors
                     }
                     break;
 
-                case Reset:
-                    _targetCollection.Clear();
-                    CopyObjects();
+                case Replace:
+                    _targetCollection[e.OldStartingIndex] =
+                        _transformSourceToTarget(_sourceCollection[e.OldStartingIndex]);
                     break;
 
-                default:
-                    throw new NotImplementedException();
+                case Reset:
+                    CopyObjects();
+                    break;
             }
         }
         #endregion

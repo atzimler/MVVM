@@ -3,7 +3,7 @@
 namespace ATZ.MVVM.ViewModels.Utility.Tests
 {
     [TestFixture]
-    public class BaseViewModelTests
+    public class BaseViewModelShould
     {
         [Test]
         public void IsValidChangedOnlyFiredWhenRealChangeOccurs()
@@ -100,6 +100,19 @@ namespace ATZ.MVVM.ViewModels.Utility.Tests
 
             vm.Model = model;
             Assert.AreEqual(model, vm.Model);
+        }
+
+        [Test]
+        public void NotChangeAnythingIfTheSameModelIsAssigned()
+        {
+            TestViewModel vm = new TestViewModel();
+            TestModel m = new TestModel();
+
+            vm.Model = m;
+            Assert.IsFalse(vm.UnbindModelCalled);
+
+            vm.Model = m;
+            Assert.IsFalse(vm.UnbindModelCalled);
         }
     }
 }
