@@ -93,10 +93,7 @@ namespace ATZ.MVVM.ViewModels.Utility.Connectors
             // the other reason could be that in this case it is similar - but results in duplicate BindModel() which could cause problems (at least performance).
             viewModel.BindModel();
 
-            if (BindViewModel != null)
-            {
-                BindViewModel(viewModel);
-            }
+            BindViewModel?.Invoke(viewModel);
 
             viewModel.IsValidChanged += UpdateValidity;
             return viewModel;

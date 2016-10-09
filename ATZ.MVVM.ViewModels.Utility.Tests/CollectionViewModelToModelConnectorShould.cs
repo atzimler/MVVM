@@ -183,5 +183,22 @@ namespace ATZ.MVVM.ViewModels.Utility.Tests
 
             Assert.DoesNotThrow(() => connector.ModelCollection = null);
         }
+
+        [Test]
+        public void BindViewModelIsCalledProperly()
+        {
+            var binderCalled = false;
+            var connector = new TConnector
+            {
+                BindViewModel = (vm) => { binderCalled = true; },
+                ModelCollection = new ObservableCollection<TestModel>(),
+                ViewModelCollection = new ObservableCollection<TestViewModel>()
+            };
+
+            Assert.IsFalse(binderCalled);
+
+            connector.ModelCollection.Add(new TestModel());
+            Assert.IsTrue(binderCalled);
+        }
     }
 }
