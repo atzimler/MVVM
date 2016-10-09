@@ -82,7 +82,7 @@ namespace ATZ.MVVM.ViewModels.Utility.Connectors
 
         private void ClearViewModelCollection()
         {
-            _viewModelCollection.ToList().ForEach(vm => DetachViewModel(vm));
+            _viewModelCollection.ToList().ForEach(DetachViewModel);
             _viewModelCollection.Clear();
         }
 
@@ -200,7 +200,7 @@ namespace ATZ.MVVM.ViewModels.Utility.Connectors
         {
             if (_viewModelCollection != null)
             {
-                _viewModelCollection.ToList().ForEach(vm => DetachViewModel(vm));
+                _viewModelCollection.ToList().ForEach(DetachViewModel);
             }
         }
 
