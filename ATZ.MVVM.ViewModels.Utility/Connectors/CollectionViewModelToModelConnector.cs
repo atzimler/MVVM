@@ -108,6 +108,44 @@ namespace ATZ.MVVM.ViewModels.Utility.Connectors
             }
         }
 
+        private void Add(NotifyCollectionChangedEventArgs e)
+        {
+            var insertPosition = e.NewStartingIndex;
+            foreach (TModel model in e.NewItems)
+            {
+                _viewModelCollection.Insert(insertPosition++, CreateViewModelForModel(model));
+            }
+        }
+        private void Move(NotifyCollectionChangedEventArgs e)
+        {
+            _viewModelCollection.Move(e.OldStartingIndex, e.NewStartingIndex);
+        }
+
+        private void Remove(NotifyCollectionChangedEventArgs e)
+        {
+            foreach (TModel model in e.OldItems)
+            {
+                DetachViewModel(_viewModelCollection[e.OldStartingIndex]);
+                _viewModelCollection.RemoveAt(e.OldStartingIndex);
+            }
+        }
+
+        private void Reset(NotifyCollectionChangedEventArgs e)
+        {
+            ClearViewModelCollection();
+            foreach (TModel model in _modelCollection)
+            {
+                _viewModelCollection.Add(CreateViewModelForModel(model));
+            }
+        }
+
+        private void Replace(NotifyCollectionChangedEventArgs e)
+        {
+            DetachViewModel(_viewModelCollection[e.OldStartingIndex]);
+            _viewModelCollection[e.OldStartingIndex] =
+                CreateViewModelForModel(_modelCollection[e.OldStartingIndex]);
+        }
+
         private void ModelCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
             if (_modelCollection == null || _viewModelCollection == null)
@@ -120,33 +158,19 @@ namespace ATZ.MVVM.ViewModels.Utility.Connectors
             switch (e.Action)
             {
                 case NotifyCollectionChangedAction.Add:
-                    int insertPosition = e.NewStartingIndex;
-                    foreach (TModel model in e.NewItems)
-                    {
-                        _viewModelCollection.Insert(insertPosition++, CreateViewModelForModel(model));
-                    }
+                    Add(e);
                     break;
                 case NotifyCollectionChangedAction.Move:
-                    _viewModelCollection.Move(e.OldStartingIndex, e.NewStartingIndex);
+                    Move(e);
                     break;
                 case NotifyCollectionChangedAction.Remove:
-                    foreach (TModel model in e.OldItems)
-                    {
-                        DetachViewModel(_viewModelCollection[e.OldStartingIndex]);
-                        _viewModelCollection.RemoveAt(e.OldStartingIndex);
-                    }
+                    Remove(e);
                     break;
                 case NotifyCollectionChangedAction.Reset:
-                    ClearViewModelCollection();
-                    foreach (TModel model in _modelCollection)
-                    {
-                        _viewModelCollection.Add(CreateViewModelForModel(model));
-                    }
+                    Reset(e);
                     break;
                 case NotifyCollectionChangedAction.Replace:
-                    DetachViewModel(_viewModelCollection[e.OldStartingIndex]);
-                    _viewModelCollection[e.OldStartingIndex] =
-                        CreateViewModelForModel(_modelCollection[e.OldStartingIndex]);
+                    Replace(e);
                     break;
             }
 
