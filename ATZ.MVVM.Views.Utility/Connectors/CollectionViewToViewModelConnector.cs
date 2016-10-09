@@ -60,6 +60,7 @@ namespace ATZ.MVVM.Views.Utility.Connectors
 
         private V CreateViewForViewModel(VM viewModel)
         {
+            // TODO: This should be DependencyInjection for IView<VM> with proper insertion of the current type of the viewModel, so that different types of subclasses can be handled correctly.
             V view = new V();
 
             // TODO: This should be IView<VM>

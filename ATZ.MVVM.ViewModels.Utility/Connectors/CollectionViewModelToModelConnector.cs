@@ -188,6 +188,21 @@ namespace ATZ.MVVM.ViewModels.Utility.Connectors
         #endregion
 
         #region Public Methods
+        public void AddModelWithViewModel(M model, VM viewModel)
+        {
+            if (_modelCollection == null || _viewModelCollection == null)
+            {
+                return;
+            }
+
+            _modelCollection.CollectionChanged -= ModelCollectionChanged;
+
+            _modelCollection.Add(model);
+            _viewModelCollection.Add(viewModel);
+
+            _modelCollection.CollectionChanged += ModelCollectionChanged;
+        }
+
         public void ClearAllViewModelBindings()
         {
             if (_viewModelCollection != null)
