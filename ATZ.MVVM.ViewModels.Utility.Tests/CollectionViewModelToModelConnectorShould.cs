@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using NUnit.Framework;
 using System.Collections.ObjectModel;
 using ATZ.MVVM.ViewModels.Utility.Connectors;
@@ -217,6 +218,33 @@ namespace ATZ.MVVM.ViewModels.Utility.Tests
 
             connector.ViewModelCollection = vmc;
             Assert.IsFalse(collectionChanged);
+        }
+
+        [Test]
+        public void NotCrashWhenAddModelWithViewModelIsCalledWithBothCollectionBeingNull()
+        {
+            var connector = new TConnector();
+            Assert.DoesNotThrow(() => connector.AddModelWithViewModel(new TestModel(), new TestViewModel()));
+        }
+
+        [Test]
+        public void NotCrashWhenAddModelWithViewModelIsCalledWithNullModelCollection()
+        {
+            var connector = new TConnector
+            {
+                ViewModelCollection = new ObservableCollection<TestViewModel>()
+            };
+            Assert.DoesNotThrow(() => connector.AddModelWithViewModel(new TestModel(), new TestViewModel()));
+        }
+
+        [Test]
+        public void NotCrashWhenAddModelWithViewModelIsCalledWithNullViewModelCollection()
+        {
+            var connector = new TConnector
+            {
+                ModelCollection = new ObservableCollection<TestModel>()
+            };
+            Assert.DoesNotThrow(() => connector.AddModelWithViewModel(new TestModel(), new TestViewModel()));
         }
     }
 }
