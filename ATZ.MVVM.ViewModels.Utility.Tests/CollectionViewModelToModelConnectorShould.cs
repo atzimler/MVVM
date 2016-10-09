@@ -336,5 +336,55 @@ namespace ATZ.MVVM.ViewModels.Utility.Tests
             connector.ModelCollection.RemoveAt(0);
             Assert.IsTrue(unbindCalled);
         }
+
+        [Test]
+        public void SortCorrectlyIfNoNeedToSwap()
+        {
+            var m1 = new TestModel();
+            var m2 = new TestModel();
+            var connector = new TConnector
+            {
+                ModelCollection = new ObservableCollection<TestModel> {m1, m2},
+                ViewModelCollection = new ObservableCollection<TestViewModel>()
+            };
+
+            connector.Sort((o1, o2) => o1 == m1 && o2 == m2 ? -1 : 1);
+            Assert.AreSame(m1, connector.ModelCollection[0]);
+            Assert.AreSame(m2, connector.ModelCollection[1]);
+        }
+
+        [Test]
+        public void SortCorrectlyIfThereIsSwap()
+        {
+            var m1 = new TestModel();
+            var m2 = new TestModel();
+            var connector = new TConnector
+            {
+                ModelCollection = new ObservableCollection<TestModel> {m1, m2},
+                ViewModelCollection = new ObservableCollection<TestViewModel>()
+            };
+
+            connector.Sort((o1, o2) => o1 == m1 && o2 == m2? 1:-1);
+            Assert.AreSame(m2, connector.ModelCollection[0]);
+            Assert.AreSame(m1, connector.ModelCollection[1]);
+        }
+
+        [Test]
+        public void ClearAllViewModelBindingsCorrectly()
+        {
+            var m = new TestModel();
+            var unbindCalled = false;
+            var connector = new TConnector
+            {
+                ModelCollection = new ObservableCollection<TestModel> {m},
+                ViewModelCollection = new ObservableCollection<TestViewModel>(),
+                UnbindViewModel = vm => unbindCalled = true
+            };
+            Assert.AreEqual(1, connector.ViewModelCollection.Count);
+
+            connector.ClearAllViewModelBindings();
+            Assert.AreEqual(1, connector.ViewModelCollection.Count);
+            Assert.IsTrue(unbindCalled);
+        }
     }
 }
