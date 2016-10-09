@@ -262,5 +262,79 @@ namespace ATZ.MVVM.ViewModels.Utility.Tests
             connector.ModelCollection[0] = new TestModel();
             Assert.AreNotSame(vm, connector.ViewModelCollection[0]);
         }
+
+        [Test]
+        public void BeAbleToHandleCollectionItemRemove()
+        {
+            var connector = new TConnector
+            {
+                ModelCollection = new ObservableCollection<TestModel>(),
+                ViewModelCollection = new ObservableCollection<TestViewModel>()
+            };
+            connector.ModelCollection.Add(new TestModel());
+            Assert.AreEqual(1, connector.ModelCollection.Count);
+            Assert.AreEqual(1, connector.ViewModelCollection.Count);
+
+            connector.ModelCollection.RemoveAt(0);
+            Assert.AreEqual(0, connector.ModelCollection.Count);
+            Assert.AreEqual(0, connector.ViewModelCollection.Count);
+        }
+
+        [Test]
+        public void BeAbleToHandleCollectionItemReset()
+        {
+            var connector = new TConnector
+            {
+                ModelCollection = new ObservableCollection<TestModel>(),
+                ViewModelCollection = new ObservableCollection<TestViewModel>()
+            };
+            connector.ModelCollection.Add(new TestModel());
+            Assert.AreEqual(1, connector.ModelCollection.Count);
+            Assert.AreEqual(1, connector.ViewModelCollection.Count);
+
+            var vm = connector.ViewModelCollection[0];
+            var m = new TestModel();
+            var mc2 = new ObservableCollection<TestModel> {m};
+
+            connector.ModelCollection = mc2;
+            Assert.AreEqual(1, connector.ModelCollection.Count);
+            Assert.AreEqual(1, connector.ViewModelCollection.Count);
+            Assert.AreNotSame(vm, connector.ViewModelCollection[0]);
+        }
+
+        [Test]
+        public void BeAbleToHandleCollectionItemMove()
+        {
+            var m1 = new TestModel();
+            var m2 = new TestModel();
+            var connector = new TConnector
+            {
+                ModelCollection = new ObservableCollection<TestModel> {m1, m2},
+                ViewModelCollection = new ObservableCollection<TestViewModel>()
+            };
+            Assert.AreEqual(2, connector.ViewModelCollection.Count);
+            var vm1 = connector.ViewModelCollection[0];
+            var vm2 = connector.ViewModelCollection[1];
+
+            connector.ModelCollection.Move(0, 1);
+            Assert.AreSame(vm2, connector.ViewModelCollection[0]);
+            Assert.AreSame(vm1, connector.ViewModelCollection[1]);
+        }
+
+        [Test]
+        public void UnbindViewModelProperly()
+        {
+            var m = new TestModel();
+            var unbindCalled = false;
+            var connector = new TConnector
+            {
+                ModelCollection = new ObservableCollection<TestModel> {m},
+                ViewModelCollection = new ObservableCollection<TestViewModel>(),
+                UnbindViewModel = vm => unbindCalled = true
+            };
+
+            connector.ModelCollection.RemoveAt(0);
+            Assert.IsTrue(unbindCalled);
+        }
     }
 }
