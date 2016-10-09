@@ -7,14 +7,14 @@ using ATZ.MVVM.Views.Utility.Interfaces;
 
 namespace ATZ.MVVM.Views.Utility.Connectors
 {
-    public class CollectionViewToViewModelConnector<V, VM, M>
-        where V : UIElement, IView<VM>, new ()
-        where VM : BaseViewModel<M>
-        where M : class
+    public class CollectionViewToViewModelConnector<TView, TViewModel, TModel>
+        where TView : UIElement, IView<TViewModel>, new ()
+        where TViewModel : BaseViewModel<TModel>
+        where TModel : class
     {
         #region Private Variables
         private UIElementCollection _viewCollection;
-        private ObservableCollection<VM> _viewModelCollection;
+        private ObservableCollection<TViewModel> _viewModelCollection;
         #endregion
 
         #region Public Properties
@@ -31,7 +31,7 @@ namespace ATZ.MVVM.Views.Utility.Connectors
             }
         }
 
-        public ObservableCollection<VM> ViewModelCollection
+        public ObservableCollection<TViewModel> ViewModelCollection
         {
             get { return _viewModelCollection; }
             set
@@ -58,10 +58,10 @@ namespace ATZ.MVVM.Views.Utility.Connectors
             }
         }
 
-        private V CreateViewForViewModel(VM viewModel)
+        private TView CreateViewForViewModel(TViewModel viewModel)
         {
             // TODO: This should be DependencyInjection for IView<VM> with proper insertion of the current type of the viewModel, so that different types of subclasses can be handled correctly.
-            V view = new V();
+            TView view = new TView();
 
             // TODO: This should be IView<VM>
             //view.ViewModel = viewModel;
@@ -97,7 +97,7 @@ namespace ATZ.MVVM.Views.Utility.Connectors
             {
                 case NotifyCollectionChangedAction.Add:
                     int insertPosition = e.NewStartingIndex;
-                    foreach (VM viewModel in e.NewItems)
+                    foreach (TViewModel viewModel in e.NewItems)
                     {
                         _viewCollection.Insert(insertPosition++, CreateViewForViewModel(viewModel));
                     }
@@ -108,7 +108,7 @@ namespace ATZ.MVVM.Views.Utility.Connectors
                     _viewCollection.Insert(e.NewStartingIndex, uiElement);
                     break;
                 case NotifyCollectionChangedAction.Remove:
-                    foreach (VM viewModel in e.OldItems)
+                    foreach (TViewModel viewModel in e.OldItems)
                     {
                         _viewCollection.RemoveAt(e.OldStartingIndex);
                     }
@@ -120,7 +120,7 @@ namespace ATZ.MVVM.Views.Utility.Connectors
 
                 case NotifyCollectionChangedAction.Reset:
                     _viewCollection.Clear();
-                    foreach (VM viewModel in _viewModelCollection)
+                    foreach (TViewModel viewModel in _viewModelCollection)
                     {
                         _viewCollection.Add(CreateViewForViewModel(viewModel));
                     }

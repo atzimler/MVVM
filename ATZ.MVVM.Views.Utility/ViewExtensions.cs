@@ -6,45 +6,42 @@ namespace ATZ.MVVM.Views.Utility
 {
     public static class ViewExtensions
     {
-        #region Private Variables
-        private static Dictionary<object, object> _registry = new Dictionary<object,object>();
-        #endregion
+        private static readonly Dictionary<object, object> Registry = new Dictionary<object,object>();
 
-        #region Public Methods
-        public static void ExecuteViewModelMethod<VM>(this IView<VM> view, Action<VM> action)
-            where VM : class
+        public static void ExecuteViewModelMethod<TViewModel>(this IView<TViewModel> view, Action<TViewModel> action)
+            where TViewModel : class
         {
-            VM vm = view.GetViewModel();
+            var vm = view.GetViewModel();
             if (vm != null)
             {
                 action(vm);
             }
         }
 
-        public static VM GetViewModel<VM>(this object window)
-            where VM : class
+        public static TViewModel GetViewModel<TViewModel>(this object window)
+            where TViewModel : class
         {
-            if (!_registry.ContainsKey(window))
+            if (!Registry.ContainsKey(window))
             {
                 return null;
             }
-            return (VM)_registry[window];
+            return (TViewModel)Registry[window];
         }
 
-        public static VM GetViewModel<VM>(this IView<VM> view)
-            where VM : class
+        public static TViewModel GetViewModel<TViewModel>(this IView<TViewModel> view)
+            where TViewModel : class
         {
-            if (!_registry.ContainsKey(view))
+            if (!Registry.ContainsKey(view))
             {
                 return null;
             }
-            return (VM)_registry[view];
+            return (TViewModel)Registry[view];
         }
 
-        public static void SetViewModel<VM>(this IView<VM> view, VM vm)
-            where VM : class
+        public static void SetViewModel<TViewModel>(this IView<TViewModel> view, TViewModel vm)
+            where TViewModel : class
         {   
-            VM currentViewModel = view.GetViewModel();
+            var currentViewModel = view.GetViewModel();
             if (currentViewModel == vm)
             {
                 return;
@@ -55,13 +52,12 @@ namespace ATZ.MVVM.Views.Utility
                 view.UnbindModel();
             }
 
-            _registry[view] = vm;
+            Registry[view] = vm;
 
             if (vm != null)
             {
                 view.BindModel(vm);
             }
         }
-        #endregion
     }
 }
