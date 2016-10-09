@@ -108,43 +108,45 @@ namespace ATZ.MVVM.ViewModels.Utility.Connectors
             }
         }
 
-        private void Add(NotifyCollectionChangedEventArgs e)
+#region generic NotifyCollectionChangedEvent handlers
+        private static void Add(CollectionViewModelToModelConnector<TViewModel, TModel> sender, NotifyCollectionChangedEventArgs e)
         {
             var insertPosition = e.NewStartingIndex;
             foreach (TModel model in e.NewItems)
             {
-                _viewModelCollection.Insert(insertPosition++, CreateViewModelForModel(model));
+                sender._viewModelCollection.Insert(insertPosition++, sender.CreateViewModelForModel(model));
             }
         }
-        private void Move(NotifyCollectionChangedEventArgs e)
+        private static void Move(CollectionViewModelToModelConnector<TViewModel, TModel> sender, NotifyCollectionChangedEventArgs e)
         {
-            _viewModelCollection.Move(e.OldStartingIndex, e.NewStartingIndex);
+            sender._viewModelCollection.Move(e.OldStartingIndex, e.NewStartingIndex);
         }
 
-        private void Remove(NotifyCollectionChangedEventArgs e)
+        private static void Remove(CollectionViewModelToModelConnector<TViewModel, TModel> sender, NotifyCollectionChangedEventArgs e)
         {
             foreach (TModel model in e.OldItems)
             {
-                DetachViewModel(_viewModelCollection[e.OldStartingIndex]);
-                _viewModelCollection.RemoveAt(e.OldStartingIndex);
+                sender.DetachViewModel(sender._viewModelCollection[e.OldStartingIndex]);
+                sender._viewModelCollection.RemoveAt(e.OldStartingIndex);
             }
         }
 
-        private void Reset(NotifyCollectionChangedEventArgs e)
+        private static void Reset(CollectionViewModelToModelConnector<TViewModel, TModel> sender, NotifyCollectionChangedEventArgs e)
         {
-            ClearViewModelCollection();
-            foreach (TModel model in _modelCollection)
+            sender.ClearViewModelCollection();
+            foreach (TModel model in sender._modelCollection)
             {
-                _viewModelCollection.Add(CreateViewModelForModel(model));
+                sender._viewModelCollection.Add(sender.CreateViewModelForModel(model));
             }
         }
 
-        private void Replace(NotifyCollectionChangedEventArgs e)
+        private static void Replace(CollectionViewModelToModelConnector<TViewModel, TModel> sender, NotifyCollectionChangedEventArgs e)
         {
-            DetachViewModel(_viewModelCollection[e.OldStartingIndex]);
-            _viewModelCollection[e.OldStartingIndex] =
-                CreateViewModelForModel(_modelCollection[e.OldStartingIndex]);
+            sender.DetachViewModel(sender._viewModelCollection[e.OldStartingIndex]);
+            sender._viewModelCollection[e.OldStartingIndex] =
+                sender.CreateViewModelForModel(sender._modelCollection[e.OldStartingIndex]);
         }
+#endregion
 
         private void ModelCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
@@ -158,19 +160,19 @@ namespace ATZ.MVVM.ViewModels.Utility.Connectors
             switch (e.Action)
             {
                 case NotifyCollectionChangedAction.Add:
-                    Add(e);
+                    Add(this, e);
                     break;
                 case NotifyCollectionChangedAction.Move:
-                    Move(e);
+                    Move(this, e);
                     break;
                 case NotifyCollectionChangedAction.Remove:
-                    Remove(e);
+                    Remove(this, e);
                     break;
                 case NotifyCollectionChangedAction.Reset:
-                    Reset(e);
+                    Reset(this, e);
                     break;
                 case NotifyCollectionChangedAction.Replace:
-                    Replace(e);
+                    Replace(this, e);
                     break;
             }
 
