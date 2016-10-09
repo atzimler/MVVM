@@ -113,15 +113,17 @@ namespace ATZ.MVVM.Views.Utility.Connectors
                         _viewCollection.RemoveAt(e.OldStartingIndex);
                     }
                     break;
+                case NotifyCollectionChangedAction.Replace:
+                    _viewCollection.RemoveAt(e.OldStartingIndex);
+                    _viewCollection.Insert(e.OldStartingIndex, CreateViewForViewModel(_viewModelCollection[e.OldStartingIndex]));
+                    break;
+
                 case NotifyCollectionChangedAction.Reset:
                     _viewCollection.Clear();
                     foreach (VM viewModel in _viewModelCollection)
                     {
                         _viewCollection.Add(CreateViewForViewModel(viewModel));
                     }
-                    break;
-                default:
-                    System.Diagnostics.Debug.WriteLine("CollectionViewToViewModelConnector: {0}", e.Action);
                     break;
             }
         }

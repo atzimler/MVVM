@@ -131,7 +131,7 @@ namespace ATZ.MVVM.ViewModels.Utility.Tests
             var connector = new TConnector();
             Assert.IsNull(connector.ModelCollection);
 
-            var mc = new ObservableCollectionEventChangeChecker();
+            var mc = new ObservableCollectionEventChangeChecker<TestModel>();
             Assert.IsFalse(mc.CollectionChangedEventHandlerAdded);
 
             connector.ModelCollection = mc;
@@ -141,8 +141,8 @@ namespace ATZ.MVVM.ViewModels.Utility.Tests
         [Test]
         public void ProperlyUnbindCollectionChanged()
         {
-            var mc1 = new ObservableCollectionEventChangeChecker();
-            var mc2 = new ObservableCollectionEventChangeChecker();
+            var mc1 = new ObservableCollectionEventChangeChecker<TestModel>();
+            var mc2 = new ObservableCollectionEventChangeChecker<TestModel>();
 
             var connector = new TConnector { ModelCollection = mc1 };
             mc1.CollectionChangedEventHandlerAdded = false;
@@ -159,7 +159,7 @@ namespace ATZ.MVVM.ViewModels.Utility.Tests
         [Test]
         public void IgnoreChangingTheCollectionIfItIsTheSame()
         {
-            var mc = new ObservableCollectionEventChangeChecker();
+            var mc = new ObservableCollectionEventChangeChecker<TestModel>();
             var connector = new TConnector
             {
                 ModelCollection = mc

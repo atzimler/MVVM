@@ -4,11 +4,12 @@ using NUnit.Framework;
 
 namespace ATZ.MVVM.ViewModels.Utility.Tests
 {
-    internal class TestViewModel : BaseViewModel<TestModel>
+    public class TestViewModel : BaseViewModel<TestModel>
     {
         private int _a;
         private int _propertyRaisingChangeNotification;
 
+        public bool ExecuteCalled { get; private set; }
         public bool UnbindModelCalled { get; private set; }
         public bool UpdateValidityCalled { get; private set; }
 
@@ -56,5 +57,9 @@ namespace ATZ.MVVM.ViewModels.Utility.Tests
             return base.SuspendPropertyChangedEvent(eventHandler);
         }
 
+        public void Execute()
+        {
+            ExecuteCalled = true;
+        }
     }
 }

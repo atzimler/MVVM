@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace ATZ.MVVM.ViewModels.Utility.Tests.TestHelpers
 {
-    public class ObservableCollectionEventChangeChecker : ObservableCollection<TestModel>
+    public class ObservableCollectionEventChangeChecker<T> : ObservableCollection<T>
     {
         public bool CollectionChangedEventHandlerAdded { get; set; }
         public bool CollectionChangedEventHandlerRemoved { get; set; }
