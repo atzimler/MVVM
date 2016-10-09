@@ -1,8 +1,8 @@
 ﻿namespace ATZ.MVVM.Views.Utility.Interfaces
 {
-    public interface IView<VM>
+    public interface IView<in TViewModel>
     {
-        void BindModel(VM vm);
+        void BindModel(TViewModel vm);
         void UnbindModel();
     }
 }
