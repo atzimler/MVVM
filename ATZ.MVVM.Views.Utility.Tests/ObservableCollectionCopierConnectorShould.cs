@@ -1,10 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Configuration;
 using System.Linq;
 using ATZ.MVVM.Views.Utility.Connectors;
 using NUnit.Framework;
-using NUnit.Framework.Constraints;
 
 namespace ATZ.MVVM.Views.Utility.Tests
 {

@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using ATZ.MVVM.ViewModels.Utility;
 
 namespace ATZ.MVVM.Views.Utility.Tests.CompositeComponents

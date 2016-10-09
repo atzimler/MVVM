@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using ATZ.MVVM.Views.Utility.Interfaces;
+﻿using ATZ.MVVM.Views.Utility.Interfaces;
 
 namespace ATZ.MVVM.Views.Utility.Tests.CompositeComponents
 {

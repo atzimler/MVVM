@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
-using System.Linq;
-using static System.Collections.Specialized.NotifyCollectionChangedAction;
 
 namespace ATZ.MVVM.Views.Utility.Connectors
 {
@@ -80,7 +78,7 @@ namespace ATZ.MVVM.Views.Utility.Connectors
         {
             switch (e.Action)
             {
-                case Add:
+                case NotifyCollectionChangedAction.Add:
                     int insertPosition = e.NewStartingIndex;
                     foreach (S obj in e.NewItems)
                     {
@@ -88,7 +86,7 @@ namespace ATZ.MVVM.Views.Utility.Connectors
                     }
                     break;
 
-                case Move:
+                case NotifyCollectionChangedAction.Move:
                     {
                         var obj = _targetCollection[e.OldStartingIndex];
                         _targetCollection.RemoveAt(e.OldStartingIndex);
@@ -96,19 +94,19 @@ namespace ATZ.MVVM.Views.Utility.Connectors
                     }
                     break;
 
-                case Remove:
+                case NotifyCollectionChangedAction.Remove:
                     foreach (S obj in e.OldItems)
                     {
                         _targetCollection.RemoveAt(e.OldStartingIndex);
                     }
                     break;
 
-                case Replace:
+                case NotifyCollectionChangedAction.Replace:
                     _targetCollection[e.OldStartingIndex] =
                         _transformSourceToTarget(_sourceCollection[e.OldStartingIndex]);
                     break;
 
-                case Reset:
+                case NotifyCollectionChangedAction.Reset:
                     CopyObjects();
                     break;
             }

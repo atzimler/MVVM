@@ -1,11 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Controls;
 using ATZ.MVVM.ViewModels.Utility.Tests;
-using NUnit.Core;
 using NUnit.Framework;
 
 namespace ATZ.MVVM.Views.Utility.Tests

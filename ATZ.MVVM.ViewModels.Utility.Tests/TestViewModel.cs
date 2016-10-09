@@ -1,6 +1,5 @@
 ﻿using System;
 using System.ComponentModel;
-using NUnit.Framework;
 
 namespace ATZ.MVVM.ViewModels.Utility.Tests
 {
