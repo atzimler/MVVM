@@ -200,5 +200,23 @@ namespace ATZ.MVVM.ViewModels.Utility.Tests
             connector.ModelCollection.Add(new TestModel());
             Assert.IsTrue(binderCalled);
         }
+
+        [Test]
+        public void ViewModelCollectionIsNotChangedIfSetToTheSame()
+        {
+            var vmc = new ObservableCollection<TestViewModel>();
+            var connector = new TConnector
+            {
+                ModelCollection = new ObservableCollection<TestModel>(),
+                ViewModelCollection = vmc
+            };
+
+            var collectionChanged = false;
+            connector.ModelCollection.Add(new TestModel());
+            connector.ViewModelCollection.CollectionChanged += (sender, args) => { collectionChanged = true; };
+
+            connector.ViewModelCollection = vmc;
+            Assert.IsFalse(collectionChanged);
+        }
     }
 }
