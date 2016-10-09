@@ -4,15 +4,15 @@ using ATZ.MVVM.Views.Utility.Interfaces;
 
 namespace ATZ.MVVM.Views.Utility.Connectors
 {
-    public class CompositeViewToViewModelConnector<V, VM, M, CV, CVM, CM>
-        where CV : IView<CVM>
-        where CVM : BaseViewModel<CM>
-        where CM : class
+    public class CompositeViewToViewModelConnector<TView, TViewModel, TModel, TComponentView, TComponentViewModel, TComponentModel>
+        where TComponentView : IView<TComponentViewModel>
+        where TComponentViewModel : BaseViewModel<TComponentModel>
+        where TComponentModel : class
     {
         #region Constructors
-        public CompositeViewToViewModelConnector(CV componentView, VM viewModel, Func<VM, CVM> componentViewModel, Func<VM, CM> componentModel)
+        public CompositeViewToViewModelConnector(TComponentView componentView, TViewModel viewModel, Func<TViewModel, TComponentViewModel> componentViewModel, Func<TViewModel, TComponentModel> componentModel)
         {
-            CVM cvm = componentViewModel(viewModel);
+            TComponentViewModel cvm = componentViewModel(viewModel);
             cvm.Model = componentModel(viewModel);
             componentView.SetViewModel(cvm);
         }

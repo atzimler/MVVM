@@ -4,16 +4,13 @@ using System.Collections.Specialized;
 
 namespace ATZ.MVVM.Views.Utility.Connectors
 {
-    public class ObservableCollectionCopierConnector<S, T>
+    public class ObservableCollectionCopierConnector<TSource, TTarget>
     {
-        #region Private Variables
-        private ObservableCollection<S> _sourceCollection;
-        private ObservableCollection<T> _targetCollection;
-        private Func<S, T> _transformSourceToTarget;
-        #endregion
+        private ObservableCollection<TSource> _sourceCollection;
+        private ObservableCollection<TTarget> _targetCollection;
+        private readonly Func<TSource, TTarget> _transformSourceToTarget;
 
-        #region Public Properties
-        public ObservableCollection<S> SourceCollection
+        public ObservableCollection<TSource> SourceCollection
         {
             get { return _sourceCollection; }
             set
@@ -33,7 +30,7 @@ namespace ATZ.MVVM.Views.Utility.Connectors
             }
         }
 
-        public ObservableCollection<T> TargetCollection
+        public ObservableCollection<TTarget> TargetCollection
         {
             get { return _targetCollection; }
             set
@@ -51,10 +48,8 @@ namespace ATZ.MVVM.Views.Utility.Connectors
                 }
             }
         }
-        #endregion
 
-        #region Constructors
-        public ObservableCollectionCopierConnector(Func<S, T> transformSourceToTarget)
+        public ObservableCollectionCopierConnector(Func<TSource, TTarget> transformSourceToTarget)
         {
             _transformSourceToTarget = transformSourceToTarget;
         }
@@ -80,7 +75,7 @@ namespace ATZ.MVVM.Views.Utility.Connectors
             {
                 case NotifyCollectionChangedAction.Add:
                     int insertPosition = e.NewStartingIndex;
-                    foreach (S obj in e.NewItems)
+                    foreach (TSource obj in e.NewItems)
                     {
                         _targetCollection.Insert(insertPosition++, _transformSourceToTarget(obj));
                     }
@@ -95,7 +90,7 @@ namespace ATZ.MVVM.Views.Utility.Connectors
                     break;
 
                 case NotifyCollectionChangedAction.Remove:
-                    foreach (S obj in e.OldItems)
+                    foreach (TSource obj in e.OldItems)
                     {
                         _targetCollection.RemoveAt(e.OldStartingIndex);
                     }
@@ -111,6 +106,5 @@ namespace ATZ.MVVM.Views.Utility.Connectors
                     break;
             }
         }
-        #endregion
     }
 }
