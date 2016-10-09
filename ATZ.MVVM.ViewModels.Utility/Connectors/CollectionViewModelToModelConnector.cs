@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.Linq;
@@ -146,6 +147,16 @@ namespace ATZ.MVVM.ViewModels.Utility.Connectors
             sender._viewModelCollection[e.OldStartingIndex] =
                 sender.CreateViewModelForModel(sender._modelCollection[e.OldStartingIndex]);
         }
+
+        private static readonly Dictionary<NotifyCollectionChangedAction, Action<CollectionViewModelToModelConnector<TViewModel, TModel>, NotifyCollectionChangedEventArgs>> EventHandlers =
+            new Dictionary<NotifyCollectionChangedAction, Action<CollectionViewModelToModelConnector<TViewModel, TModel>, NotifyCollectionChangedEventArgs>>
+            {
+                {NotifyCollectionChangedAction.Add, Add},
+                {NotifyCollectionChangedAction.Move, Move},
+                {NotifyCollectionChangedAction.Remove, Remove},
+                {NotifyCollectionChangedAction.Replace, Replace},
+                {NotifyCollectionChangedAction.Reset, Reset}
+            };
 #endregion
 
         private void ModelCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
@@ -157,23 +168,9 @@ namespace ATZ.MVVM.ViewModels.Utility.Connectors
 
             // TODO: This needs unit testing.
             // TODO: This and Views.Utility.CollectionConnector share similarities, maybe they can be merged.
-            switch (e.Action)
+            if (EventHandlers.ContainsKey(e.Action))
             {
-                case NotifyCollectionChangedAction.Add:
-                    Add(this, e);
-                    break;
-                case NotifyCollectionChangedAction.Move:
-                    Move(this, e);
-                    break;
-                case NotifyCollectionChangedAction.Remove:
-                    Remove(this, e);
-                    break;
-                case NotifyCollectionChangedAction.Reset:
-                    Reset(this, e);
-                    break;
-                case NotifyCollectionChangedAction.Replace:
-                    Replace(this, e);
-                    break;
+                EventHandlers[e.Action](this, e);
             }
 
             UpdateValidity();
