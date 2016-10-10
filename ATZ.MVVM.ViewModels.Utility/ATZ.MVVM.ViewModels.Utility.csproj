@@ -41,6 +41,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BaseViewModel.cs" />
+    <Compile Include="CollectionChangeEventHandlers.cs" />
     <Compile Include="Connectors\CollectionViewModelToModelConnector.cs" />
     <Compile Include="IVerifiable.cs" />
     <Compile Include="ObservableObject.cs" />

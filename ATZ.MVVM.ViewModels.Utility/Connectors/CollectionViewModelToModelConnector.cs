@@ -107,14 +107,15 @@ namespace ATZ.MVVM.ViewModels.Utility.Connectors
         }
 
 #region generic NotifyCollectionChangedEvent handlers
+
         private static void Add(CollectionViewModelToModelConnector<TViewModel, TModel> sender, NotifyCollectionChangedEventArgs e)
         {
-            var insertPosition = e.NewStartingIndex;
-            foreach (TModel model in e.NewItems)
-            {
-                sender._viewModelCollection.Insert(insertPosition++, sender.CreateViewModelForModel(model));
-            }
+            Func<TModel, TViewModel> create = sender.CreateViewModelForModel;
+            Action<int, TViewModel> insert = sender._viewModelCollection.Insert;
+            var collectionChangeEventHandlers = new CollectionChangeEventHandlers<TModel, TViewModel>(create, insert);
+            collectionChangeEventHandlers.Add(e);
         }
+
         private static void Move(CollectionViewModelToModelConnector<TViewModel, TModel> sender, NotifyCollectionChangedEventArgs e)
         {
             sender._viewModelCollection.Move(e.OldStartingIndex, e.NewStartingIndex);
