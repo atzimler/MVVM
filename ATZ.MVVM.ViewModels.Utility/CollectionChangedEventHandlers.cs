@@ -11,12 +11,12 @@ namespace ATZ.MVVM.ViewModels.Utility
         void ClearCollection();
         void AddItem(TCollectionItem item);
         TCollectionItem CreateItem(TSourceItem sourceItem);
-        void InsertItem(int position, TCollectionItem item);
+        void InsertItem(int index, TCollectionItem item);
+        void MoveItem(int oldIndex, int newIndex);
     }
 
     public class CollectionChangedEventHandlers<TEventItem, TCollectionItem>
     {
-        private readonly Action<int, int> _moveItem;
         private readonly Action<int> _removeItem;
         private readonly Action<int, TCollectionItem> _replaceItem;
 
@@ -24,11 +24,10 @@ namespace ATZ.MVVM.ViewModels.Utility
             _eventHandlers;
 
         public CollectionChangedEventHandlers(
-            Action<int, int> moveItem, Action<int> removeItem,
+            Action<int> removeItem,
             Action<int, TCollectionItem> replaceItem)
         {
                 // TODO: Create these on an interface, make that the sender, then the dictionary and the partial handlers can be static.
-                _moveItem = moveItem;
                 _removeItem = removeItem;
                 _replaceItem = replaceItem;
 
@@ -42,7 +41,7 @@ namespace ATZ.MVVM.ViewModels.Utility
                 };
         }
 
-        private void Add(ICollectionChangedEventSource<TEventItem, TCollectionItem> sender, NotifyCollectionChangedEventArgs e)
+        private static void Add(ICollectionChangedEventSource<TEventItem, TCollectionItem> sender, NotifyCollectionChangedEventArgs e)
         {
             var insertPosition = e.NewStartingIndex;
             foreach (TEventItem model in e.NewItems)
@@ -51,9 +50,9 @@ namespace ATZ.MVVM.ViewModels.Utility
             }
         }
 
-        private void Move(ICollectionChangedEventSource<TEventItem, TCollectionItem> sender, NotifyCollectionChangedEventArgs e)
+        private static void Move(ICollectionChangedEventSource<TEventItem, TCollectionItem> sender, NotifyCollectionChangedEventArgs e)
         {
-            _moveItem(e.OldStartingIndex, e.NewStartingIndex);
+            sender.MoveItem(e.OldStartingIndex, e.NewStartingIndex);
         }
 
         private void Remove(ICollectionChangedEventSource<TEventItem, TCollectionItem> sender, NotifyCollectionChangedEventArgs e)
@@ -65,7 +64,7 @@ namespace ATZ.MVVM.ViewModels.Utility
             }
         }
 
-        private void Reset(ICollectionChangedEventSource<TEventItem, TCollectionItem> sender, NotifyCollectionChangedEventArgs e)
+        private static void Reset(ICollectionChangedEventSource<TEventItem, TCollectionItem> sender, NotifyCollectionChangedEventArgs e)
         {
             sender.ClearCollection();
             foreach (var model in sender.CollectionItemSource)
