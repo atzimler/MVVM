@@ -122,7 +122,8 @@ namespace ATZ.MVVM.ViewModels.Utility.Connectors
 
         private static void Remove(CollectionViewModelToModelConnector<TViewModel, TModel> sender, NotifyCollectionChangedEventArgs e)
         {
-            foreach (TModel model in e.OldItems)
+            var itemsToRemove = e.OldItems.Count;
+            while (itemsToRemove-- > 0)
             {
                 sender.DetachViewModel(sender._viewModelCollection[e.OldStartingIndex]);
                 sender._viewModelCollection.RemoveAt(e.OldStartingIndex);
