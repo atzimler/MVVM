@@ -10,17 +10,26 @@ namespace ATZ.MVVM.ViewModels.Utility
 {
     public class CollectionChangeEventHandlers<TEventItem, TCollectionItem>
     {
-        private readonly Func<TEventItem, TCollectionItem> _create;
-        private readonly Action<int, TCollectionItem> _insert;
-        private readonly Action<int, int> _move;
-        private readonly Action<int> _remove;
+        private readonly Action _clearCollection;
+        private readonly Func<IEnumerable<TEventItem>> _collectionItemSource;
+        private readonly Func<TEventItem, TCollectionItem> _createItem;
+        private readonly Action<TCollectionItem> _addItem;
+        private readonly Action<int, TCollectionItem> _insertItem;
+        private readonly Action<int, int> _moveItem;
+        private readonly Action<int> _removeItem;
 
-        public CollectionChangeEventHandlers(Func<TEventItem, TCollectionItem> create, Action<int, TCollectionItem> insert, Action<int, int> move, Action<int> remove)
+        public CollectionChangeEventHandlers(
+            Func<IEnumerable<TEventItem>> collectionItemSource, Action clearCollection,
+            Func<TEventItem, TCollectionItem> createItem, Action<TCollectionItem> addItem, Action<int, TCollectionItem> insertItem, Action<int, int> moveItem, Action<int> removeItem
+            )
         {
-            _create = create;
-            _insert = insert;
-            _move = move;
-            _remove = remove;
+            _clearCollection = clearCollection;
+            _collectionItemSource = collectionItemSource;
+            _createItem = createItem;
+            _addItem = addItem;
+            _insertItem = insertItem;
+            _moveItem = moveItem;
+            _removeItem = removeItem;
         }
 
         public void Add(NotifyCollectionChangedEventArgs e)
@@ -28,13 +37,13 @@ namespace ATZ.MVVM.ViewModels.Utility
             var insertPosition = e.NewStartingIndex;
             foreach (TEventItem model in e.NewItems)
             {
-                _insert(insertPosition++, _create(model));
+                _insertItem(insertPosition++, _createItem(model));
             }
         }
 
         public void Move(NotifyCollectionChangedEventArgs e)
         {
-            _move(e.OldStartingIndex, e.NewStartingIndex);
+            _moveItem(e.OldStartingIndex, e.NewStartingIndex);
         }
 
         public void Remove(NotifyCollectionChangedEventArgs e)
@@ -42,8 +51,19 @@ namespace ATZ.MVVM.ViewModels.Utility
             var itemsToRemove = e.OldItems.Count;
             while (itemsToRemove-- > 0)
             {
-                _remove(e.OldStartingIndex);
+                _removeItem(e.OldStartingIndex);
             }
         }
+
+        public void Reset(NotifyCollectionChangedEventArgs e)
+        {
+            _clearCollection();
+            foreach (var model in _collectionItemSource())
+            {
+                _addItem(_createItem(model));
+            }
+        }
+
+
     }
 }
