@@ -19,7 +19,6 @@ namespace ATZ.MVVM.ViewModels.Utility.Connectors
         public ViewModelBinder BindViewModel { get; set; }
         public ViewModelBinder UnbindViewModel { get; set; }
 
-
         public bool IsValid
         {
             get { return _isValid; }
@@ -106,29 +105,6 @@ namespace ATZ.MVVM.ViewModels.Utility.Connectors
             UnbindViewModel?.Invoke(viewModel);
         }
 
-        IEnumerable<TModel> ICollectionChangedEventSource<TModel, TViewModel>.CollectionItemSource => _modelCollection;
-        void ICollectionChangedEventSource<TModel, TViewModel>.ClearCollection() => ClearViewModelCollection();
-        void ICollectionChangedEventSource<TModel, TViewModel>.AddItem(TViewModel item) => _viewModelCollection.Add(item);
-        TViewModel ICollectionChangedEventSource<TModel, TViewModel>.CreateItem(TModel sourceItem) => CreateViewModelForModel(sourceItem);
-
-        void ICollectionChangedEventSource<TModel, TViewModel>.InsertItem(int index, TViewModel item)
-            => _viewModelCollection.Insert(index, item);
-
-        void ICollectionChangedEventSource<TModel, TViewModel>.MoveItem(int oldIndex, int newIndex)
-            => _viewModelCollection.Move(oldIndex, newIndex);
-
-        void ICollectionChangedEventSource<TModel, TViewModel>.RemoveItem(int index)
-        {
-            DetachViewModel(_viewModelCollection[index]);
-            _viewModelCollection.RemoveAt(index);
-        }
-
-        void ICollectionChangedEventSource<TModel, TViewModel>.ReplaceItem(int index, TViewModel newItem)
-        {
-            DetachViewModel(_viewModelCollection[index]);
-            _viewModelCollection[index] = newItem;
-        }
-
         private void ModelCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
             if (_modelCollection == null || _viewModelCollection == null)
@@ -136,8 +112,7 @@ namespace ATZ.MVVM.ViewModels.Utility.Connectors
                 return;
             }
 
-            var collectionChangeEventHandlers = new CollectionChangedEventHandlers<TModel, TViewModel>();
-            collectionChangeEventHandlers.Handle(this, e);
+            CollectionChangedEventHandlers<TModel, TViewModel>.Handle(this, e);
 
             UpdateValidity();
         }
@@ -207,6 +182,32 @@ namespace ATZ.MVVM.ViewModels.Utility.Connectors
         {
             UpdateValidity();
         }
+
+
+        #region ICollectionChangedEventSource<TModel, TViewModel>
+        IEnumerable<TModel> ICollectionChangedEventSource<TModel, TViewModel>.CollectionItemSource => _modelCollection;
+        void ICollectionChangedEventSource<TModel, TViewModel>.ClearCollection() => ClearViewModelCollection();
+        void ICollectionChangedEventSource<TModel, TViewModel>.AddItem(TViewModel item) => _viewModelCollection.Add(item);
+        TViewModel ICollectionChangedEventSource<TModel, TViewModel>.CreateItem(TModel sourceItem) => CreateViewModelForModel(sourceItem);
+
+        void ICollectionChangedEventSource<TModel, TViewModel>.InsertItem(int index, TViewModel item)
+            => _viewModelCollection.Insert(index, item);
+
+        void ICollectionChangedEventSource<TModel, TViewModel>.MoveItem(int oldIndex, int newIndex)
+            => _viewModelCollection.Move(oldIndex, newIndex);
+
+        void ICollectionChangedEventSource<TModel, TViewModel>.RemoveItem(int index)
+        {
+            DetachViewModel(_viewModelCollection[index]);
+            _viewModelCollection.RemoveAt(index);
+        }
+
+        void ICollectionChangedEventSource<TModel, TViewModel>.ReplaceItem(int index, TViewModel newItem)
+        {
+            DetachViewModel(_viewModelCollection[index]);
+            _viewModelCollection[index] = newItem;
+        }
+        #endregion
 
     }
 }

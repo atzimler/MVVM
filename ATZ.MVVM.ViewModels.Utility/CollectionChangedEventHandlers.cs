@@ -4,35 +4,16 @@ using System.Collections.Specialized;
 
 namespace ATZ.MVVM.ViewModels.Utility
 {
-    public interface ICollectionChangedEventSource<TSourceItem, TCollectionItem>
+    public static class CollectionChangedEventHandlers<TEventItem, TCollectionItem>
     {
-        IEnumerable<TSourceItem> CollectionItemSource { get; }
-
-        void ClearCollection();
-        void AddItem(TCollectionItem item);
-        TCollectionItem CreateItem(TSourceItem sourceItem);
-        void InsertItem(int index, TCollectionItem item);
-        void MoveItem(int oldIndex, int newIndex);
-        void RemoveItem(int index);
-        void ReplaceItem(int index, TCollectionItem newItem);
-    }
-
-    public class CollectionChangedEventHandlers<TEventItem, TCollectionItem>
-    {
-        private readonly Dictionary<NotifyCollectionChangedAction, Action<ICollectionChangedEventSource<TEventItem, TCollectionItem>, NotifyCollectionChangedEventArgs>>
-            _eventHandlers;
-
-        public CollectionChangedEventHandlers()
-        {
-            _eventHandlers = new Dictionary<NotifyCollectionChangedAction, Action<ICollectionChangedEventSource<TEventItem, TCollectionItem>, NotifyCollectionChangedEventArgs>>
-                {
+        private static readonly Dictionary<NotifyCollectionChangedAction, Action<ICollectionChangedEventSource<TEventItem, TCollectionItem>, NotifyCollectionChangedEventArgs>>
+            EventHandlers = new Dictionary<NotifyCollectionChangedAction, Action<ICollectionChangedEventSource<TEventItem, TCollectionItem>, NotifyCollectionChangedEventArgs>> {
                     {NotifyCollectionChangedAction.Add, Add},
                     {NotifyCollectionChangedAction.Move, Move},
                     {NotifyCollectionChangedAction.Remove, Remove},
                     {NotifyCollectionChangedAction.Replace, Replace},
                     {NotifyCollectionChangedAction.Reset, Reset}
                 };
-        }
 
         private static void Add(ICollectionChangedEventSource<TEventItem, TCollectionItem> sender, NotifyCollectionChangedEventArgs e)
         {
@@ -71,11 +52,11 @@ namespace ATZ.MVVM.ViewModels.Utility
             sender.ReplaceItem(e.OldStartingIndex, sender.CreateItem((TEventItem)e.OldItems[0]));
         }
 
-        public void Handle(ICollectionChangedEventSource<TEventItem, TCollectionItem> sender, NotifyCollectionChangedEventArgs e)
+        public static void Handle(ICollectionChangedEventSource<TEventItem, TCollectionItem> sender, NotifyCollectionChangedEventArgs e)
         {
-            if (_eventHandlers.ContainsKey(e.Action))
+            if (EventHandlers.ContainsKey(e.Action))
             {
-                _eventHandlers[e.Action](sender, e);
+                EventHandlers[e.Action](sender, e);
             }
         }
     }
