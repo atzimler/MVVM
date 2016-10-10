@@ -4,17 +4,17 @@ using System.Collections.Specialized;
 
 namespace ATZ.MVVM.ViewModels.Utility
 {
-    public interface ICollectionChangedEventSource<TSourceItem, out TCollectionItem>
+    public interface ICollectionChangedEventSource<TSourceItem, TCollectionItem>
     {
         IEnumerable<TSourceItem> CollectionItemSource { get; }
 
         void ClearCollection();
+        void AddItem(TCollectionItem item);
         TCollectionItem CreateItem(TSourceItem sourceItem);
     }
 
     public class CollectionChangedEventHandlers<TEventItem, TCollectionItem>
     {
-        private readonly Action<TCollectionItem> _addItem;
         private readonly Action<int, TCollectionItem> _insertItem;
         private readonly Action<int, int> _moveItem;
         private readonly Action<int> _removeItem;
@@ -24,11 +24,10 @@ namespace ATZ.MVVM.ViewModels.Utility
             _eventHandlers;
 
         public CollectionChangedEventHandlers(
-            Action<TCollectionItem> addItem, Action<int, TCollectionItem> insertItem, Action<int, int> moveItem, Action<int> removeItem,
+            Action<int, TCollectionItem> insertItem, Action<int, int> moveItem, Action<int> removeItem,
             Action<int, TCollectionItem> replaceItem)
         {
                 // TODO: Create these on an interface, make that the sender, then the dictionary and the partial handlers can be static.
-                _addItem = addItem;
                 _insertItem = insertItem;
                 _moveItem = moveItem;
                 _removeItem = removeItem;
@@ -72,7 +71,7 @@ namespace ATZ.MVVM.ViewModels.Utility
             sender.ClearCollection();
             foreach (var model in sender.CollectionItemSource)
             {
-                _addItem(sender.CreateItem(model));
+                sender.AddItem(sender.CreateItem(model));
             }
         }
 
