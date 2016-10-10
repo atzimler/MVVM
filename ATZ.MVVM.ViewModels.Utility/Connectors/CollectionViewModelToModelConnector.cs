@@ -17,6 +17,8 @@ namespace ATZ.MVVM.ViewModels.Utility.Connectors
         private ObservableCollection<TViewModel> _viewModelCollection;
 
         public ViewModelBinder BindViewModel { get; set; }
+        public ViewModelBinder UnbindViewModel { get; set; }
+
 
         public bool IsValid
         {
@@ -52,8 +54,6 @@ namespace ATZ.MVVM.ViewModels.Utility.Connectors
                 BindModelCollection();
             }
         }
-
-        public ViewModelBinder UnbindViewModel { get; set; }
 
         public ObservableCollection<TViewModel> ViewModelCollection
         {
@@ -133,7 +133,7 @@ namespace ATZ.MVVM.ViewModels.Utility.Connectors
         private static void Reset(CollectionViewModelToModelConnector<TViewModel, TModel> sender, NotifyCollectionChangedEventArgs e)
         {
             sender.ClearViewModelCollection();
-            foreach (TModel model in sender._modelCollection)
+            foreach (var model in sender._modelCollection)
             {
                 sender._viewModelCollection.Add(sender.CreateViewModelForModel(model));
             }
@@ -189,15 +189,12 @@ namespace ATZ.MVVM.ViewModels.Utility.Connectors
 
         private void UpdateValidity()
         {
-            IsValid = _viewModelCollection == null ? true : _viewModelCollection.ToList().TrueForAll(vm => vm.IsValid);
+            IsValid = _viewModelCollection?.ToList().TrueForAll(vm => vm.IsValid) ?? true;
         }
 
         protected virtual void OnIsValidChanged()
         {
-            if (IsValidChanged != null)
-            {
-                IsValidChanged(this, EventArgs.Empty);
-            }
+            IsValidChanged?.Invoke(this, EventArgs.Empty);
             OnPropertyChanged(nameof(IsValid));
         }
 
@@ -218,10 +215,7 @@ namespace ATZ.MVVM.ViewModels.Utility.Connectors
 
         public void ClearAllViewModelBindings()
         {
-            if (_viewModelCollection != null)
-            {
-                _viewModelCollection.ToList().ForEach(DetachViewModel);
-            }
+            _viewModelCollection?.ToList().ForEach(DetachViewModel);
         }
 
         public void Sort(Comparison<TModel> comparison)
