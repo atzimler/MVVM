@@ -103,10 +103,7 @@ namespace ATZ.MVVM.ViewModels.Utility.Connectors
         private void DetachViewModel(TViewModel viewModel)
         {
             viewModel.IsValidChanged -= UpdateValidity;
-            if (UnbindViewModel != null)
-            {
-                UnbindViewModel(viewModel);
-            }
+            UnbindViewModel?.Invoke(viewModel);
         }
 
 #region generic NotifyCollectionChangedEvent handlers
