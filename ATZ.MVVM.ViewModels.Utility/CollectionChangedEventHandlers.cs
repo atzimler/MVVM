@@ -11,11 +11,11 @@ namespace ATZ.MVVM.ViewModels.Utility
         void ClearCollection();
         void AddItem(TCollectionItem item);
         TCollectionItem CreateItem(TSourceItem sourceItem);
+        void InsertItem(int position, TCollectionItem item);
     }
 
     public class CollectionChangedEventHandlers<TEventItem, TCollectionItem>
     {
-        private readonly Action<int, TCollectionItem> _insertItem;
         private readonly Action<int, int> _moveItem;
         private readonly Action<int> _removeItem;
         private readonly Action<int, TCollectionItem> _replaceItem;
@@ -24,11 +24,10 @@ namespace ATZ.MVVM.ViewModels.Utility
             _eventHandlers;
 
         public CollectionChangedEventHandlers(
-            Action<int, TCollectionItem> insertItem, Action<int, int> moveItem, Action<int> removeItem,
+            Action<int, int> moveItem, Action<int> removeItem,
             Action<int, TCollectionItem> replaceItem)
         {
                 // TODO: Create these on an interface, make that the sender, then the dictionary and the partial handlers can be static.
-                _insertItem = insertItem;
                 _moveItem = moveItem;
                 _removeItem = removeItem;
                 _replaceItem = replaceItem;
@@ -48,7 +47,7 @@ namespace ATZ.MVVM.ViewModels.Utility
             var insertPosition = e.NewStartingIndex;
             foreach (TEventItem model in e.NewItems)
             {
-                _insertItem(insertPosition++, sender.CreateItem(model));
+                sender.InsertItem(insertPosition++, sender.CreateItem(model));
             }
         }
 
