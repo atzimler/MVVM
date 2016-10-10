@@ -121,7 +121,12 @@ namespace ATZ.MVVM.ViewModels.Utility.Connectors
                 sender.DetachViewModel(sender._viewModelCollection[index]);
                 sender._viewModelCollection.RemoveAt(index);
             };
-            var collectionChangeEventHandlers = new CollectionChangeEventHandlers<TModel, TViewModel>(collectionItemSource, clearCollection, create, add, insert, move, remove);
+            Action<int, TViewModel> replace = (index, newItem) =>
+            {
+                sender.DetachViewModel(sender._viewModelCollection[index]);
+                sender._viewModelCollection[index] = newItem;
+            };
+            var collectionChangeEventHandlers = new CollectionChangeEventHandlers<TModel, TViewModel>(collectionItemSource, clearCollection, create, add, insert, move, remove, replace);
             collectionChangeEventHandlers.Add(e);
         }
 
@@ -138,7 +143,12 @@ namespace ATZ.MVVM.ViewModels.Utility.Connectors
                 sender.DetachViewModel(sender._viewModelCollection[index]);
                 sender._viewModelCollection.RemoveAt(index);
             };
-            var collectionChangeEventHandlers = new CollectionChangeEventHandlers<TModel, TViewModel>(collectionItemSource, clearCollection, create, add, insert, move, remove);
+            Action<int, TViewModel> replace = (index, newItem) =>
+            {
+                sender.DetachViewModel(sender._viewModelCollection[index]);
+                sender._viewModelCollection[index] = newItem;
+            };
+            var collectionChangeEventHandlers = new CollectionChangeEventHandlers<TModel, TViewModel>(collectionItemSource, clearCollection, create, add, insert, move, remove, replace);
             collectionChangeEventHandlers.Move(e);
         }
 
@@ -155,7 +165,12 @@ namespace ATZ.MVVM.ViewModels.Utility.Connectors
                 sender.DetachViewModel(sender._viewModelCollection[index]);
                 sender._viewModelCollection.RemoveAt(index);
             };
-            var collectionChangeEventHandlers = new CollectionChangeEventHandlers<TModel, TViewModel>(collectionItemSource, clearCollection, create, add, insert, move, remove);
+            Action<int, TViewModel> replace = (index, newItem) =>
+            {
+                sender.DetachViewModel(sender._viewModelCollection[index]);
+                sender._viewModelCollection[index] = newItem;
+            };
+            var collectionChangeEventHandlers = new CollectionChangeEventHandlers<TModel, TViewModel>(collectionItemSource, clearCollection, create, add, insert, move, remove, replace);
             collectionChangeEventHandlers.Remove(e);
         }
 
@@ -172,15 +187,35 @@ namespace ATZ.MVVM.ViewModels.Utility.Connectors
                 sender.DetachViewModel(sender._viewModelCollection[index]);
                 sender._viewModelCollection.RemoveAt(index);
             };
-            var collectionChangeEventHandlers = new CollectionChangeEventHandlers<TModel, TViewModel>(collectionItemSource, clearCollection, create, add, insert, move, remove);
+            Action<int, TViewModel> replace = (index, newItem) =>
+            {
+                sender.DetachViewModel(sender._viewModelCollection[index]);
+                sender._viewModelCollection[index] = newItem;
+            };
+            var collectionChangeEventHandlers = new CollectionChangeEventHandlers<TModel, TViewModel>(collectionItemSource, clearCollection, create, add, insert, move, remove, replace);
             collectionChangeEventHandlers.Reset(e);
         }
 
         private static void Replace(CollectionViewModelToModelConnector<TViewModel, TModel> sender, NotifyCollectionChangedEventArgs e)
         {
-            sender.DetachViewModel(sender._viewModelCollection[e.OldStartingIndex]);
-            sender._viewModelCollection[e.OldStartingIndex] =
-                sender.CreateViewModelForModel(sender._modelCollection[e.OldStartingIndex]);
+            Action clearCollection = sender.ClearViewModelCollection;
+            Func<IEnumerable<TModel>> collectionItemSource = () => sender._modelCollection;
+            Func<TModel, TViewModel> create = sender.CreateViewModelForModel;
+            Action<int, TViewModel> insert = sender._viewModelCollection.Insert;
+            Action<TViewModel> add = sender._viewModelCollection.Add;
+            Action<int, int> move = sender._viewModelCollection.Move;
+            Action<int> remove = (index) =>
+            {
+                sender.DetachViewModel(sender._viewModelCollection[index]);
+                sender._viewModelCollection.RemoveAt(index);
+            };
+            Action<int, TViewModel> replace = (index, newItem) =>
+            {
+                sender.DetachViewModel(sender._viewModelCollection[index]);
+                sender._viewModelCollection[index] = newItem;
+            };
+            var collectionChangeEventHandlers = new CollectionChangeEventHandlers<TModel, TViewModel>(collectionItemSource, clearCollection, create, add, insert, move, remove, replace);
+            collectionChangeEventHandlers.Replace(e);
         }
 
         private static readonly Dictionary<NotifyCollectionChangedAction, Action<CollectionViewModelToModelConnector<TViewModel, TModel>, NotifyCollectionChangedEventArgs>> EventHandlers =

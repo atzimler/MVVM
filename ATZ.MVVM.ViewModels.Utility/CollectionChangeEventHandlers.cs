@@ -17,10 +17,12 @@ namespace ATZ.MVVM.ViewModels.Utility
         private readonly Action<int, TCollectionItem> _insertItem;
         private readonly Action<int, int> _moveItem;
         private readonly Action<int> _removeItem;
+        private readonly Action<int, TCollectionItem> _replaceItem;
 
         public CollectionChangeEventHandlers(
             Func<IEnumerable<TEventItem>> collectionItemSource, Action clearCollection,
-            Func<TEventItem, TCollectionItem> createItem, Action<TCollectionItem> addItem, Action<int, TCollectionItem> insertItem, Action<int, int> moveItem, Action<int> removeItem
+            Func<TEventItem, TCollectionItem> createItem, Action<TCollectionItem> addItem, Action<int, TCollectionItem> insertItem, Action<int, int> moveItem, Action<int> removeItem,
+            Action<int, TCollectionItem> replaceItem
             )
         {
             _clearCollection = clearCollection;
@@ -30,6 +32,7 @@ namespace ATZ.MVVM.ViewModels.Utility
             _insertItem = insertItem;
             _moveItem = moveItem;
             _removeItem = removeItem;
+            _replaceItem = replaceItem;
         }
 
         public void Add(NotifyCollectionChangedEventArgs e)
@@ -64,6 +67,10 @@ namespace ATZ.MVVM.ViewModels.Utility
             }
         }
 
+        public void Replace(NotifyCollectionChangedEventArgs e)
+        {
+            _replaceItem(e.OldStartingIndex, _createItem((TEventItem)e.OldItems[0]));
+        }
 
     }
 }
