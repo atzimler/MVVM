@@ -112,13 +112,18 @@ namespace ATZ.MVVM.ViewModels.Utility.Connectors
         {
             Func<TModel, TViewModel> create = sender.CreateViewModelForModel;
             Action<int, TViewModel> insert = sender._viewModelCollection.Insert;
-            var collectionChangeEventHandlers = new CollectionChangeEventHandlers<TModel, TViewModel>(create, insert);
+            Action<int, int> move = sender._viewModelCollection.Move;
+            var collectionChangeEventHandlers = new CollectionChangeEventHandlers<TModel, TViewModel>(create, insert, move);
             collectionChangeEventHandlers.Add(e);
         }
 
         private static void Move(CollectionViewModelToModelConnector<TViewModel, TModel> sender, NotifyCollectionChangedEventArgs e)
         {
-            sender._viewModelCollection.Move(e.OldStartingIndex, e.NewStartingIndex);
+            Func<TModel, TViewModel> create = sender.CreateViewModelForModel;
+            Action<int, TViewModel> insert = sender._viewModelCollection.Insert;
+            Action<int, int> move = sender._viewModelCollection.Move;
+            var collectionChangeEventHandlers = new CollectionChangeEventHandlers<TModel, TViewModel>(create, insert, move);
+            collectionChangeEventHandlers.Move(e);
         }
 
         private static void Remove(CollectionViewModelToModelConnector<TViewModel, TModel> sender, NotifyCollectionChangedEventArgs e)

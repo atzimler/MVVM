@@ -12,11 +12,13 @@ namespace ATZ.MVVM.ViewModels.Utility
     {
         private readonly Func<TEventItem, TCollectionItem> _create;
         private readonly Action<int, TCollectionItem> _insert;
+        private readonly Action<int, int> _move;
 
-        public CollectionChangeEventHandlers(Func<TEventItem, TCollectionItem> create, Action<int, TCollectionItem> insert)
+        public CollectionChangeEventHandlers(Func<TEventItem, TCollectionItem> create, Action<int, TCollectionItem> insert, Action<int, int> move)
         {
             _create = create;
             _insert = insert;
+            _move = move;
         }
 
         public void Add(NotifyCollectionChangedEventArgs e)
@@ -26,6 +28,11 @@ namespace ATZ.MVVM.ViewModels.Utility
             {
                 _insert(insertPosition++, _create(model));
             }
+        }
+
+        public void Move(NotifyCollectionChangedEventArgs e)
+        {
+            _move(e.OldStartingIndex, e.NewStartingIndex);
         }
     }
 }
