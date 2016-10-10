@@ -6,7 +6,7 @@ using System.Linq;
 
 namespace ATZ.MVVM.ViewModels.Utility.Connectors
 {
-    public class CollectionViewModelToModelConnector<TViewModel, TModel> : ObservableObject, IVerifiable
+    public class CollectionViewModelToModelConnector<TViewModel, TModel> : ObservableObject, IVerifiable, ICollectionChangedEventSource
         where TViewModel : BaseViewModel<TModel>, new()
         where TModel : class
     {
@@ -106,6 +106,11 @@ namespace ATZ.MVVM.ViewModels.Utility.Connectors
             UnbindViewModel?.Invoke(viewModel);
         }
 
+        void ICollectionChangedEventSource.ClearCollection()
+        {
+            ClearViewModelCollection();
+        }
+
         private void ModelCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
             if (_modelCollection == null || _viewModelCollection == null)
@@ -113,7 +118,6 @@ namespace ATZ.MVVM.ViewModels.Utility.Connectors
                 return;
             }
 
-            Action clearCollection = ClearViewModelCollection;
             Func<IEnumerable<TModel>> collectionItemSource = () => _modelCollection;
             Func<TModel, TViewModel> create = CreateViewModelForModel;
             Action<int, TViewModel> insert = _viewModelCollection.Insert;
@@ -129,8 +133,8 @@ namespace ATZ.MVVM.ViewModels.Utility.Connectors
                 DetachViewModel(_viewModelCollection[index]);
                 _viewModelCollection[index] = newItem;
             };
-            var collectionChangeEventHandlers = new CollectionChangeEventHandlers<TModel, TViewModel>(collectionItemSource, clearCollection, create, add, insert, move, remove, replace);
-            collectionChangeEventHandlers.Handle(e);
+            var collectionChangeEventHandlers = new CollectionChangedEventHandlers<TModel, TViewModel>(collectionItemSource, create, add, insert, move, remove, replace);
+            collectionChangeEventHandlers.Handle(this, e);
 
             UpdateValidity();
         }
@@ -200,5 +204,6 @@ namespace ATZ.MVVM.ViewModels.Utility.Connectors
         {
             UpdateValidity();
         }
+
     }
 }
