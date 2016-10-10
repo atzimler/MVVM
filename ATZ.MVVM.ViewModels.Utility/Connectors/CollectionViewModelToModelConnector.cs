@@ -106,129 +106,6 @@ namespace ATZ.MVVM.ViewModels.Utility.Connectors
             UnbindViewModel?.Invoke(viewModel);
         }
 
-#region generic NotifyCollectionChangedEvent handlers
-
-        private static void Add(CollectionViewModelToModelConnector<TViewModel, TModel> sender, NotifyCollectionChangedEventArgs e)
-        {
-            Action clearCollection = sender.ClearViewModelCollection;
-            Func<IEnumerable<TModel>> collectionItemSource = () => sender._modelCollection;
-            Func<TModel, TViewModel> create = sender.CreateViewModelForModel;
-            Action<int, TViewModel> insert = sender._viewModelCollection.Insert;
-            Action<TViewModel> add = sender._viewModelCollection.Add;
-            Action<int, int> move = sender._viewModelCollection.Move;
-            Action<int> remove = (index) =>
-            {
-                sender.DetachViewModel(sender._viewModelCollection[index]);
-                sender._viewModelCollection.RemoveAt(index);
-            };
-            Action<int, TViewModel> replace = (index, newItem) =>
-            {
-                sender.DetachViewModel(sender._viewModelCollection[index]);
-                sender._viewModelCollection[index] = newItem;
-            };
-            var collectionChangeEventHandlers = new CollectionChangeEventHandlers<TModel, TViewModel>(collectionItemSource, clearCollection, create, add, insert, move, remove, replace);
-            collectionChangeEventHandlers.Add(e);
-        }
-
-        private static void Move(CollectionViewModelToModelConnector<TViewModel, TModel> sender, NotifyCollectionChangedEventArgs e)
-        {
-            Action clearCollection = sender.ClearViewModelCollection;
-            Func<IEnumerable<TModel>> collectionItemSource = () => sender._modelCollection;
-            Func<TModel, TViewModel> create = sender.CreateViewModelForModel;
-            Action<int, TViewModel> insert = sender._viewModelCollection.Insert;
-            Action<TViewModel> add = sender._viewModelCollection.Add;
-            Action<int, int> move = sender._viewModelCollection.Move;
-            Action<int> remove = (index) =>
-            {
-                sender.DetachViewModel(sender._viewModelCollection[index]);
-                sender._viewModelCollection.RemoveAt(index);
-            };
-            Action<int, TViewModel> replace = (index, newItem) =>
-            {
-                sender.DetachViewModel(sender._viewModelCollection[index]);
-                sender._viewModelCollection[index] = newItem;
-            };
-            var collectionChangeEventHandlers = new CollectionChangeEventHandlers<TModel, TViewModel>(collectionItemSource, clearCollection, create, add, insert, move, remove, replace);
-            collectionChangeEventHandlers.Move(e);
-        }
-
-        private static void Remove(CollectionViewModelToModelConnector<TViewModel, TModel> sender, NotifyCollectionChangedEventArgs e)
-        {
-            Action clearCollection = sender.ClearViewModelCollection;
-            Func<IEnumerable<TModel>> collectionItemSource = () => sender._modelCollection;
-            Func<TModel, TViewModel> create = sender.CreateViewModelForModel;
-            Action<int, TViewModel> insert = sender._viewModelCollection.Insert;
-            Action<TViewModel> add = sender._viewModelCollection.Add;
-            Action<int, int> move = sender._viewModelCollection.Move;
-            Action<int> remove = (index) =>
-            {
-                sender.DetachViewModel(sender._viewModelCollection[index]);
-                sender._viewModelCollection.RemoveAt(index);
-            };
-            Action<int, TViewModel> replace = (index, newItem) =>
-            {
-                sender.DetachViewModel(sender._viewModelCollection[index]);
-                sender._viewModelCollection[index] = newItem;
-            };
-            var collectionChangeEventHandlers = new CollectionChangeEventHandlers<TModel, TViewModel>(collectionItemSource, clearCollection, create, add, insert, move, remove, replace);
-            collectionChangeEventHandlers.Remove(e);
-        }
-
-        private static void Reset(CollectionViewModelToModelConnector<TViewModel, TModel> sender, NotifyCollectionChangedEventArgs e)
-        {
-            Action clearCollection = sender.ClearViewModelCollection;
-            Func<IEnumerable<TModel>> collectionItemSource = () => sender._modelCollection;
-            Func<TModel, TViewModel> create = sender.CreateViewModelForModel;
-            Action<int, TViewModel> insert = sender._viewModelCollection.Insert;
-            Action<TViewModel> add = sender._viewModelCollection.Add;
-            Action<int, int> move = sender._viewModelCollection.Move;
-            Action<int> remove = (index) =>
-            {
-                sender.DetachViewModel(sender._viewModelCollection[index]);
-                sender._viewModelCollection.RemoveAt(index);
-            };
-            Action<int, TViewModel> replace = (index, newItem) =>
-            {
-                sender.DetachViewModel(sender._viewModelCollection[index]);
-                sender._viewModelCollection[index] = newItem;
-            };
-            var collectionChangeEventHandlers = new CollectionChangeEventHandlers<TModel, TViewModel>(collectionItemSource, clearCollection, create, add, insert, move, remove, replace);
-            collectionChangeEventHandlers.Reset(e);
-        }
-
-        private static void Replace(CollectionViewModelToModelConnector<TViewModel, TModel> sender, NotifyCollectionChangedEventArgs e)
-        {
-            Action clearCollection = sender.ClearViewModelCollection;
-            Func<IEnumerable<TModel>> collectionItemSource = () => sender._modelCollection;
-            Func<TModel, TViewModel> create = sender.CreateViewModelForModel;
-            Action<int, TViewModel> insert = sender._viewModelCollection.Insert;
-            Action<TViewModel> add = sender._viewModelCollection.Add;
-            Action<int, int> move = sender._viewModelCollection.Move;
-            Action<int> remove = (index) =>
-            {
-                sender.DetachViewModel(sender._viewModelCollection[index]);
-                sender._viewModelCollection.RemoveAt(index);
-            };
-            Action<int, TViewModel> replace = (index, newItem) =>
-            {
-                sender.DetachViewModel(sender._viewModelCollection[index]);
-                sender._viewModelCollection[index] = newItem;
-            };
-            var collectionChangeEventHandlers = new CollectionChangeEventHandlers<TModel, TViewModel>(collectionItemSource, clearCollection, create, add, insert, move, remove, replace);
-            collectionChangeEventHandlers.Replace(e);
-        }
-
-        private static readonly Dictionary<NotifyCollectionChangedAction, Action<CollectionViewModelToModelConnector<TViewModel, TModel>, NotifyCollectionChangedEventArgs>> EventHandlers =
-            new Dictionary<NotifyCollectionChangedAction, Action<CollectionViewModelToModelConnector<TViewModel, TModel>, NotifyCollectionChangedEventArgs>>
-            {
-                {NotifyCollectionChangedAction.Add, Add},
-                {NotifyCollectionChangedAction.Move, Move},
-                {NotifyCollectionChangedAction.Remove, Remove},
-                {NotifyCollectionChangedAction.Replace, Replace},
-                {NotifyCollectionChangedAction.Reset, Reset}
-            };
-#endregion
-
         private void ModelCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
             if (_modelCollection == null || _viewModelCollection == null)
@@ -236,12 +113,24 @@ namespace ATZ.MVVM.ViewModels.Utility.Connectors
                 return;
             }
 
-            // TODO: This needs unit testing.
-            // TODO: This and Views.Utility.CollectionConnector share similarities, maybe they can be merged.
-            if (EventHandlers.ContainsKey(e.Action))
+            Action clearCollection = ClearViewModelCollection;
+            Func<IEnumerable<TModel>> collectionItemSource = () => _modelCollection;
+            Func<TModel, TViewModel> create = CreateViewModelForModel;
+            Action<int, TViewModel> insert = _viewModelCollection.Insert;
+            Action<TViewModel> add = _viewModelCollection.Add;
+            Action<int, int> move = _viewModelCollection.Move;
+            Action<int> remove = (index) =>
             {
-                EventHandlers[e.Action](this, e);
-            }
+                DetachViewModel(_viewModelCollection[index]);
+                _viewModelCollection.RemoveAt(index);
+            };
+            Action<int, TViewModel> replace = (index, newItem) =>
+            {
+                DetachViewModel(_viewModelCollection[index]);
+                _viewModelCollection[index] = newItem;
+            };
+            var collectionChangeEventHandlers = new CollectionChangeEventHandlers<TModel, TViewModel>(collectionItemSource, clearCollection, create, add, insert, move, remove, replace);
+            collectionChangeEventHandlers.Handle(e);
 
             UpdateValidity();
         }

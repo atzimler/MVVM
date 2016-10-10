@@ -19,12 +19,16 @@ namespace ATZ.MVVM.ViewModels.Utility
         private readonly Action<int> _removeItem;
         private readonly Action<int, TCollectionItem> _replaceItem;
 
+        private readonly Dictionary<NotifyCollectionChangedAction, Action<NotifyCollectionChangedEventArgs>>
+            _eventHandlers;
+
         public CollectionChangeEventHandlers(
             Func<IEnumerable<TEventItem>> collectionItemSource, Action clearCollection,
             Func<TEventItem, TCollectionItem> createItem, Action<TCollectionItem> addItem, Action<int, TCollectionItem> insertItem, Action<int, int> moveItem, Action<int> removeItem,
             Action<int, TCollectionItem> replaceItem
             )
         {
+            // TODO: Create these on an interface, make that the sender, then the dictionary and the partial handlers can be static.
             _clearCollection = clearCollection;
             _collectionItemSource = collectionItemSource;
             _createItem = createItem;
@@ -33,9 +37,18 @@ namespace ATZ.MVVM.ViewModels.Utility
             _moveItem = moveItem;
             _removeItem = removeItem;
             _replaceItem = replaceItem;
-        }
 
-        public void Add(NotifyCollectionChangedEventArgs e)
+        _eventHandlers = new Dictionary<NotifyCollectionChangedAction, Action<NotifyCollectionChangedEventArgs>>
+            {
+                {NotifyCollectionChangedAction.Add, Add},
+                {NotifyCollectionChangedAction.Move, Move},
+                {NotifyCollectionChangedAction.Remove, Remove},
+                {NotifyCollectionChangedAction.Replace, Replace},
+                {NotifyCollectionChangedAction.Reset, Reset}
+            };
+    }
+
+    public void Add(NotifyCollectionChangedEventArgs e)
         {
             var insertPosition = e.NewStartingIndex;
             foreach (TEventItem model in e.NewItems)
@@ -72,5 +85,12 @@ namespace ATZ.MVVM.ViewModels.Utility
             _replaceItem(e.OldStartingIndex, _createItem((TEventItem)e.OldItems[0]));
         }
 
+        public void Handle(NotifyCollectionChangedEventArgs e)
+        {
+            if (_eventHandlers.ContainsKey(e.Action))
+            {
+                _eventHandlers[e.Action](e);
+            }
+        }
     }
 }
