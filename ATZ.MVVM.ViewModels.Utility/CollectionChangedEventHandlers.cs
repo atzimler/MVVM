@@ -13,22 +13,20 @@ namespace ATZ.MVVM.ViewModels.Utility
         TCollectionItem CreateItem(TSourceItem sourceItem);
         void InsertItem(int index, TCollectionItem item);
         void MoveItem(int oldIndex, int newIndex);
+        void RemoveItem(int index);
     }
 
     public class CollectionChangedEventHandlers<TEventItem, TCollectionItem>
     {
-        private readonly Action<int> _removeItem;
         private readonly Action<int, TCollectionItem> _replaceItem;
 
         private readonly Dictionary<NotifyCollectionChangedAction, Action<ICollectionChangedEventSource<TEventItem, TCollectionItem>, NotifyCollectionChangedEventArgs>>
             _eventHandlers;
 
         public CollectionChangedEventHandlers(
-            Action<int> removeItem,
             Action<int, TCollectionItem> replaceItem)
         {
                 // TODO: Create these on an interface, make that the sender, then the dictionary and the partial handlers can be static.
-                _removeItem = removeItem;
                 _replaceItem = replaceItem;
 
             _eventHandlers = new Dictionary<NotifyCollectionChangedAction, Action<ICollectionChangedEventSource<TEventItem, TCollectionItem>, NotifyCollectionChangedEventArgs>>
@@ -55,12 +53,12 @@ namespace ATZ.MVVM.ViewModels.Utility
             sender.MoveItem(e.OldStartingIndex, e.NewStartingIndex);
         }
 
-        private void Remove(ICollectionChangedEventSource<TEventItem, TCollectionItem> sender, NotifyCollectionChangedEventArgs e)
+        private static void Remove(ICollectionChangedEventSource<TEventItem, TCollectionItem> sender, NotifyCollectionChangedEventArgs e)
         {
             var itemsToRemove = e.OldItems.Count;
             while (itemsToRemove-- > 0)
             {
-                _removeItem(e.OldStartingIndex);
+                sender.RemoveItem(e.OldStartingIndex);
             }
         }
 

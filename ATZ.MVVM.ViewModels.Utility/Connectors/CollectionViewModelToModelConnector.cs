@@ -117,6 +117,12 @@ namespace ATZ.MVVM.ViewModels.Utility.Connectors
         void ICollectionChangedEventSource<TModel, TViewModel>.MoveItem(int oldIndex, int newIndex)
             => _viewModelCollection.Move(oldIndex, newIndex);
 
+        void ICollectionChangedEventSource<TModel, TViewModel>.RemoveItem(int index)
+        {
+            DetachViewModel(_viewModelCollection[index]);
+            _viewModelCollection.RemoveAt(index);
+        }
+
         private void ModelCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
             if (_modelCollection == null || _viewModelCollection == null)
@@ -124,17 +130,12 @@ namespace ATZ.MVVM.ViewModels.Utility.Connectors
                 return;
             }
 
-            Action<int> remove = (index) =>
-            {
-                DetachViewModel(_viewModelCollection[index]);
-                _viewModelCollection.RemoveAt(index);
-            };
             Action<int, TViewModel> replace = (index, newItem) =>
             {
                 DetachViewModel(_viewModelCollection[index]);
                 _viewModelCollection[index] = newItem;
             };
-            var collectionChangeEventHandlers = new CollectionChangedEventHandlers<TModel, TViewModel>(remove, replace);
+            var collectionChangeEventHandlers = new CollectionChangedEventHandlers<TModel, TViewModel>(replace);
             collectionChangeEventHandlers.Handle(this, e);
 
             UpdateValidity();
