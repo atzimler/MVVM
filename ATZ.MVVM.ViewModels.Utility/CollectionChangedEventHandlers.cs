@@ -14,21 +14,16 @@ namespace ATZ.MVVM.ViewModels.Utility
         void InsertItem(int index, TCollectionItem item);
         void MoveItem(int oldIndex, int newIndex);
         void RemoveItem(int index);
+        void ReplaceItem(int index, TCollectionItem newItem);
     }
 
     public class CollectionChangedEventHandlers<TEventItem, TCollectionItem>
     {
-        private readonly Action<int, TCollectionItem> _replaceItem;
-
         private readonly Dictionary<NotifyCollectionChangedAction, Action<ICollectionChangedEventSource<TEventItem, TCollectionItem>, NotifyCollectionChangedEventArgs>>
             _eventHandlers;
 
-        public CollectionChangedEventHandlers(
-            Action<int, TCollectionItem> replaceItem)
+        public CollectionChangedEventHandlers()
         {
-                // TODO: Create these on an interface, make that the sender, then the dictionary and the partial handlers can be static.
-                _replaceItem = replaceItem;
-
             _eventHandlers = new Dictionary<NotifyCollectionChangedAction, Action<ICollectionChangedEventSource<TEventItem, TCollectionItem>, NotifyCollectionChangedEventArgs>>
                 {
                     {NotifyCollectionChangedAction.Add, Add},
@@ -71,9 +66,9 @@ namespace ATZ.MVVM.ViewModels.Utility
             }
         }
 
-        private void Replace(ICollectionChangedEventSource<TEventItem, TCollectionItem> sender, NotifyCollectionChangedEventArgs e)
+        private static void Replace(ICollectionChangedEventSource<TEventItem, TCollectionItem> sender, NotifyCollectionChangedEventArgs e)
         {
-            _replaceItem(e.OldStartingIndex, sender.CreateItem((TEventItem)e.OldItems[0]));
+            sender.ReplaceItem(e.OldStartingIndex, sender.CreateItem((TEventItem)e.OldItems[0]));
         }
 
         public void Handle(ICollectionChangedEventSource<TEventItem, TCollectionItem> sender, NotifyCollectionChangedEventArgs e)
