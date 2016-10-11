@@ -56,7 +56,7 @@ namespace ATZ.MVVM.Views.Utility.Connectors
             }
         }
 
-        private TView CreateViewForViewModel(TViewModel viewModel)
+        private static TView CreateViewForViewModel(TViewModel viewModel)
         {
             // TODO: This should be DependencyInjection for IView<VM> with proper insertion of the current type of the viewModel, so that different types of subclasses can be handled correctly.
             TView view = new TView();
