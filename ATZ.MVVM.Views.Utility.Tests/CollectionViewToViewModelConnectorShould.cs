@@ -132,5 +132,24 @@ namespace ATZ.MVVM.Views.Utility.Tests
             Assert.AreEqual(1, sp.Children.Count);
             Assert.AreNotSame(v1, sp.Children[0]);
         }
+
+        [Test]
+        [STAThread]
+        public void KeepViewModelCollectionUnchangedIfReplacedWithTheSameObject()
+        {
+            var sp = new StackPanel();
+            var vms = new ObservableCollectionEventChangeChecker<TestViewModel> {new TestViewModel()};
+            var conn = new TConnector
+            {
+                ViewCollection = sp.Children,
+                ViewModelCollection = vms
+            };
+            vms.CollectionChangedEventHandlerAdded = false;
+            vms.CollectionChangedEventHandlerRemoved = false;
+
+            conn.ViewModelCollection = vms;
+            Assert.IsFalse(vms.CollectionChangedEventHandlerAdded);
+            Assert.IsFalse(vms.CollectionChangedEventHandlerRemoved);
+        }
     }
 }

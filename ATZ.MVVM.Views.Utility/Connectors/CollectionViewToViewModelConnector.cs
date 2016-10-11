@@ -33,14 +33,16 @@ namespace ATZ.MVVM.Views.Utility.Connectors
             get { return _viewModelCollection; }
             set
             {
-                if (_viewModelCollection != value)
+                if (_viewModelCollection == value)
                 {
-                    UnbindViewModelCollection();
-
-                    _viewModelCollection = value;
-
-                    BindViewModelCollection();
+                    return;
                 }
+
+                UnbindViewModelCollection();
+
+                _viewModelCollection = value;
+
+                BindViewModelCollection();
             }
         }
 
