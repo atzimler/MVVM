@@ -87,7 +87,7 @@ namespace ATZ.MVVM.Views.Utility.Tests
                 ViewCollection = sp.Children,
                 ViewModelCollection = vms
             };
-            Assert.AreEqual(2, sp.Children.Count);
+            Assert.AreEqual(2, conn.ViewCollection.Count);
 
             var v1 = sp.Children[0];
             var v2 = sp.Children[1];
@@ -108,7 +108,7 @@ namespace ATZ.MVVM.Views.Utility.Tests
                 ViewCollection = sp.Children,
                 ViewModelCollection = vms
             };
-            Assert.AreEqual(1, sp.Children.Count);
+            Assert.AreEqual(1, conn.ViewCollection.Count);
 
             vms.RemoveAt(0);
             Assert.AreEqual(0, sp.Children.Count);

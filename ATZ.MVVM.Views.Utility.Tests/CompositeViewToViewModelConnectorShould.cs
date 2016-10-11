@@ -17,6 +17,7 @@ namespace ATZ.MVVM.Views.Utility.Tests
             var mvm = new MainViewModel {ComponentViewModel = cvm, ComponentModel = cm};
             var cv = new ComponentView();
 
+            // ReSharper disable once UnusedVariable => variable needed to correctly create the connector that will set up the MVVM components.
             var conn = new TConnector(cv, mvm, vm => vm.ComponentViewModel, vm => vm.ComponentModel);
             Assert.AreSame(cm, cvm.Model);
             Assert.AreSame(cvm, cv.GetViewModel());

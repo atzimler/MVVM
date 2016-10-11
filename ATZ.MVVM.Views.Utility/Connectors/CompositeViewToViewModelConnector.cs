@@ -9,14 +9,12 @@ namespace ATZ.MVVM.Views.Utility.Connectors
         where TComponentViewModel : BaseViewModel<TComponentModel>
         where TComponentModel : class
     {
-        #region Constructors
         public CompositeViewToViewModelConnector(TComponentView componentView, TViewModel viewModel, Func<TViewModel, TComponentViewModel> componentViewModel, Func<TViewModel, TComponentModel> componentModel)
         {
-            TComponentViewModel cvm = componentViewModel(viewModel);
+            var cvm = componentViewModel(viewModel);
             cvm.Model = componentModel(viewModel);
             componentView.SetViewModel(cvm);
         }
-        #endregion
     }
 
 }
