@@ -12,12 +12,9 @@ namespace ATZ.MVVM.Views.Utility.Connectors
         where TViewModel : BaseViewModel<TModel>
         where TModel : class
     {
-        #region Private Variables
         private UIElementCollection _viewCollection;
         private ObservableCollection<TViewModel> _viewModelCollection;
-        #endregion
 
-        #region Public Properties
         public UIElementCollection ViewCollection
         {
             get { return _viewCollection; }
@@ -46,9 +43,7 @@ namespace ATZ.MVVM.Views.Utility.Connectors
                 }
             }
         }
-        #endregion
 
-        #region Private Methods
         private void BindViewModelCollection()
         {
             if (_viewModelCollection != null)
@@ -127,6 +122,5 @@ namespace ATZ.MVVM.Views.Utility.Connectors
                     break;
             }
         }
-        #endregion
     }
 }
