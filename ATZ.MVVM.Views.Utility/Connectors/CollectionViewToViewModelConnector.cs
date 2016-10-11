@@ -29,6 +29,7 @@ namespace ATZ.MVVM.Views.Utility.Connectors
             }
         }
 
+        // TODO: Source collection handling can be merged between the three connector classes.
         public ObservableCollection<TViewModel> ViewModelCollection
         {
             get { return _viewModelCollection; }
