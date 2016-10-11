@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
+using System.ComponentModel;
 using System.Windows;
 using System.Windows.Controls;
 using ATZ.MVVM.ViewModels.Utility;
@@ -8,53 +9,87 @@ using ATZ.MVVM.Views.Utility.Interfaces;
 
 namespace ATZ.MVVM.Views.Utility.Connectors
 {
-    public class CollectionViewToViewModelConnector<TView, TViewModel, TModel> : ICollectionChangedEventSource<TViewModel, TView>
-        where TView : UIElement, IView<TViewModel>, new ()
-        where TViewModel : BaseViewModel<TModel>
-        where TModel : class
+    public abstract class Connector<TSource, TTarget, TTargetCollection> : ICollectionChangedEventSource<TSource, TTarget>
     {
-        private UIElementCollection _viewCollection;
-        private ObservableCollection<TViewModel> _viewModelCollection;
+        private ObservableCollection<TSource> _sourceCollection;
 
-        public UIElementCollection ViewCollection
+        private void ResetTargetCollection()
         {
-            get { return _viewCollection; }
-            set
-            {
-                if (_viewCollection != value)
-                {
-                    _viewCollection = value;
-                    ResetViewCollectionToViewModelCollection();
-                }
-            }
+            SourceCollectionChanged(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
         }
 
-        // TODO: Source collection handling can be merged between the three connector classes.
-        public ObservableCollection<TViewModel> ViewModelCollection
+        // TODO: This should be private, temporary solution till refactoring is completed.
+        protected void SourceCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
-            get { return _viewModelCollection; }
+            if (_sourceCollection == null || TargetCollection == null)
+            {
+                return;
+            }
+
+            CollectionChangedEventHandlers<TSource, TTarget>.Handle(this, e);
+        }
+
+        protected ObservableCollection<TSource> SourceCollection
+        {
+            get { return _sourceCollection; }
             set
             {
-                if (_viewModelCollection == value)
+                if (_sourceCollection == value)
                 {
                     return;
                 }
 
-                UnbindViewModelCollection();
+                if (_sourceCollection != null)
+                {
+                    _sourceCollection.CollectionChanged -= SourceCollectionChanged;
+                }
 
-                _viewModelCollection = value;
+                _sourceCollection = value;
+                ResetTargetCollection();
 
-                BindViewModelCollection();
+                if (_sourceCollection != null)
+                {
+                    _sourceCollection.CollectionChanged += SourceCollectionChanged;
+                }
             }
         }
 
-        private void BindViewModelCollection()
+        protected TTargetCollection TargetCollection { get; set; }
+
+        public IEnumerable<TSource> CollectionItemSource => SourceCollection;
+        public abstract void ClearCollection();
+        public abstract void AddItem(TTarget item);
+        public abstract TTarget CreateItem(TSource sourceItem);
+        public abstract void InsertItem(int index, TTarget item);
+        public abstract void MoveItem(int oldIndex, int newIndex);
+        public abstract void RemoveItem(int index);
+        public abstract void ReplaceItem(int index, TTarget newItem);
+    }
+
+    public class CollectionViewToViewModelConnector<TView, TViewModel, TModel> : Connector<TViewModel, TView, UIElementCollection>
+        where TView : UIElement, IView<TViewModel>, new ()
+        where TViewModel : BaseViewModel<TModel>
+        where TModel : class
+    {
+        public UIElementCollection ViewCollection
         {
-            if (_viewModelCollection != null)
+            get { return TargetCollection; }
+            set
             {
-                _viewModelCollection.CollectionChanged += ViewModelCollectionChanged;
+                if (TargetCollection == value)
+                {
+                    return;
+                }
+
+                TargetCollection = value;
                 ResetViewCollectionToViewModelCollection();
             }
+        }
+
+        public ObservableCollection<TViewModel> ViewModelCollection
+        {
+            get { return SourceCollection; }
+            set { SourceCollection = value; }
         }
 
         private static TView CreateViewForViewModel(TViewModel viewModel)
@@ -73,55 +108,28 @@ namespace ATZ.MVVM.Views.Utility.Connectors
 
         private void ResetViewCollectionToViewModelCollection()
         {
-            ViewModelCollectionChanged(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
+            SourceCollectionChanged(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
         }
 
-        private void UnbindViewModelCollection()
+        // TODO: Check: we might be able to unify some of the ICollectionChangedEventSource members across Connectors to move them to the base.
+        public override void ClearCollection() => TargetCollection.Clear();
+        public override void AddItem(TView item) => TargetCollection.Add(item);
+        public override TView CreateItem(TViewModel sourceItem) => CreateViewForViewModel(sourceItem);
+        public override void InsertItem(int index, TView item) => TargetCollection.Insert(index, item);
+
+        public override void MoveItem(int oldIndex, int newIndex)
         {
-            if (_viewModelCollection != null)
-            {
-                _viewModelCollection.CollectionChanged -= ViewModelCollectionChanged;
-            }
+            var uiElement = TargetCollection[oldIndex];
+            TargetCollection.RemoveAt(oldIndex);
+            TargetCollection.Insert(newIndex, uiElement);
         }
 
-        private void ViewModelCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+        public override void RemoveItem(int index) => TargetCollection.RemoveAt(index);
+
+        public override void ReplaceItem(int index, TView newItem)
         {
-            if (_viewModelCollection == null || _viewCollection == null)
-            {
-                return;
-            }
-
-            CollectionChangedEventHandlers<TViewModel, TView>.Handle(this, e);
+            TargetCollection.RemoveAt(index);
+            TargetCollection.Insert(index, newItem);
         }
-
-        #region ICollectionChangedEventSource<TViewModel, TView>
-        IEnumerable<TViewModel> ICollectionChangedEventSource<TViewModel, TView>.CollectionItemSource => _viewModelCollection;
-
-        void ICollectionChangedEventSource<TViewModel, TView>.ClearCollection() => _viewCollection.Clear();
-
-        void ICollectionChangedEventSource<TViewModel, TView>.AddItem(TView item) => _viewCollection.Add(item);
-
-        TView ICollectionChangedEventSource<TViewModel, TView>.CreateItem(TViewModel sourceItem)
-            => CreateViewForViewModel(sourceItem);
-
-        void ICollectionChangedEventSource<TViewModel, TView>.InsertItem(int index, TView item)
-            => _viewCollection.Insert(index, item);
-
-        void ICollectionChangedEventSource<TViewModel, TView>.MoveItem(int oldIndex, int newIndex)
-        {
-            var uiElement = _viewCollection[oldIndex];
-            _viewCollection.RemoveAt(oldIndex);
-            _viewCollection.Insert(newIndex, uiElement);
-        }
-
-        void ICollectionChangedEventSource<TViewModel, TView>.RemoveItem(int index) => _viewCollection.RemoveAt(index);
-
-        void ICollectionChangedEventSource<TViewModel, TView>.ReplaceItem(int index, TView newItem)
-        {
-            _viewCollection.RemoveAt(index);
-            _viewCollection.Insert(index, newItem);
-        }
-        #endregion
-
     }
 }
