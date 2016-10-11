@@ -1,72 +1,13 @@
-﻿using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Collections.Specialized;
-using System.ComponentModel;
+﻿using System.Collections.ObjectModel;
 using System.Windows;
 using System.Windows.Controls;
 using ATZ.MVVM.ViewModels.Utility;
+using ATZ.MVVM.ViewModels.Utility.Connectors;
 using ATZ.MVVM.Views.Utility.Interfaces;
 
 namespace ATZ.MVVM.Views.Utility.Connectors
 {
-    public abstract class Connector<TSource, TTarget, TTargetCollection> : ICollectionChangedEventSource<TSource, TTarget>
-    {
-        private ObservableCollection<TSource> _sourceCollection;
-
-        private void ResetTargetCollection()
-        {
-            SourceCollectionChanged(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
-        }
-
-        // TODO: This should be private, temporary solution till refactoring is completed.
-        protected void SourceCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
-        {
-            if (_sourceCollection == null || TargetCollection == null)
-            {
-                return;
-            }
-
-            CollectionChangedEventHandlers<TSource, TTarget>.Handle(this, e);
-        }
-
-        protected ObservableCollection<TSource> SourceCollection
-        {
-            get { return _sourceCollection; }
-            set
-            {
-                if (_sourceCollection == value)
-                {
-                    return;
-                }
-
-                if (_sourceCollection != null)
-                {
-                    _sourceCollection.CollectionChanged -= SourceCollectionChanged;
-                }
-
-                _sourceCollection = value;
-                ResetTargetCollection();
-
-                if (_sourceCollection != null)
-                {
-                    _sourceCollection.CollectionChanged += SourceCollectionChanged;
-                }
-            }
-        }
-
-        protected TTargetCollection TargetCollection { get; set; }
-
-        public IEnumerable<TSource> CollectionItemSource => SourceCollection;
-        public abstract void ClearCollection();
-        public abstract void AddItem(TTarget item);
-        public abstract TTarget CreateItem(TSource sourceItem);
-        public abstract void InsertItem(int index, TTarget item);
-        public abstract void MoveItem(int oldIndex, int newIndex);
-        public abstract void RemoveItem(int index);
-        public abstract void ReplaceItem(int index, TTarget newItem);
-    }
-
-    public class CollectionViewToViewModelConnector<TView, TViewModel, TModel> : Connector<TViewModel, TView, UIElementCollection>
+    public class CollectionViewToViewModelConnector<TView, TViewModel, TModel> : BaseConnector<TViewModel, TView, UIElementCollection>
         where TView : UIElement, IView<TViewModel>, new ()
         where TViewModel : BaseViewModel<TModel>
         where TModel : class
@@ -74,16 +15,7 @@ namespace ATZ.MVVM.Views.Utility.Connectors
         public UIElementCollection ViewCollection
         {
             get { return TargetCollection; }
-            set
-            {
-                if (TargetCollection == value)
-                {
-                    return;
-                }
-
-                TargetCollection = value;
-                ResetViewCollectionToViewModelCollection();
-            }
+            set { TargetCollection = value; }
         }
 
         public ObservableCollection<TViewModel> ViewModelCollection
@@ -104,11 +36,6 @@ namespace ATZ.MVVM.Views.Utility.Connectors
             view.SetViewModel(viewModel);
 
             return view;
-        }
-
-        private void ResetViewCollectionToViewModelCollection()
-        {
-            SourceCollectionChanged(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
         }
 
         // TODO: Check: we might be able to unify some of the ICollectionChangedEventSource members across Connectors to move them to the base.
