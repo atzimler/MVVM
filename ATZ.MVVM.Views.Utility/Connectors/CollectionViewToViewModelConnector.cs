@@ -1,4 +1,5 @@
-﻿using System.Collections.ObjectModel;
+﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.Windows;
 using System.Windows.Controls;
@@ -7,7 +8,7 @@ using ATZ.MVVM.Views.Utility.Interfaces;
 
 namespace ATZ.MVVM.Views.Utility.Connectors
 {
-    public class CollectionViewToViewModelConnector<TView, TViewModel, TModel>
+    public class CollectionViewToViewModelConnector<TView, TViewModel, TModel> : ICollectionChangedEventSource<TViewModel, TView>
         where TView : UIElement, IView<TViewModel>, new ()
         where TViewModel : BaseViewModel<TModel>
         where TModel : class
@@ -89,40 +90,37 @@ namespace ATZ.MVVM.Views.Utility.Connectors
                 return;
             }
 
-            // TODO: This needs Unit testing.
-            switch (e.Action)
-            {
-                case NotifyCollectionChangedAction.Add:
-                    int insertPosition = e.NewStartingIndex;
-                    foreach (TViewModel viewModel in e.NewItems)
-                    {
-                        _viewCollection.Insert(insertPosition++, CreateViewForViewModel(viewModel));
-                    }
-                    break;
-                case NotifyCollectionChangedAction.Move:
-                    UIElement uiElement = _viewCollection[e.OldStartingIndex];
-                    _viewCollection.RemoveAt(e.OldStartingIndex);
-                    _viewCollection.Insert(e.NewStartingIndex, uiElement);
-                    break;
-                case NotifyCollectionChangedAction.Remove:
-                    foreach (TViewModel viewModel in e.OldItems)
-                    {
-                        _viewCollection.RemoveAt(e.OldStartingIndex);
-                    }
-                    break;
-                case NotifyCollectionChangedAction.Replace:
-                    _viewCollection.RemoveAt(e.OldStartingIndex);
-                    _viewCollection.Insert(e.OldStartingIndex, CreateViewForViewModel(_viewModelCollection[e.OldStartingIndex]));
-                    break;
-
-                case NotifyCollectionChangedAction.Reset:
-                    _viewCollection.Clear();
-                    foreach (TViewModel viewModel in _viewModelCollection)
-                    {
-                        _viewCollection.Add(CreateViewForViewModel(viewModel));
-                    }
-                    break;
-            }
+            CollectionChangedEventHandlers<TViewModel, TView>.Handle(this, e);
         }
+
+        #region ICollectionChangedEventSource<TViewModel, TView>
+        IEnumerable<TViewModel> ICollectionChangedEventSource<TViewModel, TView>.CollectionItemSource => _viewModelCollection;
+
+        void ICollectionChangedEventSource<TViewModel, TView>.ClearCollection() => _viewCollection.Clear();
+
+        void ICollectionChangedEventSource<TViewModel, TView>.AddItem(TView item) => _viewCollection.Add(item);
+
+        TView ICollectionChangedEventSource<TViewModel, TView>.CreateItem(TViewModel sourceItem)
+            => CreateViewForViewModel(sourceItem);
+
+        void ICollectionChangedEventSource<TViewModel, TView>.InsertItem(int index, TView item)
+            => _viewCollection.Insert(index, item);
+
+        void ICollectionChangedEventSource<TViewModel, TView>.MoveItem(int oldIndex, int newIndex)
+        {
+            var uiElement = _viewCollection[oldIndex];
+            _viewCollection.RemoveAt(oldIndex);
+            _viewCollection.Insert(newIndex, uiElement);
+        }
+
+        void ICollectionChangedEventSource<TViewModel, TView>.RemoveItem(int index) => _viewCollection.RemoveAt(index);
+
+        void ICollectionChangedEventSource<TViewModel, TView>.ReplaceItem(int index, TView newItem)
+        {
+            _viewCollection.RemoveAt(index);
+            _viewCollection.Insert(index, newItem);
+        }
+        #endregion
+
     }
 }
