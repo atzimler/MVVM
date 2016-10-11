@@ -49,7 +49,7 @@ namespace ATZ.MVVM.ViewModels.Utility
 
         private static void Replace(ICollectionChangedEventSource<TEventItem, TCollectionItem> sender, NotifyCollectionChangedEventArgs e)
         {
-            sender.ReplaceItem(e.OldStartingIndex, sender.CreateItem((TEventItem)e.OldItems[0]));
+            sender.ReplaceItem(e.NewStartingIndex, sender.CreateItem((TEventItem)e.NewItems[0]));
         }
 
         public static void Handle(ICollectionChangedEventSource<TEventItem, TCollectionItem> sender, NotifyCollectionChangedEventArgs e)

@@ -1,10 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
+using ATZ.MVVM.ViewModels.Utility;
 
 namespace ATZ.MVVM.Views.Utility.Connectors
 {
-    public class ObservableCollectionCopierConnector<TSource, TTarget>
+    public class ObservableCollectionCopierConnector<TSource, TTarget> : ICollectionChangedEventSource<TSource, TTarget>
     {
         private ObservableCollection<TSource> _sourceCollection;
         private ObservableCollection<TTarget> _targetCollection;
@@ -71,40 +73,34 @@ namespace ATZ.MVVM.Views.Utility.Connectors
 
         private void SourceCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
-            switch (e.Action)
+            if (_sourceCollection == null || _targetCollection == null)
             {
-                case NotifyCollectionChangedAction.Add:
-                    int insertPosition = e.NewStartingIndex;
-                    foreach (TSource obj in e.NewItems)
-                    {
-                        _targetCollection.Insert(insertPosition++, _transformSourceToTarget(obj));
-                    }
-                    break;
-
-                case NotifyCollectionChangedAction.Move:
-                    {
-                        var obj = _targetCollection[e.OldStartingIndex];
-                        _targetCollection.RemoveAt(e.OldStartingIndex);
-                        _targetCollection.Insert(e.NewStartingIndex, obj);
-                    }
-                    break;
-
-                case NotifyCollectionChangedAction.Remove:
-                    foreach (TSource obj in e.OldItems)
-                    {
-                        _targetCollection.RemoveAt(e.OldStartingIndex);
-                    }
-                    break;
-
-                case NotifyCollectionChangedAction.Replace:
-                    _targetCollection[e.OldStartingIndex] =
-                        _transformSourceToTarget(_sourceCollection[e.OldStartingIndex]);
-                    break;
-
-                case NotifyCollectionChangedAction.Reset:
-                    CopyObjects();
-                    break;
+                return;
             }
+            CollectionChangedEventHandlers<TSource, TTarget>.Handle(this, e);
         }
+
+        #region ICollectionChangedEventSource<TSource, TTarget>
+
+        IEnumerable<TSource> ICollectionChangedEventSource<TSource, TTarget>.CollectionItemSource => _sourceCollection;
+
+        void ICollectionChangedEventSource<TSource, TTarget>.ClearCollection() => _targetCollection.Clear();
+
+        void ICollectionChangedEventSource<TSource, TTarget>.AddItem(TTarget item) => _targetCollection.Add(item);
+
+        TTarget ICollectionChangedEventSource<TSource, TTarget>.CreateItem(TSource sourceItem)
+            => _transformSourceToTarget(sourceItem);
+
+        void ICollectionChangedEventSource<TSource, TTarget>.InsertItem(int index, TTarget item)
+            => _targetCollection.Insert(index, item);
+
+        void ICollectionChangedEventSource<TSource, TTarget>.MoveItem(int oldIndex, int newIndex)
+            => _targetCollection.Move(oldIndex, newIndex);
+
+        void ICollectionChangedEventSource<TSource, TTarget>.RemoveItem(int index) => _targetCollection.RemoveAt(index);
+
+        void ICollectionChangedEventSource<TSource, TTarget>.ReplaceItem(int index, TTarget newItem)
+            => _targetCollection[index] = newItem;
+        #endregion
     }
 }
