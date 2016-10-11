@@ -1,28 +1,26 @@
 ﻿using System;
 
 
-//TODO: Remove #region (everywhere).
 namespace ATZ.MVVM.ViewModels.Utility
 {
     public abstract class BaseViewModel<T> : ObservableObject, IVerifiable
         where T : class
     {
-        #region Private Variables
         private bool _isValid;
         private T _model;
-        #endregion
 
-        #region Public Properties
         public bool IsValid
         {
             get { return _isValid; }
             set
             {
-                if (_isValid != value)
+                if (_isValid == value)
                 {
-                    _isValid = value;
-                    OnIsValidChanged();
+                    return;
                 }
+
+                _isValid = value;
+                OnIsValidChanged();
             }
         }
 
@@ -33,50 +31,42 @@ namespace ATZ.MVVM.ViewModels.Utility
             get { return _model; }
             set
             {
-                if (_model != value)
+                if (_model == value)
                 {
-                    if (_model != null)
-                    {
-                        UnbindModel();
-                    }
-                    _model = value;
-                    if (_model != null)
-                    {
-                        BindModel();
-                        UpdateValidity(this, EventArgs.Empty);
-                    }
+                    return;
+                }
+
+                if (_model != null)
+                {
+                    UnbindModel();
+                }
+                _model = value;
+                if (_model != null)
+                {
+                    BindModel();
+                    UpdateValidity(this, EventArgs.Empty);
                 }
             }
         }
-        #endregion
 
-        #region Constructors
         public BaseViewModel()
         {
             InitializeComponent();
         }
-        #endregion
 
-        #region Protected Methods
         protected virtual void InitializeComponent()
         {
         }
 
         protected virtual void OnIsValidChanged()
         {
-            if (IsValidChanged != null)
-            {
-                IsValidChanged(this, EventArgs.Empty);
-            }
+            IsValidChanged?.Invoke(this, EventArgs.Empty);
             OnPropertyChanged(nameof(IsValid));
         }
         
         protected abstract void UnbindModel();
-        #endregion
 
-        #region Public Methods
         public abstract void BindModel();
         public abstract void UpdateValidity(object sender, EventArgs e);
-        #endregion
     }
 }
