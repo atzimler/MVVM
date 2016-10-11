@@ -104,7 +104,7 @@ namespace ATZ.MVVM.ViewModels.Utility.Tests
             var m = new TestModel();
             var vm = new TestViewModel();
 
-            connector.AddModelWithViewModel(m, vm);
+            connector.Add(m, vm);
 
             Assert.AreEqual(1, connector.ModelCollection.Count);
             Assert.AreEqual(1, connector.ViewModelCollection.Count);
@@ -223,7 +223,7 @@ namespace ATZ.MVVM.ViewModels.Utility.Tests
         public void NotCrashWhenAddModelWithViewModelIsCalledWithBothCollectionBeingNull()
         {
             var connector = new TConnector();
-            Assert.DoesNotThrow(() => connector.AddModelWithViewModel(new TestModel(), new TestViewModel()));
+            Assert.DoesNotThrow(() => connector.Add(new TestModel(), new TestViewModel()));
         }
 
         [Test]
@@ -233,7 +233,7 @@ namespace ATZ.MVVM.ViewModels.Utility.Tests
             {
                 ViewModelCollection = new ObservableCollection<TestViewModel>()
             };
-            Assert.DoesNotThrow(() => connector.AddModelWithViewModel(new TestModel(), new TestViewModel()));
+            Assert.DoesNotThrow(() => connector.Add(new TestModel(), new TestViewModel()));
         }
 
         [Test]
@@ -243,7 +243,7 @@ namespace ATZ.MVVM.ViewModels.Utility.Tests
             {
                 ModelCollection = new ObservableCollection<TestModel>()
             };
-            Assert.DoesNotThrow(() => connector.AddModelWithViewModel(new TestModel(), new TestViewModel()));
+            Assert.DoesNotThrow(() => connector.Add(new TestModel(), new TestViewModel()));
         }
 
         [Test]

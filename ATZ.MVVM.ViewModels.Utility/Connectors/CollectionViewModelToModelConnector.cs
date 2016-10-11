@@ -1,20 +1,16 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Collections.Specialized;
 using System.Linq;
 
 namespace ATZ.MVVM.ViewModels.Utility.Connectors
 {
-    public class CollectionViewModelToModelConnector<TViewModel, TModel> : ObservableObject, IVerifiable, ICollectionChangedEventSource<TModel, TViewModel>
+    public class CollectionViewModelToModelConnector<TViewModel, TModel> : ObservableCollectionConnector<TModel, TViewModel>, IVerifiable
         where TViewModel : BaseViewModel<TModel>, new()
         where TModel : class
     {
         public delegate void ViewModelBinder(TViewModel vm);
 
         private bool _isValid;
-        private ObservableCollection<TModel> _modelCollection;
-        private ObservableCollection<TViewModel> _viewModelCollection;
 
         public ViewModelBinder BindViewModel { get; set; }
         public ViewModelBinder UnbindViewModel { get; set; }
@@ -38,65 +34,20 @@ namespace ATZ.MVVM.ViewModels.Utility.Connectors
 
         public ObservableCollection<TModel> ModelCollection
         {
-            get { return _modelCollection; }
-            set
-            {
-                if (_modelCollection == value)
-                {
-                    return;
-                }
-
-                UnbindModelCollection();
-
-                _modelCollection = value;
-
-                BindModelCollection();
-            }
+            get { return SourceCollection; }
+            set { SourceCollection = value; }
         }
 
         public ObservableCollection<TViewModel> ViewModelCollection
         {
-            get { return _viewModelCollection; }
-            set
-            {
-                if (_viewModelCollection == value)
-                {
-                    return;
-                }
-
-                _viewModelCollection = value;
-                ResetViewModelCollectionToModelCollection();
-            }
-        }
-
-        private void BindModelCollection()
-        {
-            if (_modelCollection == null)
-            {
-                return;
-            }
-
-            _modelCollection.CollectionChanged += ModelCollectionChanged;
-            ResetViewModelCollectionToModelCollection();
+            get { return TargetCollection; }
+            set { TargetCollection = value; }
         }
 
         private void ClearViewModelCollection()
         {
-            _viewModelCollection.ToList().ForEach(DetachViewModel);
-            _viewModelCollection.Clear();
-        }
-
-        private TViewModel CreateViewModelForModel(TModel model)
-        {
-            var viewModel = new TViewModel { Model = model };
-            // TODO: Replacing the viewModel.Model (above) actually executes the BindModel() below (check) and this is the only result why BindModel() is public on BaseViewModel. However,
-            // the other reason could be that in this case it is similar - but results in duplicate BindModel() which could cause problems (at least performance).
-            viewModel.BindModel();
-
-            BindViewModel?.Invoke(viewModel);
-
-            viewModel.IsValidChanged += UpdateValidity;
-            return viewModel;
+            TargetCollection.ToList().ForEach(DetachViewModel);
+            TargetCollection.Clear();
         }
 
         private void DetachViewModel(TViewModel viewModel)
@@ -105,34 +56,9 @@ namespace ATZ.MVVM.ViewModels.Utility.Connectors
             UnbindViewModel?.Invoke(viewModel);
         }
 
-        private void ModelCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
-        {
-            if (_modelCollection == null || _viewModelCollection == null)
-            {
-                return;
-            }
-
-            CollectionChangedEventHandlers<TModel, TViewModel>.Handle(this, e);
-
-            UpdateValidity();
-        }
-
-        private void ResetViewModelCollectionToModelCollection()
-        {
-            ModelCollectionChanged(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
-        }
-
-        private void UnbindModelCollection()
-        {
-            if (_modelCollection != null)
-            {
-                _modelCollection.CollectionChanged -= ModelCollectionChanged;
-            }
-        }
-
         private void UpdateValidity()
         {
-            IsValid = _viewModelCollection?.ToList().TrueForAll(vm => vm.IsValid) ?? true;
+            IsValid = TargetCollection?.ToList().TrueForAll(vm => vm.IsValid) ?? true;
         }
 
         protected virtual void OnIsValidChanged()
@@ -141,24 +67,9 @@ namespace ATZ.MVVM.ViewModels.Utility.Connectors
             OnPropertyChanged(nameof(IsValid));
         }
 
-        public void AddModelWithViewModel(TModel model, TViewModel viewModel)
-        {
-            if (_modelCollection == null || _viewModelCollection == null)
-            {
-                return;
-            }
-
-            _modelCollection.CollectionChanged -= ModelCollectionChanged;
-
-            _modelCollection.Add(model);
-            _viewModelCollection.Add(viewModel);
-
-            _modelCollection.CollectionChanged += ModelCollectionChanged;
-        }
-
         public void ClearAllViewModelBindings()
         {
-            _viewModelCollection?.ToList().ForEach(DetachViewModel);
+            TargetCollection?.ToList().ForEach(DetachViewModel);
         }
 
         public void Sort(Comparison<TModel> comparison)
@@ -167,11 +78,11 @@ namespace ATZ.MVVM.ViewModels.Utility.Connectors
             do
             {
                 swapped = false;
-                for (int index = 0; index < _modelCollection.Count - 1; ++index)
+                for (int index = 0; index < SourceCollection.Count - 1; ++index)
                 {
-                    if (comparison(_modelCollection[index], _modelCollection[index + 1]) > 0)
+                    if (comparison(SourceCollection[index], SourceCollection[index + 1]) > 0)
                     {
-                        _modelCollection.Move(index + 1, index);
+                        SourceCollection.Move(index + 1, index);
                         swapped = true;
                     }
                 }
@@ -184,30 +95,31 @@ namespace ATZ.MVVM.ViewModels.Utility.Connectors
         }
 
 
-        #region ICollectionChangedEventSource<TModel, TViewModel>
-        IEnumerable<TModel> ICollectionChangedEventSource<TModel, TViewModel>.CollectionItemSource => _modelCollection;
-        void ICollectionChangedEventSource<TModel, TViewModel>.ClearCollection() => ClearViewModelCollection();
-        void ICollectionChangedEventSource<TModel, TViewModel>.AddItem(TViewModel item) => _viewModelCollection.Add(item);
-        TViewModel ICollectionChangedEventSource<TModel, TViewModel>.CreateItem(TModel sourceItem) => CreateViewModelForModel(sourceItem);
+        public override void ClearCollection() => ClearViewModelCollection();
 
-        void ICollectionChangedEventSource<TModel, TViewModel>.InsertItem(int index, TViewModel item)
-            => _viewModelCollection.Insert(index, item);
-
-        void ICollectionChangedEventSource<TModel, TViewModel>.MoveItem(int oldIndex, int newIndex)
-            => _viewModelCollection.Move(oldIndex, newIndex);
-
-        void ICollectionChangedEventSource<TModel, TViewModel>.RemoveItem(int index)
+        public override TViewModel CreateItem(TModel sourceItem)
         {
-            DetachViewModel(_viewModelCollection[index]);
-            _viewModelCollection.RemoveAt(index);
+            var viewModel = new TViewModel { Model = sourceItem };
+            // TODO: Replacing the viewModel.Model (above) actually executes the BindModel() below (check) and this is the only result why BindModel() is public on BaseViewModel. However,
+            // the other reason could be that in this case it is similar - but results in duplicate BindModel() which could cause problems (at least performance).
+            viewModel.BindModel();
+
+            BindViewModel?.Invoke(viewModel);
+
+            viewModel.IsValidChanged += UpdateValidity;
+            return viewModel;
         }
 
-        void ICollectionChangedEventSource<TModel, TViewModel>.ReplaceItem(int index, TViewModel newItem)
+        public override void RemoveItem(int index)
         {
-            DetachViewModel(_viewModelCollection[index]);
-            _viewModelCollection[index] = newItem;
+            DetachViewModel(TargetCollection[index]);
+            TargetCollection.RemoveAt(index);
         }
-        #endregion
 
+        public override void ReplaceItem(int index, TViewModel newItem)
+        {
+            DetachViewModel(TargetCollection[index]);
+            TargetCollection[index] = newItem;
+        }
     }
 }

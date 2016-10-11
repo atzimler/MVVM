@@ -4,7 +4,7 @@ using System.Collections.Specialized;
 
 namespace ATZ.MVVM.ViewModels.Utility.Connectors
 {
-    public abstract class BaseConnector<TSource, TTarget, TTargetCollection> : ICollectionChangedEventSource<TSource, TTarget>
+    public abstract class BaseConnector<TSource, TTarget, TTargetCollection> : ObservableObject, ICollectionChangedEventSource<TSource, TTarget>
     {
         private ObservableCollection<TSource> _sourceCollection;
         private TTargetCollection _targetCollection;
@@ -72,5 +72,21 @@ namespace ATZ.MVVM.ViewModels.Utility.Connectors
         public abstract void MoveItem(int oldIndex, int newIndex);
         public abstract void RemoveItem(int index);
         public abstract void ReplaceItem(int index, TTarget newItem);
+
+        public void Add(TSource sourceItem, TTarget targetItem)
+        {
+            if (_sourceCollection == null || _targetCollection == null)
+            {
+                return;
+            }
+
+            _sourceCollection.CollectionChanged -= SourceCollectionChanged;
+
+            _sourceCollection.Add(sourceItem);
+            AddItem(targetItem);
+
+            _sourceCollection.CollectionChanged += SourceCollectionChanged;
+        }
+
     }
 }
