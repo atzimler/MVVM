@@ -32,7 +32,7 @@ namespace ATZ.MVVM.Views.Utility.Tests
             var conn = new ObservableCollectionCopierConnector<int, int>(n => n) {SourceCollection = sc, TargetCollection = tc};
             sc.Add(1);
 
-            AssertCollectionsAreEqual(sc, tc);
+            AssertCollectionsAreEqual(conn.SourceCollection, conn.TargetCollection);
         }
 
         [Test]
@@ -46,11 +46,11 @@ namespace ATZ.MVVM.Views.Utility.Tests
                 SourceCollection = sc,
                 TargetCollection = tc
             };
-            AssertCollectionsAreEqual(sc, tc);
+            AssertCollectionsAreEqual(conn.SourceCollection, conn.TargetCollection);
 
-            sc.Clear();
+            conn.SourceCollection.Clear();
 
-            AssertCollectionsAreEqual(sc, tc);
+            AssertCollectionsAreEqual(conn.SourceCollection, conn.TargetCollection);
         }
 
         [Test]
@@ -64,11 +64,11 @@ namespace ATZ.MVVM.Views.Utility.Tests
                 SourceCollection = sc,
                 TargetCollection = tc
             };
-            AssertCollectionsAreEqual(sc, tc);
+            AssertCollectionsAreEqual(conn.SourceCollection, conn.TargetCollection);
 
-            sc.Move(0, 1);
+            conn.SourceCollection.Move(0, 1);
 
-            AssertCollectionsAreEqual(sc, tc);
+            AssertCollectionsAreEqual(conn.SourceCollection, conn.TargetCollection);
         }
 
         [Test]
@@ -128,11 +128,11 @@ namespace ATZ.MVVM.Views.Utility.Tests
                 SourceCollection = sc,
                 TargetCollection = tc
             };
-            AssertCollectionsAreEqual(sc, tc);
+            AssertCollectionsAreEqual(conn.SourceCollection, conn.TargetCollection);
 
-            sc.Remove(2);
+            conn.SourceCollection.Remove(2);
 
-            AssertCollectionsAreEqual(sc, tc);
+            AssertCollectionsAreEqual(conn.SourceCollection, conn.TargetCollection);
         }
 
         [Test]
@@ -146,11 +146,11 @@ namespace ATZ.MVVM.Views.Utility.Tests
                 SourceCollection = sc,
                 TargetCollection = tc
             };
-            AssertCollectionsAreEqual(sc, tc);
+            AssertCollectionsAreEqual(conn.SourceCollection, conn.TargetCollection);
 
-            sc[0] = 4;
+            conn.SourceCollection[0] = 4;
 
-            AssertCollectionsAreEqual(sc, tc);
+            AssertCollectionsAreEqual(conn.SourceCollection, conn.TargetCollection);
         }
 
         [Test]
