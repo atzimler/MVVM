@@ -78,13 +78,15 @@ namespace ATZ.MVVM.ViewModels.Utility.Connectors
             do
             {
                 swapped = false;
-                for (int index = 0; index < SourceCollection.Count - 1; ++index)
+                for (var index = 0; index < SourceCollection.Count - 1; ++index)
                 {
-                    if (comparison(SourceCollection[index], SourceCollection[index + 1]) > 0)
+                    if (comparison(SourceCollection[index], SourceCollection[index + 1]) <= 0)
                     {
-                        SourceCollection.Move(index + 1, index);
-                        swapped = true;
+                        continue;
                     }
+
+                    SourceCollection.Move(index + 1, index);
+                    swapped = true;
                 }
             } while (swapped);
         }
