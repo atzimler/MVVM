@@ -102,9 +102,6 @@ namespace ATZ.MVVM.ViewModels.Utility.Connectors
         public override TViewModel CreateItem(TModel sourceItem)
         {
             var viewModel = new TViewModel { Model = sourceItem };
-            // TODO: Replacing the viewModel.Model (above) actually executes the BindModel() below (check) and this is the only result why BindModel() is public on BaseViewModel. However,
-            // the other reason could be that in this case it is similar - but results in duplicate BindModel() which could cause problems (at least performance).
-            viewModel.BindModel();
 
             BindViewModel?.Invoke(viewModel);
 

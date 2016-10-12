@@ -385,5 +385,20 @@ namespace ATZ.MVVM.ViewModels.Utility.Tests
             Assert.AreEqual(1, connector.ViewModelCollection.Count);
             Assert.IsTrue(unbindCalled);
         }
+
+        [Test]
+        public void BindViewModelToTheModelProperlyWhenAddingNewModel()
+        {
+            var m = new TestModel();
+            var connector = new TConnector
+            {
+                ModelCollection = new ObservableCollection<TestModel>(),
+                ViewModelCollection = new ObservableCollection<TestViewModel>()
+            };
+            connector.ModelCollection.Add(m);
+
+            Assert.AreEqual(1, connector.ViewModelCollection.Count);
+            Assert.IsTrue(connector.ViewModelCollection[0].BindModelCalled);
+        }
     }
 }

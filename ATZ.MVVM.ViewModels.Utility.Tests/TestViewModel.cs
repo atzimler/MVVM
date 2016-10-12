@@ -9,6 +9,7 @@ namespace ATZ.MVVM.ViewModels.Utility.Tests
         private int _propertyRaisingChangeNotification;
 
         public bool ExecuteCalled { get; private set; }
+        public bool BindModelCalled { get; private set; }
         public bool UnbindModelCalled { get; private set; }
         public bool UpdateValidityCalled { get; private set; }
 
@@ -37,8 +38,9 @@ namespace ATZ.MVVM.ViewModels.Utility.Tests
             UpdateValidityCalled = true;
         }
 
-        public override void BindModel()
+        protected override void BindModel()
         {
+            BindModelCalled = true;
         }
 
         public void NullAdditionalProperties()

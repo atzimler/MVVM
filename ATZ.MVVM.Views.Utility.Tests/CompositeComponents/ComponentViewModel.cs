@@ -9,7 +9,7 @@ namespace ATZ.MVVM.Views.Utility.Tests.CompositeComponents
         {
         }
 
-        public override void BindModel()
+        protected override void BindModel()
         {
         }
 

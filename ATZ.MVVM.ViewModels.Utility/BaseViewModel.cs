@@ -63,10 +63,10 @@ namespace ATZ.MVVM.ViewModels.Utility
             IsValidChanged?.Invoke(this, EventArgs.Empty);
             OnPropertyChanged(nameof(IsValid));
         }
-        
+
+        protected abstract void BindModel();
         protected abstract void UnbindModel();
 
-        public abstract void BindModel();
         public abstract void UpdateValidity(object sender, EventArgs e);
     }
 }
