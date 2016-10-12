@@ -31,8 +31,6 @@ namespace ATZ.MVVM.Views.Utility.Connectors
 
             // TODO: This should be IView<VM>
             //view.ViewModel = viewModel;
-            // TODO: This should be automatically done by the ViewExtensions.SetViewModel.
-            //view.BindModel(viewModel);
             view.SetViewModel(viewModel);
 
             return view;

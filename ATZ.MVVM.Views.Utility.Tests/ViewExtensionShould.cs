@@ -1,5 +1,6 @@
 ﻿using System;
 using ATZ.MVVM.ViewModels.Utility.Tests;
+using NUnit.Core;
 using NUnit.Framework;
 
 namespace ATZ.MVVM.Views.Utility.Tests
@@ -76,6 +77,16 @@ namespace ATZ.MVVM.Views.Utility.Tests
             v.SetViewModel(tvm);
             v.ExecuteViewModelMethod(vm => vm.Execute());
             Assert.IsTrue(tvm.ExecuteCalled);
+        }
+
+        [Test]
+        [STAThread]
+        public void CallBindModelOnView()
+        {
+            var v = new TestView();
+            var tvm = new TestViewModel();
+            v.SetViewModel(tvm);
+            Assert.IsTrue(v.BindModelCalled);
         }
     }
 }
