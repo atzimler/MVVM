@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.Windows.Controls;
+using ATZ.DependencyInjection;
 using ATZ.MVVM.ViewModels.Utility.Tests;
 using ATZ.MVVM.ViewModels.Utility.Tests.TestHelpers;
 using ATZ.MVVM.Views.Utility.Connectors;
+using ATZ.MVVM.Views.Utility.Interfaces;
 using NUnit.Framework;
 
 namespace ATZ.MVVM.Views.Utility.Tests
@@ -13,6 +15,13 @@ namespace ATZ.MVVM.Views.Utility.Tests
     [TestFixture]
     public class CollectionViewToViewModelConnectorShould
     {
+        [TestFixtureSetUp]
+        public void TestFixtureSetUp()
+        {
+            DependencyResolver.Instance.Bind<IView<TestViewModel>>().To<TestView>();
+            DependencyResolver.Instance.Bind<IView<TestViewModel2>>().To<TestView2>();
+        }
+
         [Test]
         [STAThread]
         public void RetainViewCollection()
@@ -150,6 +159,23 @@ namespace ATZ.MVVM.Views.Utility.Tests
             conn.ViewModelCollection = vms;
             Assert.IsFalse(vms.CollectionChangedEventHandlerAdded);
             Assert.IsFalse(vms.CollectionChangedEventHandlerRemoved);
+        }
+
+        [Test]
+        [STAThread]
+        public void CreateAppropriateTypesDependingOnViewModels()
+        {
+            var sp = new StackPanel();
+            var vms = new ObservableCollection<TestViewModel>() {new TestViewModel(), new TestViewModel2()};
+            var conn = new TConnector
+            {
+                ViewCollection = sp.Children,
+                ViewModelCollection = vms
+            };
+
+            Assert.AreEqual(2, conn.ViewCollection.Count);
+            Assert.AreEqual(typeof(TestView), conn.ViewCollection[0].GetType());
+            Assert.AreEqual(typeof(TestView2), conn.ViewCollection[1].GetType());
         }
     }
 }
