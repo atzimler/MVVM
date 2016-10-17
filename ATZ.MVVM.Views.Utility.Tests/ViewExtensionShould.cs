@@ -1,12 +1,11 @@
 ﻿using System;
 using ATZ.MVVM.ViewModels.Utility.Tests;
-using NUnit.Core;
 using NUnit.Framework;
 
 namespace ATZ.MVVM.Views.Utility.Tests
 {
     [TestFixture]
-    class ViewExtensionShould
+    public class ViewExtensionShould
     {
         [Test]
         [STAThread]
