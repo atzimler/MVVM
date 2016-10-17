@@ -1,9 +1,12 @@
 ﻿using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Windows;
 using System.Windows.Controls;
+using ATZ.DependencyInjection;
 using ATZ.MVVM.ViewModels.Utility;
 using ATZ.MVVM.ViewModels.Utility.Connectors;
 using ATZ.MVVM.Views.Utility.Interfaces;
+using Ninject;
 
 namespace ATZ.MVVM.Views.Utility.Connectors
 {
@@ -26,14 +29,17 @@ namespace ATZ.MVVM.Views.Utility.Connectors
 
         private static TView CreateViewForViewModel(TViewModel viewModel)
         {
-            // TODO: This should be DependencyInjection for IView<VM> with proper insertion of the current type of the viewModel, so that different types of subclasses can be handled correctly.
-            TView view = new TView();
+            var iview = DependencyResolver.Instance.Get<IView<TViewModel>>();
+            iview.SetViewModel(viewModel);
 
-            // TODO: This should be IView<VM>
-            //view.ViewModel = viewModel;
-            view.SetViewModel(viewModel);
+            var view = iview as TView;
+            if (view != null)
+            {
+                return view;
+            }
 
-            return view;
+            Debug.WriteLine($"IView<{typeof(TViewModel).FullName}> created by the DependencyResolver.Instance is not of type {typeof(TView)}!");
+            return new TView();
         }
 
         public override void ClearCollection() => TargetCollection.Clear();
