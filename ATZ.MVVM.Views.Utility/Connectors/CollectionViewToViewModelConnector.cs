@@ -36,7 +36,6 @@ namespace ATZ.MVVM.Views.Utility.Connectors
             return view;
         }
 
-        // TODO: Check: we might be able to unify some of the ICollectionChangedEventSource members across Connectors to move them to the base.
         public override void ClearCollection() => TargetCollection.Clear();
         public override void AddItem(TView item) => TargetCollection.Add(item);
         public override TView CreateItem(TViewModel sourceItem) => CreateViewForViewModel(sourceItem);
