@@ -29,6 +29,9 @@ namespace ATZ.MVVM.Views.Utility.Connectors
 
         private static TView CreateViewForViewModel(TViewModel viewModel)
         {
+            // TODO: This might not exist in the DependencyResolver, should be looked up walking recursively up on the TViewModel class hierarchy.
+            // TODO: Resolution, not found directly in DependencyResolver, should be added to the DependencyResolver for caching.
+            // TODO: Not IView<TViewModel> should be looked up, but IView<typeof(viewModel) to actually provide proper binding.
             var iview = DependencyResolver.Instance.Get<IView<TViewModel>>();
             iview.SetViewModel(viewModel);
 
