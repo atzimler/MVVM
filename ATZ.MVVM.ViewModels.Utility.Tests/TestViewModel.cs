@@ -45,7 +45,7 @@ namespace ATZ.MVVM.ViewModels.Utility.Tests
 
         public void NullAdditionalProperties()
         {
-            Set(ref _propertyRaisingChangeNotification, _propertyRaisingChangeNotification + 1, null);
+            Set(ref _propertyRaisingChangeNotification, _propertyRaisingChangeNotification + 1);
         }
 
         public void SetWith2Parameters(int value)

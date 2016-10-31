@@ -166,7 +166,7 @@ namespace ATZ.MVVM.Views.Utility.Tests
         public void CreateAppropriateTypesDependingOnViewModels()
         {
             var sp = new StackPanel();
-            var vms = new ObservableCollection<TestViewModel>() {new TestViewModel(), new TestViewModel2()};
+            var vms = new ObservableCollection<TestViewModel> {new TestViewModel(), new TestViewModel2()};
             var conn = new TConnector
             {
                 ViewCollection = sp.Children,

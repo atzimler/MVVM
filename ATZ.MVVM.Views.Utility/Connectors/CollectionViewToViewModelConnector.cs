@@ -6,11 +6,10 @@ using ATZ.DependencyInjection;
 using ATZ.MVVM.ViewModels.Utility;
 using ATZ.MVVM.ViewModels.Utility.Connectors;
 using ATZ.MVVM.Views.Utility.Interfaces;
-using Ninject;
 
 namespace ATZ.MVVM.Views.Utility.Connectors
 {
-    public class CollectionViewToViewModelConnector<TView, TViewModel, TModel> : BaseConnector<TViewModel, TView, UIElementCollection>
+    public class CollectionViewToViewModelConnector<TView, TViewModel, TModel> : BaseConnector<TViewModel, IView<TViewModel>, UIElementCollection>
         where TView : UIElement, IView<TViewModel>, new ()
         where TViewModel : BaseViewModel<TModel>
         where TModel : class
@@ -27,15 +26,11 @@ namespace ATZ.MVVM.Views.Utility.Connectors
             set { SourceCollection = value; }
         }
 
-        private static TView CreateViewForViewModel(TViewModel viewModel)
+        private static IView<TViewModel> CreateViewForViewModel(TViewModel viewModel)
         {
-            // TODO: This might not exist in the DependencyResolver, should be looked up walking recursively up on the TViewModel class hierarchy.
-            // TODO: Resolution, not found directly in DependencyResolver, should be added to the DependencyResolver for caching.
-            // TODO: Not IView<TViewModel> should be looked up, but IView<typeof(viewModel) to actually provide proper binding.
-            var iview = DependencyResolver.Instance.Get<IView<TViewModel>>();
-            iview.SetViewModel(viewModel);
+            var view = DependencyResolver.Instance.GetInterface<IView<TViewModel>>(typeof(IView<>), viewModel.GetType());
+            view.SetViewModel(viewModel);
 
-            var view = iview as TView;
             if (view != null)
             {
                 return view;
@@ -46,9 +41,9 @@ namespace ATZ.MVVM.Views.Utility.Connectors
         }
 
         public override void ClearCollection() => TargetCollection.Clear();
-        public override void AddItem(TView item) => TargetCollection.Add(item);
-        public override TView CreateItem(TViewModel sourceItem) => CreateViewForViewModel(sourceItem);
-        public override void InsertItem(int index, TView item) => TargetCollection.Insert(index, item);
+        public override void AddItem(IView<TViewModel> item) => TargetCollection.Add(item.UIElement);
+        public override IView<TViewModel> CreateItem(TViewModel sourceItem) => CreateViewForViewModel(sourceItem);
+        public override void InsertItem(int index, IView<TViewModel> item) => TargetCollection.Insert(index, item.UIElement);
 
         public override void MoveItem(int oldIndex, int newIndex)
         {
@@ -59,10 +54,10 @@ namespace ATZ.MVVM.Views.Utility.Connectors
 
         public override void RemoveItem(int index) => TargetCollection.RemoveAt(index);
 
-        public override void ReplaceItem(int index, TView newItem)
+        public override void ReplaceItem(int index, IView<TViewModel> newItem)
         {
             TargetCollection.RemoveAt(index);
-            TargetCollection.Insert(index, newItem);
+            TargetCollection.Insert(index, newItem.UIElement);
         }
     }
 }
