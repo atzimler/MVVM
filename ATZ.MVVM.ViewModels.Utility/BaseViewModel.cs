@@ -51,10 +51,13 @@ namespace ATZ.MVVM.ViewModels.Utility
 
         public BaseViewModel()
         {
+            // TODO: This needs to be figured out why I have the virtual call here (probably do a test package without the virtual function and see what is hapening when I refactor the dependent functions)
             InitializeComponent();
         }
 
-        protected virtual void InitializeComponent()
+        // TODO: For trying it out.
+        //protected virtual void InitializeComponent()
+        protected void InitializeComponent()
         {
         }
 
