@@ -4,7 +4,7 @@ using NUnit.Framework;
 
 namespace ATZ.MVVM.Views.Utility.Tests
 {
-    using TConnector = CompositeViewToViewModelConnector<MainView, MainViewModel, MainModel, ComponentView, ComponentViewModel, ComponentModel>;
+    using TConnector = CompositeViewToViewModelConnector<MainModel, MainView, MainViewModel, ComponentModel, ComponentView, ComponentViewModel>;
 
     [TestFixture]
     class CompositeViewToViewModelConnectorShould
