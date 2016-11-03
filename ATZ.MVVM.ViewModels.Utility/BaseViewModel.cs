@@ -41,26 +41,42 @@ namespace ATZ.MVVM.ViewModels.Utility
                     UnbindModel();
                 }
                 _model = value;
-                if (_model != null)
+
+                if (_model == null)
                 {
-                    BindModel();
-                    UpdateValidity(this, EventArgs.Empty);
+                    return;
                 }
+
+                BindModel();
+                UpdateValidity(this, EventArgs.Empty);
             }
         }
 
-        public BaseViewModel()
+        protected BaseViewModel()
         {
-            // TODO: This needs to be figured out why I have the virtual call here (probably do a test package without the virtual function and see what is hapening when I refactor the dependent functions)
+            // ReSharper disable once VirtualMemberCallInConstructor => Because Model Binding can occur as soon as object is constructed at this level, the components have to be
+            // initialized when passing this point. However, top level constructors could initialize a component that is already too late, because lower level constructor tries
+            // to set the Model on the ViewModel. As a result, NullReferenceExceptions might occur. We are following the solution used in the WPF code and InitializeComponent is
+            // the place to initialize those objects that might be accessed during View/ViewModel interactions.
             InitializeComponent();
         }
 
-        // TODO: For trying it out.
-        //protected virtual void InitializeComponent()
-        protected void InitializeComponent()
+        /// <summary>
+        /// Initialize components of the ViewModel.
+        /// </summary>
+        /// <remarks>
+        /// Because Model Binding can occur as soon as object is constructed at this level, the components have to be
+        /// initialized when passing this point. However, top level constructors could initialize a component that is already too late, because lower level constructor tries
+        /// to set the Model on the ViewModel. As a result, NullReferenceExceptions might occur. We are following the solution used in the WPF code and InitializeComponent is
+        /// the place to initialize those objects that might be accessed during View/ViewModel interactions.
+        /// To avoid problems, overriden InitializeComponent methods should call base InitializeComponent method, usually as a first operation, but might be exceptions.
+        /// </remarks>
+        // ReSharper disable once VirtualMemberNeverOverridden.Global => Part of Public API
+        protected virtual void InitializeComponent()
         {
         }
 
+        // ReSharper disable once VirtualMemberNeverOverridden.Global => Part of Public API
         protected virtual void OnIsValidChanged()
         {
             IsValidChanged?.Invoke(this, EventArgs.Empty);
