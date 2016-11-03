@@ -9,7 +9,15 @@
 
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>Base library for MVVM architecture.</description>
-    <releaseNotes>Initial NuGet Packaging.</releaseNotes>
+    <dependencies>
+      <dependency id="ATZ.Reflection" version="[1,2)" />
+      <dependency id="ATZ.DependencyResolver" version="[1,2)" />
+    </dependencies>
+
+    <releaseNotes>
+2.0.0:
+- Initial NuGet Packaging.
+    </releaseNotes>
     <copyright>Copyright 2015</copyright>
   </metadata>
 </package>
