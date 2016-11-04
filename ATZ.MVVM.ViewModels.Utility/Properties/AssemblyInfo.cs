@@ -1,5 +1,6 @@
 ﻿using System.Reflection;
 using System.Runtime.InteropServices;
+//TODO: Public API documentation.
 //TODO: Set proper copyright information in each dll before publishing.
 
 // General Information about an assembly is controlled through the following 
