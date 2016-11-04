@@ -4,17 +4,39 @@ using System.Linq;
 
 namespace ATZ.MVVM.ViewModels.Utility.Connectors
 {
+    /// <summary>
+    /// Connector between a collection of ViewModels and Models.
+    /// </summary>
+    /// <typeparam name="TViewModel">The type of the ViewModel.</typeparam>
+    /// <typeparam name="TModel">The type of the Model.</typeparam>
+    // ReSharper disable once ClassWithVirtualMembersNeverInherited.Global => Part of public API.
     public class CollectionViewModelToModelConnector<TViewModel, TModel> : ObservableCollectionConnector<TModel, TViewModel>, IVerifiable
         where TViewModel : BaseViewModel<TModel>, new()
         where TModel : class
     {
+        /// <summary>
+        /// Delegate function to bind a ViewModel.
+        /// </summary>
+        /// <param name="vm">The ViewModel to bind.</param>
         public delegate void ViewModelBinder(TViewModel vm);
 
         private bool _isValid;
 
+        /// <summary>
+        /// Delegate to bind the ViewModel.
+        /// </summary>
+        // ReSharper disable once MemberCanBePrivate.Global => Part of public API.
         public ViewModelBinder BindViewModel { get; set; }
+
+        /// <summary>
+        /// Delegate to unbind the ViewModel.
+        /// </summary>
+        // ReSharper disable once MemberCanBePrivate.Global => Part of public API.
         public ViewModelBinder UnbindViewModel { get; set; }
 
+        /// <summary>
+        /// The validity of the object.
+        /// </summary>
         public bool IsValid
         {
             get { return _isValid; }
@@ -30,14 +52,23 @@ namespace ATZ.MVVM.ViewModels.Utility.Connectors
             }
         }
 
+        /// <summary>
+        /// The validity of the object has changed.
+        /// </summary>
         public event EventHandler IsValidChanged;
 
+        /// <summary>
+        /// The collection of the Model objects.
+        /// </summary>
         public ObservableCollection<TModel> ModelCollection
         {
             get { return SourceCollection; }
             set { SourceCollection = value; }
         }
 
+        /// <summary>
+        /// The collection of the ViewModel objects.
+        /// </summary>
         public ObservableCollection<TViewModel> ViewModelCollection
         {
             get { return TargetCollection; }
@@ -61,17 +92,27 @@ namespace ATZ.MVVM.ViewModels.Utility.Connectors
             IsValid = TargetCollection?.ToList().TrueForAll(vm => vm.IsValid) ?? true;
         }
 
+        /// <summary>
+        /// Fire IsValidChanged event and property change notification for IsValid property.
+        /// </summary>
         protected virtual void OnIsValidChanged()
         {
             IsValidChanged?.Invoke(this, EventArgs.Empty);
             OnPropertyChanged(nameof(IsValid));
         }
 
+        /// <summary>
+        /// Detach all ViewModels in the mirror collection.
+        /// </summary>
         public void ClearAllViewModelBindings()
         {
             TargetCollection?.ToList().ForEach(DetachViewModel);
         }
 
+        /// <summary>
+        /// Sort the Model collection with the given comparison method.
+        /// </summary>
+        /// <param name="comparison">The comparison method to compare the Model objects.</param>
         public void Sort(Comparison<TModel> comparison)
         {
             bool swapped;
@@ -91,14 +132,20 @@ namespace ATZ.MVVM.ViewModels.Utility.Connectors
             } while (swapped);
         }
 
+        /// <summary>
+        /// Reevaluation of the object validity requested.
+        /// </summary>
+        /// <param name="sender">The sender of the event.</param>
+        /// <param name="e">The arguments of the event.</param>
         public void UpdateValidity(object sender, EventArgs e)
         {
             UpdateValidity();
         }
 
-
+        /// <see cref="ICollectionChangedEventSource{TSourceItem,TCollectionItem}.ClearCollection"/>
         public override void ClearCollection() => ClearViewModelCollection();
 
+        /// <see cref="ICollectionChangedEventSource{TSourceItem,TCollectionItem}.CreateItem"/>
         public override TViewModel CreateItem(TModel sourceItem)
         {
             var viewModel = new TViewModel { Model = sourceItem };
@@ -109,12 +156,14 @@ namespace ATZ.MVVM.ViewModels.Utility.Connectors
             return viewModel;
         }
 
+        /// <see cref="ICollectionChangedEventSource{TSourceItem,TCollectionItem}.RemoveItem"/>
         public override void RemoveItem(int index)
         {
             DetachViewModel(TargetCollection[index]);
             TargetCollection.RemoveAt(index);
         }
 
+        /// <see cref="ICollectionChangedEventSource{TSourceItem,TCollectionItem}.ReplaceItem"/>
         public override void ReplaceItem(int index, TViewModel newItem)
         {
             DetachViewModel(TargetCollection[index]);

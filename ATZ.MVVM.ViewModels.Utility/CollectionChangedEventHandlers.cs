@@ -4,6 +4,11 @@ using System.Collections.Specialized;
 
 namespace ATZ.MVVM.ViewModels.Utility
 {
+    /// <summary>
+    /// Generic implementation for handling collection change events in ObservableCollections when mirroring the collection.
+    /// </summary>
+    /// <typeparam name="TEventItem">The type of the items in the event from the source ObservableCollection.</typeparam>
+    /// <typeparam name="TCollectionItem">The type of the items in the mirror ObservableCollection.</typeparam>
     public static class CollectionChangedEventHandlers<TEventItem, TCollectionItem>
     {
         private static readonly Dictionary<NotifyCollectionChangedAction, Action<ICollectionChangedEventSource<TEventItem, TCollectionItem>, NotifyCollectionChangedEventArgs>>
@@ -52,6 +57,11 @@ namespace ATZ.MVVM.ViewModels.Utility
             sender.ReplaceItem(e.NewStartingIndex, sender.CreateItem((TEventItem)e.NewItems[0]));
         }
 
+        /// <summary>
+        /// Handle INotifyCollectionChanged events.
+        /// </summary>
+        /// <param name="sender">The sender of the event.</param>
+        /// <param name="e">The arguments of the event.</param>
         public static void Handle(ICollectionChangedEventSource<TEventItem, TCollectionItem> sender, NotifyCollectionChangedEventArgs e)
         {
             if (EventHandlers.ContainsKey(e.Action))

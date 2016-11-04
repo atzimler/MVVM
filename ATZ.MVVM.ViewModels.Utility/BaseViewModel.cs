@@ -3,12 +3,19 @@
 
 namespace ATZ.MVVM.ViewModels.Utility
 {
+    /// <summary>
+    /// Base view model class.
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
     public abstract class BaseViewModel<T> : ObservableObject, IVerifiable
         where T : class
     {
         private bool _isValid;
         private T _model;
 
+        /// <summary>
+        /// The validity of the object.
+        /// </summary>
         public bool IsValid
         {
             get { return _isValid; }
@@ -24,8 +31,14 @@ namespace ATZ.MVVM.ViewModels.Utility
             }
         }
 
+        /// <summary>
+        /// The validity of the object has changed.
+        /// </summary>
         public event EventHandler IsValidChanged;
   
+        /// <summary>
+        /// The model object associated with the ViewModel.
+        /// </summary>
         public T Model
         {
             get { return _model; }
@@ -52,6 +65,9 @@ namespace ATZ.MVVM.ViewModels.Utility
             }
         }
 
+        /// <summary>
+        /// Constructor.
+        /// </summary>
         protected BaseViewModel()
         {
             // ReSharper disable once VirtualMemberCallInConstructor => Because Model Binding can occur as soon as object is constructed at this level, the components have to be
@@ -76,6 +92,9 @@ namespace ATZ.MVVM.ViewModels.Utility
         {
         }
 
+        /// <summary>
+        /// Fire IsValidChanged event and property change notification event for the IsValid property.
+        /// </summary>
         // ReSharper disable once VirtualMemberNeverOverridden.Global => Part of Public API
         protected virtual void OnIsValidChanged()
         {
@@ -83,9 +102,21 @@ namespace ATZ.MVVM.ViewModels.Utility
             OnPropertyChanged(nameof(IsValid));
         }
 
+        /// <summary>
+        /// Bind the Model to the ViewModel.
+        /// </summary>
         protected abstract void BindModel();
+
+        /// <summary>
+        /// Unbind the Model from the ViewModel.
+        /// </summary>
         protected abstract void UnbindModel();
 
+        /// <summary>
+        /// Reevaluation of the object validity requested.
+        /// </summary>
+        /// <param name="sender">The sender of the event.</param>
+        /// <param name="e">The arguments of the event.</param>
         public abstract void UpdateValidity(object sender, EventArgs e);
     }
 }
