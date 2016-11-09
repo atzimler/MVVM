@@ -1,4 +1,5 @@
-﻿using System.Collections.ObjectModel;
+﻿using System;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Windows;
 using System.Windows.Controls;
@@ -16,7 +17,7 @@ namespace ATZ.MVVM.Views.Utility.Connectors
     /// <typeparam name="TViewModel">The type of the ViewModel.</typeparam>
     /// <typeparam name="TModel">The type of the Model.</typeparam>
     public class CollectionViewToViewModelConnector<TView, TViewModel, TModel> : BaseConnector<TViewModel, IView<TViewModel>, UIElementCollection>
-        where TView : UIElement, IView<TViewModel>, new ()
+        where TView : UIElement, IView<TViewModel>
         where TViewModel : BaseViewModel<TModel>
         where TModel : class
     {
@@ -49,7 +50,7 @@ namespace ATZ.MVVM.Views.Utility.Connectors
             }
 
             Debug.WriteLine($"IView<{typeof(TViewModel).FullName}> created by the DependencyResolver.Instance is not of type {typeof(TView)}!");
-            return new TView();
+            return Activator.CreateInstance<TView>();
         }
 
         /// <see cref="ICollectionChangedEventSource{TSourceItem,TCollectionItem}.ClearCollection"/>

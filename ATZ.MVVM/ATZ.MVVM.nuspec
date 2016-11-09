@@ -16,6 +16,15 @@
     </dependencies>
 
     <releaseNotes>
+2.2.0:
+- Relaxing requirement of the View in CollectionViewToViewModelConnector to be required to have new().
+  This allows the usage of IView&lt;TViewModel&gt; as TView in case we don't want to specify it more exactly.
+  Of course in this case when the actual type cannot be resolved throw the DependencyResolver, it will fail
+  when have no new(), but the alternative in these failing resolution cases could be only to return null,
+  which has a risk of NullReferenceException. The previous safety action, which was to create a new TView
+  in case of failing resolution is still working when the type is exactly specified and has parameterless
+  constructor.
+      
 2.1.0:
 - Initial NuGet Packaging.
     </releaseNotes>
