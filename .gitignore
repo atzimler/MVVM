@@ -1,5 +1,7 @@
 .vs
 *.DotSettings.user
 
+packages
+
 */bin/*
 */obj/*
