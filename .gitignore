@@ -1,4 +1,5 @@
 .vs
+*.DotSettings
 *.DotSettings.user
 
 packages
