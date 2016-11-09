@@ -177,5 +177,22 @@ namespace ATZ.MVVM.Views.Utility.Tests
             Assert.AreEqual(typeof(TestView), conn.ViewCollection[0].GetType());
             Assert.AreEqual(typeof(TestView2), conn.ViewCollection[1].GetType());
         }
+
+        // TODO: Exercise to complete for MVVM 3.0, would probably properly allow StackPanelView : IView<StackPanelViewModel>, IView<FrameworkElementViewModel>'s BindModelImplementation. Currently 
+        //public void AllowClassHierarchies()
+        //{
+        //    var view = new ClassHierarchyView();
+        //    var baseView = (IView<BaseModel>) view;
+        //    Assert.IsNotNull(baseView);
+
+        //    var derivedView = (IView<DerivedModel>) view;
+        //    Assert.IsNotNull(derivedView);
+
+        //    var baseViewModel = baseView.GetViewModel();
+        //    var derivedViewModel = derivedView.GetViewModel();
+        //    Assert.AreSame(baseViewModel, derivedViewModel);
+
+        //    Assert.IsTrue(typeof(BaseModel).IsAssignableFrom(typeof(DerivedModel)));
+        //}
     }
 }
