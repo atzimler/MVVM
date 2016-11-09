@@ -17,6 +17,11 @@
     </dependencies>
 
     <releaseNotes>
+2.2.1:
+- Further relaxing the requirements of the TView for CollectionViewToViewModelConnector, because specifying
+  UIElement did not allow to use IView&lt;TViewModel&gt; as TView. The fact that it should be a UIElement
+  was not used in the implementation of the class.
+      
 2.2.0:
 - Relaxing requirement of the View in CollectionViewToViewModelConnector to be required to have new().
   This allows the usage of IView&lt;TViewModel&gt; as TView in case we don't want to specify it more exactly.
