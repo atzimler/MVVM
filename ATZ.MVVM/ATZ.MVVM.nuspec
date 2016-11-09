@@ -8,6 +8,7 @@
     <owners>$author$</owners>
 
     <requireLicenseAcceptance>true</requireLicenseAcceptance>
+    <projectUrl>https://github.com/atzimler/MVVM</projectUrl>
     <licenseUrl>https://raw.githubusercontent.com/atzimler/MVVM/master/LICENSE.txt</licenseUrl>
     <description>Base library for MVVM architecture.</description>
     <dependencies>
