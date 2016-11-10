@@ -10,15 +10,12 @@ namespace ATZ.MVVM.Views.Utility.Connectors
     /// </summary>
     /// <typeparam name="TModel">The Model of the main object.</typeparam>
     /// <typeparam name="TView">The View of the main object.</typeparam>
-    /// <typeparam name="TViewModel">The ViewModel of the main object.</typeparam>
     /// <typeparam name="TComponentModel">The Model of the component object.</typeparam>
     /// <typeparam name="TComponentView">The View of the component object.</typeparam>
-    /// <typeparam name="TComponentViewModel">The ViewModel of the component object.</typeparam>
     // ReSharper disable UnusedTypeParameter => To simplify usage, we require the MVVM types in pair.
-    public class CompositeViewToViewModelConnector<TModel, TView, TViewModel, TComponentModel, TComponentView, TComponentViewModel>
+    public class CompositeViewToViewModelConnector<TModel, TView, TComponentModel, TComponentView>
     // ReSharper restore UnusedTypeParameter
-        where TComponentView : IView<TComponentViewModel>
-        where TComponentViewModel : BaseViewModel<TComponentModel>
+        where TComponentView : IView<IViewModel<TComponentModel>>
         where TComponentModel : class
     {
         /// <summary>
@@ -28,10 +25,14 @@ namespace ATZ.MVVM.Views.Utility.Connectors
         /// <param name="viewModel">The ViewModel of the main object.</param>
         /// <param name="componentViewModel">Function to extract the ViewModel of the component from the ViewModel of the main object.</param>
         /// <param name="componentModel">Function to extract the Model of the component from the Model of the main object.</param>
-        public CompositeViewToViewModelConnector(TComponentView componentView, TViewModel viewModel, Func<TViewModel, TComponentViewModel> componentViewModel, Func<TViewModel, TComponentModel> componentModel)
+        public CompositeViewToViewModelConnector(
+            TComponentView componentView,
+            IViewModel<TModel> viewModel,
+            Func<IViewModel<TModel>, IViewModel<TComponentModel>> componentViewModel,
+            Func<IViewModel<TModel>, TComponentModel> componentModel)
         {
             var cvm = componentViewModel(viewModel);
-            cvm.Model = componentModel(viewModel);
+            cvm.SetModel(componentModel(viewModel));
             componentView.SetViewModel(cvm);
         }
     }

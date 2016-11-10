@@ -1,6 +1,7 @@
 ﻿namespace ATZ.MVVM.Views.Utility.Tests.CompositeComponents
 {
-    class MainModel
+    public class MainModel
     {
+        public ComponentModel ComponentModel { get; set; }
     }
 }
