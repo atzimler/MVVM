@@ -149,7 +149,7 @@ namespace ATZ.MVVM.ViewModels.Utility.Connectors
         {
             var viewModel = DependencyResolver.Instance.GetInterface<IViewModel<TModel>>(
                 typeof(IViewModel<>), sourceItem.GetType());
-            viewModel.Model = sourceItem;
+            viewModel.SetModel(sourceItem);
 
             BindViewModel?.Invoke(viewModel);
 

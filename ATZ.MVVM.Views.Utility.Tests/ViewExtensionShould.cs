@@ -64,7 +64,7 @@ namespace ATZ.MVVM.Views.Utility.Tests
         public void NotCrashIfViewModelIsNotSetAndExecuteActionIsCalled()
         {
             var v = new TestView();
-            Assert.DoesNotThrow(() => v.ExecuteViewModelMethod(vm => vm.Execute()));
+            Assert.DoesNotThrow(() => v.ExecuteViewModelMethod(vm => ((TestViewModel)vm).Execute()));
         }
 
         [Test]
@@ -74,7 +74,7 @@ namespace ATZ.MVVM.Views.Utility.Tests
             var v = new TestView();
             var tvm = new TestViewModel();
             v.SetViewModel(tvm);
-            v.ExecuteViewModelMethod(vm => vm.Execute());
+            v.ExecuteViewModelMethod(vm => ((TestViewModel)vm).Execute());
             Assert.IsTrue(tvm.ExecuteCalled);
         }
 

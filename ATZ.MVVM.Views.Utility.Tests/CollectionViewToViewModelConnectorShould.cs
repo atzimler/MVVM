@@ -2,6 +2,7 @@
 using System.Collections.ObjectModel;
 using System.Windows.Controls;
 using ATZ.DependencyInjection;
+using ATZ.MVVM.ViewModels.Utility;
 using ATZ.MVVM.ViewModels.Utility.Tests;
 using ATZ.MVVM.ViewModels.Utility.Tests.TestHelpers;
 using ATZ.MVVM.Views.Utility.Connectors;

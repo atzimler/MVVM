@@ -112,6 +112,16 @@ namespace ATZ.MVVM.ViewModels.Utility
         /// </summary>
         protected abstract void UnbindModel();
 
+        public T GetModel()
+        {
+            return Model;
+        }
+
+        public void SetModel(T model)
+        {
+            Model = model;
+        }
+
         /// <summary>
         /// Reevaluation of the object validity requested.
         /// </summary>

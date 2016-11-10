@@ -34,7 +34,7 @@ namespace ATZ.MVVM.ViewModels.Utility.Tests
             var model = new TestModel();
             Assert.IsFalse(tvm.UpdateValidityCalled);
 
-            vm.Model = model;
+            vm.SetModel(model);
             Assert.IsTrue(tvm.UpdateValidityCalled);
         }
 
@@ -46,10 +46,10 @@ namespace ATZ.MVVM.ViewModels.Utility.Tests
             var model = new TestModel();
             Assert.IsFalse(tvm.UnbindModelCalled);
 
-            vm.Model = model;
+            vm.SetModel(model);
             Assert.IsFalse(tvm.UnbindModelCalled);
 
-            vm.Model = null;
+            vm.SetModel(null);
             Assert.IsTrue(tvm.UnbindModelCalled);
         }
 
@@ -98,10 +98,10 @@ namespace ATZ.MVVM.ViewModels.Utility.Tests
             IViewModel<TestModel> vm = new TestViewModel();
             TestModel model = new TestModel();
 
-            Assert.IsNull(vm.Model);
+            Assert.IsNull(vm.GetModel());
 
-            vm.Model = model;
-            Assert.AreEqual(model, vm.Model);
+            vm.SetModel(model);
+            Assert.AreEqual(model, vm.GetModel());
         }
 
         [Test]
@@ -111,10 +111,10 @@ namespace ATZ.MVVM.ViewModels.Utility.Tests
             IViewModel<TestModel> vm = tvm;
             var m = new TestModel();
 
-            vm.Model = m;
+            vm.SetModel(m);
             Assert.IsFalse(tvm.UnbindModelCalled);
 
-            vm.Model = m;
+            vm.SetModel(m);
             Assert.IsFalse(tvm.UnbindModelCalled);
         }
 
