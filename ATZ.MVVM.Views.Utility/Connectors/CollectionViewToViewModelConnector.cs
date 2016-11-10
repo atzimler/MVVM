@@ -13,11 +13,9 @@ namespace ATZ.MVVM.Views.Utility.Connectors
     /// Connector between Views and ViewModels collections.
     /// </summary>
     /// <typeparam name="TView">The type of the View.</typeparam>
-    /// <typeparam name="TViewModel">The type of the ViewModel.</typeparam>
     /// <typeparam name="TModel">The type of the Model.</typeparam>
-    public class CollectionViewToViewModelConnector<TView, TViewModel, TModel> : BaseConnector<TViewModel, IView<TViewModel>, UIElementCollection>
-        where TView : IView<TViewModel>
-        where TViewModel : BaseViewModel<TModel>
+    public class CollectionViewToViewModelConnector<TView, TModel> : BaseConnector<IViewModel<TModel>, IView<IViewModel<TModel>>, UIElementCollection>
+        where TView : IView<IViewModel<TModel>>
         where TModel : class
     {
         /// <summary>
@@ -32,15 +30,15 @@ namespace ATZ.MVVM.Views.Utility.Connectors
         /// <summary>
         /// The ViewModel collection.
         /// </summary>
-        public ObservableCollection<TViewModel> ViewModelCollection
+        public ObservableCollection<IViewModel<TModel>> ViewModelCollection
         {
             get { return SourceCollection; }
             set { SourceCollection = value; }
         }
 
-        private static IView<TViewModel> CreateViewForViewModel(TViewModel viewModel)
+        private static IView<IViewModel<TModel>> CreateViewForViewModel(IViewModel<TModel> viewModel)
         {
-            var view = DependencyResolver.Instance.GetInterface<IView<TViewModel>>(typeof(IView<>), viewModel.GetType());
+            var view = DependencyResolver.Instance.GetInterface<IView<IViewModel<TModel>>>(typeof(IView<>), viewModel.GetType());
             view.SetViewModel(viewModel);
 
             if (view != null)
@@ -48,7 +46,7 @@ namespace ATZ.MVVM.Views.Utility.Connectors
                 return view;
             }
 
-            Debug.WriteLine($"IView<{typeof(TViewModel).FullName}> created by the DependencyResolver.Instance is not of type {typeof(TView)}!");
+            Debug.WriteLine($"IView<{typeof(IViewModel<TModel>).FullName}> created by the DependencyResolver.Instance is not of type {typeof(TView)}!");
             return Activator.CreateInstance<TView>();
         }
 
@@ -56,13 +54,13 @@ namespace ATZ.MVVM.Views.Utility.Connectors
         public override void ClearCollection() => TargetCollection.Clear();
 
         /// <see cref="ICollectionChangedEventSource{TSourceItem,TCollectionItem}.AddItem"/>
-        public override void AddItem(IView<TViewModel> item) => TargetCollection.Add(item.UIElement);
+        public override void AddItem(IView<IViewModel<TModel>> item) => TargetCollection.Add(item.UIElement);
 
         /// <see cref="ICollectionChangedEventSource{TSourceItem,TCollectionItem}.CreateItem"/>
-        public override IView<TViewModel> CreateItem(TViewModel sourceItem) => CreateViewForViewModel(sourceItem);
+        public override IView<IViewModel<TModel>> CreateItem(IViewModel<TModel> sourceItem) => CreateViewForViewModel(sourceItem);
 
         /// <see cref="ICollectionChangedEventSource{TSourceItem,TCollectionItem}.InsertItem"/>
-        public override void InsertItem(int index, IView<TViewModel> item) => TargetCollection.Insert(index, item.UIElement);
+        public override void InsertItem(int index, IView<IViewModel<TModel>> item) => TargetCollection.Insert(index, item.UIElement);
 
         /// <see cref="ICollectionChangedEventSource{TSourceItem,TCollectionItem}.MoveItem"/>
         public override void MoveItem(int oldIndex, int newIndex)
@@ -76,7 +74,7 @@ namespace ATZ.MVVM.Views.Utility.Connectors
         public override void RemoveItem(int index) => TargetCollection.RemoveAt(index);
 
         /// <see cref="ICollectionChangedEventSource{TSourceItem,TCollectionItem}.ReplaceItem"/>
-        public override void ReplaceItem(int index, IView<TViewModel> newItem)
+        public override void ReplaceItem(int index, IView<IViewModel<TModel>> newItem)
         {
             TargetCollection.RemoveAt(index);
             TargetCollection.Insert(index, newItem.UIElement);

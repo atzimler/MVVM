@@ -11,7 +11,7 @@ using NUnit.Framework;
 
 namespace ATZ.MVVM.Views.Utility.Tests
 {
-    using TConnector = CollectionViewToViewModelConnector<TestView, TestViewModel, TestModel>;
+    using TConnector = CollectionViewToViewModelConnector<TestView, TestModel>;
 
     [TestFixture]
     public class CollectionViewToViewModelConnectorShould
@@ -39,7 +39,7 @@ namespace ATZ.MVVM.Views.Utility.Tests
         [Test]
         public void RetainViewModelCollection()
         {
-            var vm = new ObservableCollection<TestViewModel>();
+            var vm = new ObservableCollection<IViewModel<TestModel>>();
             var conn = new TConnector();
             Assert.IsNull(conn.ViewModelCollection);
 
@@ -52,7 +52,7 @@ namespace ATZ.MVVM.Views.Utility.Tests
         public void ProperlyCreateViewForViewModel()
         {
             var sp = new StackPanel();
-            var vm = new ObservableCollection<TestViewModel>();
+            var vm = new ObservableCollection<IViewModel<TestModel>>();
             var conn = new TConnector
             {
                 ViewCollection = sp.Children,
@@ -71,7 +71,7 @@ namespace ATZ.MVVM.Views.Utility.Tests
         public void UnbindViewModelCollectionWhenReplaced()
         {
             var sp = new StackPanel();
-            var vm = new ObservableCollectionEventChangeChecker<TestViewModel>();
+            var vm = new ObservableCollectionEventChangeChecker<IViewModel<TestModel>>();
             var conn = new TConnector
             {
                 ViewCollection = sp.Children,
@@ -91,7 +91,7 @@ namespace ATZ.MVVM.Views.Utility.Tests
             var vm2 = new TestViewModel();
 
             var sp = new StackPanel();
-            var vms = new ObservableCollection<TestViewModel> {vm1, vm2};
+            var vms = new ObservableCollection<IViewModel<TestModel>> {vm1, vm2};
             var conn = new TConnector
             {
                 ViewCollection = sp.Children,
@@ -112,7 +112,7 @@ namespace ATZ.MVVM.Views.Utility.Tests
         public void ProperlyRemoveViewWhenViewModelIsRemoved()
         {
             var sp = new StackPanel();
-            var vms = new ObservableCollection<TestViewModel> {new TestViewModel()};
+            var vms = new ObservableCollection<IViewModel<TestModel>> {new TestViewModel()};
             var conn = new TConnector
             {
                 ViewCollection = sp.Children,
@@ -129,7 +129,7 @@ namespace ATZ.MVVM.Views.Utility.Tests
         public void ProperlyReplaceViewWhenViewModelIsReplaced()
         {
             var sp = new StackPanel();
-            var vms = new ObservableCollection<TestViewModel> {new TestViewModel()};
+            var vms = new ObservableCollection<IViewModel<TestModel>> {new TestViewModel()};
             var conn = new TConnector
             {
                 ViewCollection = sp.Children,
@@ -148,7 +148,7 @@ namespace ATZ.MVVM.Views.Utility.Tests
         public void KeepViewModelCollectionUnchangedIfReplacedWithTheSameObject()
         {
             var sp = new StackPanel();
-            var vms = new ObservableCollectionEventChangeChecker<TestViewModel> {new TestViewModel()};
+            var vms = new ObservableCollectionEventChangeChecker<IViewModel<TestModel>> {new TestViewModel()};
             var conn = new TConnector
             {
                 ViewCollection = sp.Children,
@@ -167,7 +167,7 @@ namespace ATZ.MVVM.Views.Utility.Tests
         public void CreateAppropriateTypesDependingOnViewModels()
         {
             var sp = new StackPanel();
-            var vms = new ObservableCollection<TestViewModel> {new TestViewModel(), new TestViewModel2()};
+            var vms = new ObservableCollection<IViewModel<TestModel>> {new TestViewModel(), new TestViewModel2()};
             var conn = new TConnector
             {
                 ViewCollection = sp.Children,
