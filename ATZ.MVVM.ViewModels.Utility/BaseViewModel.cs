@@ -7,7 +7,7 @@ namespace ATZ.MVVM.ViewModels.Utility
     /// Base view model class.
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    public abstract class BaseViewModel<T> : ObservableObject, IVerifiable
+    public abstract class BaseViewModel<T> : ObservableObject, IVerifiable, IViewModel<T>
         where T : class
     {
         private bool _isValid;

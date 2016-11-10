@@ -48,6 +48,7 @@
     <Compile Include="Connectors\ObservableCollectionConnector.cs" />
     <Compile Include="ICollectionChangedEventSource.cs" />
     <Compile Include="IVerifiable.cs" />
+    <Compile Include="IViewModel.cs" />
     <Compile Include="ObservableObject.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SuspendPropertyChangedEvent.cs" />
