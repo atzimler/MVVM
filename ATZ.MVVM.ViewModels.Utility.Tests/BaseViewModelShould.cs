@@ -8,7 +8,7 @@ namespace ATZ.MVVM.ViewModels.Utility.Tests
         [Test]
         public void IsValidChangedOnlyFiredWhenRealChangeOccurs()
         {
-            var vm = new TestViewModel();
+            IViewModel<TestModel> vm = new TestViewModel();
             var fired = false;
             vm.IsValidChanged += (obj, e) => { fired = true; };
 
@@ -28,34 +28,36 @@ namespace ATZ.MVVM.ViewModels.Utility.Tests
         [Test]
         public void IsValidIsRereadOnModelChange()
         {
-            TestViewModel vm = new TestViewModel();
+            var tvm = new TestViewModel();
+            IViewModel<TestModel> vm = tvm;
 
-            TestModel model = new TestModel();
-
-            Assert.IsFalse(vm.UpdateValidityCalled);
+            var model = new TestModel();
+            Assert.IsFalse(tvm.UpdateValidityCalled);
 
             vm.Model = model;
-            Assert.IsTrue(vm.UpdateValidityCalled);
+            Assert.IsTrue(tvm.UpdateValidityCalled);
         }
 
         [Test]
         public void ModelIsUnboundWhenItIsNotNull()
         {
-            var vm = new TestViewModel();
+            var tvm = new TestViewModel();
+            IViewModel<TestModel> vm = tvm;
             var model = new TestModel();
-            Assert.IsFalse(vm.UnbindModelCalled);
+            Assert.IsFalse(tvm.UnbindModelCalled);
 
             vm.Model = model;
-            Assert.IsFalse(vm.UnbindModelCalled);
+            Assert.IsFalse(tvm.UnbindModelCalled);
 
             vm.Model = null;
-            Assert.IsTrue(vm.UnbindModelCalled);
+            Assert.IsTrue(tvm.UnbindModelCalled);
         }
 
         [Test]
         public void OnPropertyChangedOnlyFiredWhenRealChangeOccurs()
         {
-            var vm = new TestViewModel();
+            var tvm = new TestViewModel();
+            IViewModel<TestModel> vm = tvm;
             var fired = false;
             vm.PropertyChanged += (obj, e) =>
             {
@@ -78,7 +80,7 @@ namespace ATZ.MVVM.ViewModels.Utility.Tests
         [Test]
         public void RetainsIsValid()
         {
-            TestViewModel vm = new TestViewModel();
+            IViewModel<TestModel> vm = new TestViewModel();
             Assert.IsFalse(vm.IsValid);
 
             vm.IsValid = true;
@@ -93,7 +95,7 @@ namespace ATZ.MVVM.ViewModels.Utility.Tests
         [Test]
         public void RetainsModel()
         {
-            TestViewModel vm = new TestViewModel();
+            IViewModel<TestModel> vm = new TestViewModel();
             TestModel model = new TestModel();
 
             Assert.IsNull(vm.Model);
@@ -105,14 +107,15 @@ namespace ATZ.MVVM.ViewModels.Utility.Tests
         [Test]
         public void NotChangeAnythingIfTheSameModelIsAssigned()
         {
-            TestViewModel vm = new TestViewModel();
-            TestModel m = new TestModel();
+            var tvm = new TestViewModel();
+            IViewModel<TestModel> vm = tvm;
+            var m = new TestModel();
 
             vm.Model = m;
-            Assert.IsFalse(vm.UnbindModelCalled);
+            Assert.IsFalse(tvm.UnbindModelCalled);
 
             vm.Model = m;
-            Assert.IsFalse(vm.UnbindModelCalled);
+            Assert.IsFalse(tvm.UnbindModelCalled);
         }
 
         [Test]
