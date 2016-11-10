@@ -11,7 +11,7 @@ namespace ATZ.MVVM.ViewModels.Utility.Connectors
     /// <typeparam name="TModel">The type of the Model.</typeparam>
     // ReSharper disable once ClassWithVirtualMembersNeverInherited.Global => Part of public API.
     public class CollectionViewModelToModelConnector<TViewModel, TModel> : ObservableCollectionConnector<TModel, IViewModel<TModel>>, IVerifiable
-        where TViewModel : BaseViewModel<TModel>, new()
+        where TViewModel : IViewModel<TModel>, new()
         where TModel : class
     {
         /// <summary>
