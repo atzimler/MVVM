@@ -76,6 +76,11 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ClassHierarchyTestComponents\BaseModel.cs" />
+    <Compile Include="ClassHierarchyTestComponents\BaseViewModel.cs" />
+    <Compile Include="ClassHierarchyTestComponents\ClassHierarchyView.cs" />
+    <Compile Include="ClassHierarchyTestComponents\DerivedModel.cs" />
+    <Compile Include="ClassHierarchyTestComponents\DerivedViewModel.cs" />
     <Compile Include="CollectionViewToViewModelConnectorShould.cs" />
     <Compile Include="CompositeComponents\ComponentModel.cs" />
     <Compile Include="CompositeComponents\ComponentView.cs" />
