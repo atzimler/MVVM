@@ -17,6 +17,11 @@
     </dependencies>
 
     <releaseNotes>
+3.0.0:
+- Support for multiple class hierarchies through interfaces. The hierarchy of the Models now can be mirrored
+  by the ViewModels and the Views without having problem with the single inheritance restriction of the
+  language.
+      
 2.2.1:
 - Further relaxing the requirements of the TView for CollectionViewToViewModelConnector, because specifying
   UIElement did not allow to use IView&lt;TViewModel&gt; as TView. The fact that it should be a UIElement
