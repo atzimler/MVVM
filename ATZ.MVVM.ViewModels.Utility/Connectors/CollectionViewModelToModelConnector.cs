@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.Linq;
+using ATZ.DependencyInjection;
 
 namespace ATZ.MVVM.ViewModels.Utility.Connectors
 {
@@ -148,7 +149,9 @@ namespace ATZ.MVVM.ViewModels.Utility.Connectors
         /// <see cref="ICollectionChangedEventSource{TSourceItem,TCollectionItem}.CreateItem"/>
         public override IViewModel<TModel> CreateItem(TModel sourceItem)
         {
-            var viewModel = new TViewModel { Model = sourceItem };
+            var viewModel = DependencyResolver.Instance.GetInterface<IViewModel<TModel>>(
+                typeof(IViewModel<>), sourceItem.GetType());
+            viewModel.Model = sourceItem;
 
             BindViewModel?.Invoke(viewModel);
 

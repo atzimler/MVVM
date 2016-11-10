@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using NUnit.Framework;
 using System.Collections.ObjectModel;
+using ATZ.DependencyInjection;
 using ATZ.MVVM.ViewModels.Utility.Connectors;
 using ATZ.MVVM.ViewModels.Utility.Tests.TestHelpers;
 
@@ -26,6 +27,13 @@ namespace ATZ.MVVM.ViewModels.Utility.Tests
             }
 
             Assert.AreEqual(connector.IsValid, validity);
+        }
+
+        [SetUp]
+        public void SetUp()
+        {
+            DependencyResolver.Initialize();
+            DependencyResolver.Instance.Bind<IViewModel<TestModel>>().To<TestViewModel>();
         }
 
         [Test]
