@@ -8,11 +8,9 @@ namespace ATZ.MVVM.ViewModels.Utility.Connectors
     /// <summary>
     /// Connector between a collection of ViewModels and Models.
     /// </summary>
-    /// <typeparam name="TViewModel">The type of the ViewModel.</typeparam>
     /// <typeparam name="TModel">The type of the Model.</typeparam>
     // ReSharper disable once ClassWithVirtualMembersNeverInherited.Global => Part of public API.
-    public class CollectionViewModelToModelConnector<TViewModel, TModel> : ObservableCollectionConnector<TModel, IViewModel<TModel>>, IVerifiable
-        where TViewModel : IViewModel<TModel>
+    public class CollectionViewModelToModelConnector<TModel> : ObservableCollectionConnector<TModel, IViewModel<TModel>>, IVerifiable
         where TModel : class
     {
         /// <summary>

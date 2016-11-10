@@ -7,7 +7,7 @@ using ATZ.MVVM.ViewModels.Utility.Tests.TestHelpers;
 
 namespace ATZ.MVVM.ViewModels.Utility.Tests
 {
-    using TConnector = CollectionViewModelToModelConnector<TestViewModel, TestModel>;
+    using TConnector = CollectionViewModelToModelConnector<TestModel>;
 
     [TestFixture]
     public class CollectionViewModelToModelConnectorShould

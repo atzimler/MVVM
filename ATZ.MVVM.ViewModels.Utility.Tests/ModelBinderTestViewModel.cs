@@ -3,7 +3,7 @@ using ATZ.MVVM.ViewModels.Utility.Connectors;
 
 namespace ATZ.MVVM.ViewModels.Utility.Tests
 {
-    using TEntriesConnector = CollectionViewModelToModelConnector<TestViewModel, TestModel>;
+    using TEntriesConnector = CollectionViewModelToModelConnector<TestModel>;
 
     public class ModelBinderTestViewModel : BaseViewModel<ModelBinderTestModel>
     {
