@@ -16,7 +16,7 @@ namespace ATZ.MVVM.ViewModels.Utility.Tests
             var connector = new TConnector
             {
                 ModelCollection = new ObservableCollection<TestModel>(),
-                ViewModelCollection = new ObservableCollection<TestViewModel>()
+                ViewModelCollection = new ObservableCollection<IViewModel<TestModel>>()
             };
 
             for (var model = 0; model < viewModelValidities.Count; ++model)
@@ -98,7 +98,7 @@ namespace ATZ.MVVM.ViewModels.Utility.Tests
             var connector = new TConnector
             {
                 ModelCollection = new ObservableCollection<TestModel>(),
-                ViewModelCollection = new ObservableCollection<TestViewModel>()
+                ViewModelCollection = new ObservableCollection<IViewModel<TestModel>>()
             };
 
             var m = new TestModel();
@@ -192,7 +192,7 @@ namespace ATZ.MVVM.ViewModels.Utility.Tests
             {
                 BindViewModel = (vm) => { binderCalled = true; },
                 ModelCollection = new ObservableCollection<TestModel>(),
-                ViewModelCollection = new ObservableCollection<TestViewModel>()
+                ViewModelCollection = new ObservableCollection<IViewModel<TestModel>>()
             };
 
             Assert.IsFalse(binderCalled);
@@ -204,7 +204,7 @@ namespace ATZ.MVVM.ViewModels.Utility.Tests
         [Test]
         public void ViewModelCollectionIsNotChangedIfSetToTheSame()
         {
-            var vmc = new ObservableCollection<TestViewModel>();
+            var vmc = new ObservableCollection<IViewModel<TestModel>>();
             var connector = new TConnector
             {
                 ModelCollection = new ObservableCollection<TestModel>(),
@@ -231,7 +231,7 @@ namespace ATZ.MVVM.ViewModels.Utility.Tests
         {
             var connector = new TConnector
             {
-                ViewModelCollection = new ObservableCollection<TestViewModel>()
+                ViewModelCollection = new ObservableCollection<IViewModel<TestModel>>()
             };
             Assert.DoesNotThrow(() => connector.Add(new TestModel(), new TestViewModel()));
         }
@@ -252,7 +252,7 @@ namespace ATZ.MVVM.ViewModels.Utility.Tests
             var connector = new TConnector
             {
                 ModelCollection = new ObservableCollection<TestModel>(),
-                ViewModelCollection = new ObservableCollection<TestViewModel>()
+                ViewModelCollection = new ObservableCollection<IViewModel<TestModel>>()
             };
             connector.ModelCollection.Add(new TestModel());
 
@@ -268,7 +268,7 @@ namespace ATZ.MVVM.ViewModels.Utility.Tests
             var connector = new TConnector
             {
                 ModelCollection = new ObservableCollection<TestModel>(),
-                ViewModelCollection = new ObservableCollection<TestViewModel>()
+                ViewModelCollection = new ObservableCollection<IViewModel<TestModel>>()
             };
             connector.ModelCollection.Add(new TestModel());
             Assert.AreEqual(1, connector.ModelCollection.Count);
@@ -285,7 +285,7 @@ namespace ATZ.MVVM.ViewModels.Utility.Tests
             var connector = new TConnector
             {
                 ModelCollection = new ObservableCollection<TestModel>(),
-                ViewModelCollection = new ObservableCollection<TestViewModel>()
+                ViewModelCollection = new ObservableCollection<IViewModel<TestModel>>()
             };
             connector.ModelCollection.Add(new TestModel());
             Assert.AreEqual(1, connector.ModelCollection.Count);
@@ -309,7 +309,7 @@ namespace ATZ.MVVM.ViewModels.Utility.Tests
             var connector = new TConnector
             {
                 ModelCollection = new ObservableCollection<TestModel> {m1, m2},
-                ViewModelCollection = new ObservableCollection<TestViewModel>()
+                ViewModelCollection = new ObservableCollection<IViewModel<TestModel>>()
             };
             Assert.AreEqual(2, connector.ViewModelCollection.Count);
             var vm1 = connector.ViewModelCollection[0];
@@ -328,7 +328,7 @@ namespace ATZ.MVVM.ViewModels.Utility.Tests
             var connector = new TConnector
             {
                 ModelCollection = new ObservableCollection<TestModel> {m},
-                ViewModelCollection = new ObservableCollection<TestViewModel>(),
+                ViewModelCollection = new ObservableCollection<IViewModel<TestModel>>(),
                 UnbindViewModel = vm => unbindCalled = true
             };
 
@@ -344,7 +344,7 @@ namespace ATZ.MVVM.ViewModels.Utility.Tests
             var connector = new TConnector
             {
                 ModelCollection = new ObservableCollection<TestModel> {m1, m2},
-                ViewModelCollection = new ObservableCollection<TestViewModel>()
+                ViewModelCollection = new ObservableCollection<IViewModel<TestModel>>()
             };
 
             connector.Sort((o1, o2) => o1 == m1 && o2 == m2 ? -1 : 1);
@@ -360,7 +360,7 @@ namespace ATZ.MVVM.ViewModels.Utility.Tests
             var connector = new TConnector
             {
                 ModelCollection = new ObservableCollection<TestModel> {m1, m2},
-                ViewModelCollection = new ObservableCollection<TestViewModel>()
+                ViewModelCollection = new ObservableCollection<IViewModel<TestModel>>()
             };
 
             connector.Sort((o1, o2) => o1 == m1 && o2 == m2? 1:-1);
@@ -376,7 +376,7 @@ namespace ATZ.MVVM.ViewModels.Utility.Tests
             var connector = new TConnector
             {
                 ModelCollection = new ObservableCollection<TestModel> {m},
-                ViewModelCollection = new ObservableCollection<TestViewModel>(),
+                ViewModelCollection = new ObservableCollection<IViewModel<TestModel>>(),
                 UnbindViewModel = vm => unbindCalled = true
             };
             Assert.AreEqual(1, connector.ViewModelCollection.Count);
@@ -393,12 +393,15 @@ namespace ATZ.MVVM.ViewModels.Utility.Tests
             var connector = new TConnector
             {
                 ModelCollection = new ObservableCollection<TestModel>(),
-                ViewModelCollection = new ObservableCollection<TestViewModel>()
+                ViewModelCollection = new ObservableCollection<IViewModel<TestModel>>()
             };
             connector.ModelCollection.Add(m);
 
             Assert.AreEqual(1, connector.ViewModelCollection.Count);
-            Assert.IsTrue(connector.ViewModelCollection[0].BindModelCalled);
+
+            var vm = connector.ViewModelCollection[0] as TestViewModel;
+            Assert.IsNotNull(vm);
+            Assert.IsTrue(vm.BindModelCalled);
         }
     }
 }

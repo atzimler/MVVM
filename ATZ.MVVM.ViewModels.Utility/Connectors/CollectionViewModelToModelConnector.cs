@@ -10,7 +10,7 @@ namespace ATZ.MVVM.ViewModels.Utility.Connectors
     /// <typeparam name="TViewModel">The type of the ViewModel.</typeparam>
     /// <typeparam name="TModel">The type of the Model.</typeparam>
     // ReSharper disable once ClassWithVirtualMembersNeverInherited.Global => Part of public API.
-    public class CollectionViewModelToModelConnector<TViewModel, TModel> : ObservableCollectionConnector<TModel, TViewModel>, IVerifiable
+    public class CollectionViewModelToModelConnector<TViewModel, TModel> : ObservableCollectionConnector<TModel, IViewModel<TModel>>, IVerifiable
         where TViewModel : BaseViewModel<TModel>, new()
         where TModel : class
     {
@@ -18,7 +18,7 @@ namespace ATZ.MVVM.ViewModels.Utility.Connectors
         /// Delegate function to bind a ViewModel.
         /// </summary>
         /// <param name="vm">The ViewModel to bind.</param>
-        public delegate void ViewModelBinder(TViewModel vm);
+        public delegate void ViewModelBinder(IViewModel<TModel> vm);
 
         private bool _isValid;
 
@@ -69,7 +69,7 @@ namespace ATZ.MVVM.ViewModels.Utility.Connectors
         /// <summary>
         /// The collection of the ViewModel objects.
         /// </summary>
-        public ObservableCollection<TViewModel> ViewModelCollection
+        public ObservableCollection<IViewModel<TModel>> ViewModelCollection
         {
             get { return TargetCollection; }
             set { TargetCollection = value; }
@@ -81,7 +81,7 @@ namespace ATZ.MVVM.ViewModels.Utility.Connectors
             TargetCollection.Clear();
         }
 
-        private void DetachViewModel(TViewModel viewModel)
+        private void DetachViewModel(IViewModel<TModel> viewModel)
         {
             viewModel.IsValidChanged -= UpdateValidity;
             UnbindViewModel?.Invoke(viewModel);
@@ -146,7 +146,7 @@ namespace ATZ.MVVM.ViewModels.Utility.Connectors
         public override void ClearCollection() => ClearViewModelCollection();
 
         /// <see cref="ICollectionChangedEventSource{TSourceItem,TCollectionItem}.CreateItem"/>
-        public override TViewModel CreateItem(TModel sourceItem)
+        public override IViewModel<TModel> CreateItem(TModel sourceItem)
         {
             var viewModel = new TViewModel { Model = sourceItem };
 
@@ -164,7 +164,7 @@ namespace ATZ.MVVM.ViewModels.Utility.Connectors
         }
 
         /// <see cref="ICollectionChangedEventSource{TSourceItem,TCollectionItem}.ReplaceItem"/>
-        public override void ReplaceItem(int index, TViewModel newItem)
+        public override void ReplaceItem(int index, IViewModel<TModel> newItem)
         {
             DetachViewModel(TargetCollection[index]);
             TargetCollection[index] = newItem;
