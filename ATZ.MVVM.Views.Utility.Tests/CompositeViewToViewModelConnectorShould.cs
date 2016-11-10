@@ -1,5 +1,4 @@
-﻿using ATZ.MVVM.ViewModels.Utility;
-using ATZ.MVVM.Views.Utility.Connectors;
+﻿using ATZ.MVVM.Views.Utility.Connectors;
 using ATZ.MVVM.Views.Utility.Tests.CompositeComponents;
 using NUnit.Framework;
 

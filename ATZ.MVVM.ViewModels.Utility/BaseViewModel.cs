@@ -7,7 +7,7 @@ namespace ATZ.MVVM.ViewModels.Utility
     /// Base view model class.
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    public abstract class BaseViewModel<T> : ObservableObject, IVerifiable, IViewModel<T>
+    public abstract class BaseViewModel<T> : ObservableObject, IViewModel<T>
         where T : class
     {
         private bool _isValid;
@@ -42,6 +42,7 @@ namespace ATZ.MVVM.ViewModels.Utility
         public T Model
         {
             get { return _model; }
+            // ReSharper disable once MemberCanBeProtected.Global => Part of public API.
             set
             {
                 if (_model == value)
@@ -112,11 +113,19 @@ namespace ATZ.MVVM.ViewModels.Utility
         /// </summary>
         protected abstract void UnbindModel();
 
+        /// <summary>
+        /// Get the value of the Model property in a covariant type implementation way.
+        /// </summary>
+        /// <returns>The value of the Model property.</returns>
         public T GetModel()
         {
             return Model;
         }
 
+        /// <summary>
+        /// Set the value of the Model proeprty in a contravariant type implementation way.
+        /// </summary>
+        /// <param name="model">The new value of the Model property.</param>
         public void SetModel(T model)
         {
             Model = model;

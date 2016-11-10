@@ -1,5 +1,4 @@
 ﻿using System;
-using System.ComponentModel;
 using ATZ.MVVM.ViewModels.Utility;
 
 namespace ATZ.MVVM.Views.Utility.Tests.CompositeComponents

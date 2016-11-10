@@ -5,9 +5,9 @@ namespace ATZ.MVVM.Views.Utility.Tests
 {
     public class TestViewModel2 : TestViewModel, IViewModel<TestModel2>
     {
-        public new TestModel2 Model { get; set; }
+        private new TestModel2 Model { get; set; }
 
-        public TestModel2 GetModel()
+        public new TestModel2 GetModel()
         {
             return Model;
         }

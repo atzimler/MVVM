@@ -7,7 +7,11 @@ namespace ATZ.MVVM.ViewModels.Utility
     /// </summary>
     public class SuspendPropertyChangedEvent : IDisposable
     {
+        /// <summary>
+        /// Delegate type for action to resume event handling.
+        /// </summary>
         public delegate void ResumeEvent();
+
         private readonly ResumeEvent _resumeEvent;
 
         /// <summary>
