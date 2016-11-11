@@ -2,12 +2,14 @@
 using System.Collections.ObjectModel;
 using System.Windows.Controls;
 using ATZ.DependencyInjection;
+using ATZ.DependencyInjection.System;
 using ATZ.MVVM.ViewModels.Utility;
 using ATZ.MVVM.ViewModels.Utility.Tests;
 using ATZ.MVVM.ViewModels.Utility.Tests.TestHelpers;
 using ATZ.MVVM.Views.Utility.Connectors;
 using ATZ.MVVM.Views.Utility.Interfaces;
 using ATZ.MVVM.Views.Utility.Tests.ClassHierarchyTestComponents;
+using Moq;
 using NUnit.Framework;
 
 namespace ATZ.MVVM.Views.Utility.Tests
@@ -208,6 +210,30 @@ namespace ATZ.MVVM.Views.Utility.Tests
 
             Assert.IsNotNull(view);
             Assert.AreEqual(typeof(TestView), view.GetType());
+        }
+
+        [Test]
+        [STAThread]
+        public void WarnIfViewDoesNotImplementCorrectInterface()
+        {
+            var debug = new Mock<IDebug>();
+            debug.Setup(d => d.WriteLine("IView<ATZ.MVVM.ViewModels.Utility.Tests.TestViewModel> was successfully resolved, "
+                + "but it has no interface of IView<IViewModel<ATZ.MVVM.ViewModels.Utility.Tests.TestModel>>!"));
+
+            DependencyResolver.Initialize();
+            DependencyInjection.System.Bindings.Initialize();
+
+            DependencyResolver.Instance.Unbind<IDebug>();
+            DependencyResolver.Instance.Bind<IDebug>().ToConstant(debug.Object);
+
+            DependencyResolver.Instance.Bind<IView<TestViewModel>>().To<TestViewWithoutInterface>();
+
+            var conn = new CollectionViewToViewModelConnector<IView<IViewModel<TestModel>>, TestModel>();
+            var vm = new TestViewModel();
+            var view = conn.CreateItem(vm);
+
+            Assert.IsNull(view);
+            debug.VerifyAll();
         }
     }
 }

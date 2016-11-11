@@ -31,12 +31,16 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="ATZ.DependencyInjection, Version=1.1.0.13185, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\ATZ.DependencyInjection.1.1.0.13185\lib\net452\ATZ.DependencyInjection.dll</HintPath>
+    <Reference Include="ATZ.DependencyInjection, Version=1.2.0.27094, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\ATZ.DependencyInjection.1.2.0.27094\lib\net452\ATZ.DependencyInjection.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="ATZ.Reflection, Version=1.1.1.33036, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\ATZ.Reflection.1.1.1.33036\lib\net452\ATZ.Reflection.dll</HintPath>
+    <Reference Include="ATZ.DependencyInjection.System, Version=1.2.0.27095, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\ATZ.DependencyInjection.System.1.2.0.27095\lib\net452\ATZ.DependencyInjection.System.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="ATZ.Reflection, Version=1.2.0.14240, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\ATZ.Reflection.1.2.0.14240\lib\net452\ATZ.Reflection.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Ninject, Version=3.2.0.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL">
@@ -56,6 +60,7 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Bindings.cs" />
     <Compile Include="Connectors\CollectionViewToViewModelConnector.cs" />
     <Compile Include="Connectors\CompositeViewToViewModelConnector.cs" />
     <Compile Include="Connectors\ObservableCollectionCopierConnector.cs" />

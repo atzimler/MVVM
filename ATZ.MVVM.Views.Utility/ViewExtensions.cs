@@ -52,6 +52,11 @@ namespace ATZ.MVVM.Views.Utility
         public static TViewModel GetViewModel<TViewModel>(this IView<TViewModel> view)
             where TViewModel : class
         {
+            if (view == null)
+            {
+                return null;
+            }
+
             if (!Registry.ContainsKey(view))
             {
                 return null;
@@ -67,7 +72,12 @@ namespace ATZ.MVVM.Views.Utility
         /// <param name="vm">The ViewModel.</param>
         public static void SetViewModel<TViewModel>(this IView<TViewModel> view, TViewModel vm)
             where TViewModel : class
-        {   
+        {
+            if (view == null)
+            {
+                return;
+            }
+
             var currentViewModel = view.GetViewModel();
             if (currentViewModel == vm)
             {

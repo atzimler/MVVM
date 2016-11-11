@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Collections.ObjectModel;
-using System.Diagnostics;
 using System.Windows.Controls;
 using ATZ.DependencyInjection;
+using ATZ.DependencyInjection.System;
 using ATZ.MVVM.ViewModels.Utility;
 using ATZ.MVVM.ViewModels.Utility.Connectors;
 using ATZ.MVVM.Views.Utility.Interfaces;
+using Ninject;
 
 namespace ATZ.MVVM.Views.Utility.Connectors
 {
@@ -38,16 +39,24 @@ namespace ATZ.MVVM.Views.Utility.Connectors
 
         private static IView<IViewModel<TModel>> CreateViewForViewModel(IViewModel<TModel> viewModel)
         {
-            var view = DependencyResolver.Instance.GetInterface<IView<IViewModel<TModel>>>(typeof(IView<>), viewModel.GetType());
-            view.SetViewModel(viewModel);
-
-            if (view != null)
+            var obj = DependencyResolver.Instance.GetInterface(typeof(IView<>), viewModel.GetType());
+            if (obj == null)
             {
-                return view;
+                DependencyResolver.Instance.Get<IDebug>().WriteLine(
+                    $"IView<{typeof(IViewModel<TModel>).FullName}> created by the DependencyResolver.Instance is not of type {typeof(TView)}!");
+                return Activator.CreateInstance<TView>();
             }
 
-            Debug.WriteLine($"IView<{typeof(IViewModel<TModel>).FullName}> created by the DependencyResolver.Instance is not of type {typeof(TView)}!");
-            return Activator.CreateInstance<TView>();
+            var view = obj as IView<IViewModel<TModel>>;
+            if (view == null)
+            {
+                DependencyResolver.Instance.Get<IDebug>().WriteLine(
+                    $"IView<{viewModel.GetType().FullName}> was successfully resolved, but it has no interface of IView<IViewModel<{typeof(TModel).FullName}>>!");
+                return null;
+            }
+
+            view.SetViewModel(viewModel);
+            return view;
         }
 
         /// <see cref="ICollectionChangedEventSource{TSourceItem,TCollectionItem}.ClearCollection"/>
