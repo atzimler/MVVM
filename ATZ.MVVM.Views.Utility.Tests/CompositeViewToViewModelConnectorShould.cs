@@ -7,7 +7,7 @@ namespace ATZ.MVVM.Views.Utility.Tests
     using TConnector = CompositeViewToViewModelConnector<MainModel, MainView, ComponentModel, ComponentView>;
 
     [TestFixture]
-    class CompositeViewToViewModelConnectorShould
+    public class CompositeViewToViewModelConnectorShould
     {
         [Test]
         public void SetUpCompositeInformationProperly()
@@ -21,6 +21,16 @@ namespace ATZ.MVVM.Views.Utility.Tests
             var conn = new TConnector(cv, mvm, vm => ((MainViewModel)vm).ComponentViewModel, vm => ((MainViewModel)vm).ComponentModel);
             Assert.AreSame(cm, cvm.Model);
             Assert.AreSame(cvm, cv.GetViewModel());
+        }
+
+        [Test]
+        public void NotCrashIfSomethingIsNull()
+        {
+            Assert.DoesNotThrow(() =>
+            {
+                // ReSharper disable once UnusedVariable => variable needed to correctly create the connector that will set up the MVVM components.
+                var conn = new TConnector(null, null, vm => null, vm => null);
+            });
         }
     }
 }

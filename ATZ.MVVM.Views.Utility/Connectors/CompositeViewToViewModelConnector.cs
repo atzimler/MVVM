@@ -32,8 +32,8 @@ namespace ATZ.MVVM.Views.Utility.Connectors
             Func<IViewModel<TModel>, TComponentModel> componentModel)
         {
             var cvm = componentViewModel(viewModel);
-            cvm.SetModel(componentModel(viewModel));
-            componentView.SetViewModel(cvm);
+            cvm?.SetModel(componentModel(viewModel));
+            componentView?.SetViewModel(cvm);
         }
     }
 
