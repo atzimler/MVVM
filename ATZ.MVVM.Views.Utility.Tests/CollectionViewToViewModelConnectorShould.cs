@@ -197,5 +197,17 @@ namespace ATZ.MVVM.Views.Utility.Tests
 
             Assert.IsTrue(typeof(BaseModel).IsAssignableFrom(typeof(DerivedModel)));
         }
+
+        [Test]
+        [STAThread]
+        public void CreateCorrectViewType()
+        {
+            var conn = new TConnector();
+            var vm = new TestViewModel();
+            var view = conn.CreateItem(vm);
+
+            Assert.IsNotNull(view);
+            Assert.AreEqual(typeof(TestView), view.GetType());
+        }
     }
 }
