@@ -121,6 +121,26 @@ namespace ATZ.MVVM.ViewModels.Utility.Tests
         }
 
         [Test]
+        public void ModelAndViewModelCanBeAddedAtTheSameTimeWithSimplifiedSyntaxIfTheyAreAlreadyConnected()
+        {
+            var connector = new TConnector
+            {
+                ModelCollection = new ObservableCollection<TestModel>(),
+                ViewModelCollection = new ObservableCollection<IViewModel<TestModel>>()
+            };
+
+            var m = new TestModel();
+            var vm = new TestViewModel {Model = m};
+
+            connector.Add(vm);
+
+            Assert.AreEqual(1, connector.ModelCollection.Count);
+            Assert.AreEqual(1, connector.ViewModelCollection.Count);
+            Assert.AreSame(m, connector.ModelCollection[0]);
+            Assert.AreSame(vm, connector.ViewModelCollection[0]);
+        }
+
+        [Test]
         public void RetainModelCollection()
         {
             var connector = new TConnector();

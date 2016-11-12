@@ -101,6 +101,15 @@ namespace ATZ.MVVM.ViewModels.Utility.Connectors
         }
 
         /// <summary>
+        /// Add the ViewModel to the ViewModel collection and at the same time add the ViewModel's Model to the Model collection.
+        /// </summary>
+        /// <param name="viewModel">The ViewModel to add to the ViewModel collection.</param>
+        public void Add(IViewModel<TModel> viewModel)
+        {
+            Add(viewModel.GetModel(), viewModel);
+        }
+
+        /// <summary>
         /// Detach all ViewModels in the mirror collection.
         /// </summary>
         public void ClearAllViewModelBindings()

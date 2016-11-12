@@ -7,7 +7,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTitle("ATZ.MVVM")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Attila Tamás Zimler")]
+[assembly: AssemblyCompany("Attila Tamas Zimler")]
 [assembly: AssemblyProduct("ATZ.MVVM")]
 [assembly: AssemblyCopyright("Copyright ©  2015")]
 [assembly: AssemblyTrademark("")]
@@ -39,4 +39,4 @@ using System.Runtime.InteropServices;
 //MINOR version when you add functionality in a backwards-compatible manner, and
 //PATCH version when you make backwards-compatible fixes.
 //Additional labels for pre-release and build metadata are available as extensions to the MAJOR.MINOR.PATCH format.
-[assembly: AssemblyVersion("3.0.0.*")]
+[assembly: AssemblyVersion("3.1.0.*")]

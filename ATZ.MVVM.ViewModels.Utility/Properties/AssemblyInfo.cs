@@ -4,11 +4,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("ViewModels.Utility")]
+[assembly: AssemblyTitle("ATZ.MVVM.ViewModels.Utility")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("ViewModels.Utility")]
+[assembly: AssemblyCompany("Attila Tamas Zimler")]
+[assembly: AssemblyProduct("ATZ.MVVM.ViewModels.Utility")]
 [assembly: AssemblyCopyright("Copyright ©  2015")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -31,4 +31,4 @@ using System.Runtime.InteropServices;
 // You can specify all the values or you can default the Build and Revision Numbers 
 // by using the '*' as shown below:
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("3.0.0.*")]
+[assembly: AssemblyVersion("3.1.0.*")]
