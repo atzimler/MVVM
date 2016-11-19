@@ -18,6 +18,10 @@
     </dependencies>
 
     <releaseNotes>
+3.2.0:
+- Added classes MvmTuple and MvvmTuple to register Model-ViewModel and Model-View-ViewModel
+  type combinations respectively.
+      
 3.1.0:
 - Added CollectionViewModelToModelConnector.Add(IView&lt;TModel&gt;).
 - Corrected assembly information that was either missing or otherwise incorrect (or in the case of my name,

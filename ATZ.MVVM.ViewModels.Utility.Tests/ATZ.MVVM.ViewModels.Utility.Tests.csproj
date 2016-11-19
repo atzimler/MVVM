@@ -73,9 +73,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BaseViewModelShould.cs" />
+    <Compile Include="BindingVerification.cs" />
     <Compile Include="CollectionViewModelToModelConnectorShould.cs" />
     <Compile Include="ModelBinderTestModel.cs" />
     <Compile Include="ModelBinderTestViewModel.cs" />
+    <Compile Include="MvmTupleShould.cs" />
     <Compile Include="ObservableObjectShould.cs" />
     <Compile Include="ObservableObjectWithPropertyOfType.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

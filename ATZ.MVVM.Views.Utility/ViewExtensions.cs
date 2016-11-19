@@ -33,6 +33,7 @@ namespace ATZ.MVVM.Views.Utility
         /// <typeparam name="TViewModel">The type of the ViewModel</typeparam>
         /// <param name="view">The View.</param>
         /// <returns>The ViewModel associated with the View.</returns>
+        // TODO: Multiple implementation of GetViewModel in the body, not on the API with GetViewModel(this IView<TViewModel>).
         public static TViewModel GetViewModel<TViewModel>(this object view)
             where TViewModel : class
         {

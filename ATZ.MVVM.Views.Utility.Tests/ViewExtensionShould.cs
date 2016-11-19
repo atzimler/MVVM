@@ -1,5 +1,6 @@
 ﻿using System;
 using ATZ.MVVM.ViewModels.Utility.Tests;
+using ATZ.MVVM.Views.Utility.Interfaces;
 using NUnit.Framework;
 
 namespace ATZ.MVVM.Views.Utility.Tests
@@ -86,6 +87,21 @@ namespace ATZ.MVVM.Views.Utility.Tests
             var tvm = new TestViewModel();
             v.SetViewModel(tvm);
             Assert.IsTrue(v.BindModelCalled);
+        }
+
+        [Test]
+        public void ReturnNullForNullViewsViewModel()
+        {
+            IView<TestViewModel> vm = null;
+            Assert.IsNull(vm.GetViewModel());
+        }
+
+        [Test]
+        public void NotCrashWhenTryingToSetViewModelOnANullView()
+        {
+            IView<TestViewModel> vm = null;
+            // ReSharper disable once ExpressionIsAlwaysNull => Yes, that is what we are testing.
+            Assert.DoesNotThrow(() => vm.SetViewModel(new TestViewModel()));
         }
     }
 }
