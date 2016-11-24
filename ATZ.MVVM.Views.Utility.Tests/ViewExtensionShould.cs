@@ -1,5 +1,4 @@
-﻿using System;
-using System.Threading;
+﻿using System.Threading;
 using ATZ.MVVM.ViewModels.Utility.Tests;
 using ATZ.MVVM.Views.Utility.Interfaces;
 using NUnit.Framework;
