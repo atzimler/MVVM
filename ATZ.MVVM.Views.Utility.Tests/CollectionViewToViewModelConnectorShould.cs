@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.ObjectModel;
+using System.Threading;
 using System.Windows.Controls;
 using ATZ.DependencyInjection;
 using ATZ.DependencyInjection.System;
@@ -19,15 +20,15 @@ namespace ATZ.MVVM.Views.Utility.Tests
     [TestFixture]
     public class CollectionViewToViewModelConnectorShould
     {
-        [TestFixtureSetUp]
-        public void TestFixtureSetUp()
+        [OneTimeSetUp]
+        public void OneTimeSetUp()
         {
             DependencyResolver.Instance.Bind<IView<TestViewModel>>().To<TestView>();
             DependencyResolver.Instance.Bind<IView<TestViewModel2>>().To<TestView2>();
         }
 
         [Test]
-        [STAThread]
+        [Apartment(ApartmentState.STA)]
         public void RetainViewCollection()
         {
             var sp = new StackPanel();
@@ -51,7 +52,7 @@ namespace ATZ.MVVM.Views.Utility.Tests
         }
 
         [Test]
-        [STAThread]
+        [Apartment(ApartmentState.STA)]
         public void ProperlyCreateViewForViewModel()
         {
             var sp = new StackPanel();
@@ -70,7 +71,7 @@ namespace ATZ.MVVM.Views.Utility.Tests
         }
 
         [Test]
-        [STAThread]
+        [Apartment(ApartmentState.STA)]
         public void UnbindViewModelCollectionWhenReplaced()
         {
             var sp = new StackPanel();
@@ -87,7 +88,7 @@ namespace ATZ.MVVM.Views.Utility.Tests
         }
 
         [Test]
-        [STAThread]
+        [Apartment(ApartmentState.STA)]
         public void ProperlyMoveViewWhenViewModelIsMoved()
         {
             var vm1 = new TestViewModel();
@@ -111,7 +112,7 @@ namespace ATZ.MVVM.Views.Utility.Tests
         }
 
         [Test]
-        [STAThread]
+        [Apartment(ApartmentState.STA)]
         public void ProperlyRemoveViewWhenViewModelIsRemoved()
         {
             var sp = new StackPanel();
@@ -128,7 +129,7 @@ namespace ATZ.MVVM.Views.Utility.Tests
         }
 
         [Test]
-        [STAThread]
+        [Apartment(ApartmentState.STA)]
         public void ProperlyReplaceViewWhenViewModelIsReplaced()
         {
             var sp = new StackPanel();
@@ -147,7 +148,7 @@ namespace ATZ.MVVM.Views.Utility.Tests
         }
 
         [Test]
-        [STAThread]
+        [Apartment(ApartmentState.STA)]
         public void KeepViewModelCollectionUnchangedIfReplacedWithTheSameObject()
         {
             var sp = new StackPanel();
@@ -166,7 +167,7 @@ namespace ATZ.MVVM.Views.Utility.Tests
         }
 
         [Test]
-        [STAThread]
+        [Apartment(ApartmentState.STA)]
         public void CreateAppropriateTypesDependingOnViewModels()
         {
             var sp = new StackPanel();
@@ -183,7 +184,7 @@ namespace ATZ.MVVM.Views.Utility.Tests
         }
 
         [Test]
-        [STAThread]
+        [Apartment(ApartmentState.STA)]
         public void AllowClassHierarchies()
         {
             var view = new ClassHierarchyView();
@@ -201,7 +202,7 @@ namespace ATZ.MVVM.Views.Utility.Tests
         }
 
         [Test]
-        [STAThread]
+        [Apartment(ApartmentState.STA)]
         public void CreateCorrectViewType()
         {
             var conn = new TConnector();
@@ -213,7 +214,7 @@ namespace ATZ.MVVM.Views.Utility.Tests
         }
 
         [Test]
-        [STAThread]
+        [Apartment(ApartmentState.STA)]
         public void WarnIfViewDoesNotImplementCorrectInterface()
         {
             var debug = new Mock<IDebug>();

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 using ATZ.DependencyInjection;
 using ATZ.MVVM.ViewModels.Utility;
 using ATZ.MVVM.ViewModels.Utility.Tests;
@@ -111,8 +112,7 @@ namespace ATZ.MVVM.Views.Utility.Tests
         }
 
         [Test]
-        // TODO: Update NUnit used by the project from v2 to v3.
-        [STAThread]
+        [Apartment(ApartmentState.STA)]
         public void ProperlyRegisterBindings()
         {
             var tuple = new MvvmTuple { Model = typeof(TestModel), ViewModel = typeof(TestViewModel), View = typeof(TestView) };

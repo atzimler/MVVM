@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 using ATZ.MVVM.ViewModels.Utility.Tests;
 using ATZ.MVVM.Views.Utility.Interfaces;
 using NUnit.Framework;
@@ -9,7 +10,7 @@ namespace ATZ.MVVM.Views.Utility.Tests
     public class ViewExtensionShould
     {
         [Test]
-        [STAThread]
+        [Apartment(ApartmentState.STA)]
         public void NotBindViewModelWhenTheSameModelIsSet()
         {
             var vm = new TestViewModel();
@@ -24,7 +25,7 @@ namespace ATZ.MVVM.Views.Utility.Tests
         }
 
         [Test]
-        [STAThread]
+        [Apartment(ApartmentState.STA)]
         public void UnbindPreviousViewProperly()
         {
             var vm1 = new TestViewModel();
@@ -40,7 +41,7 @@ namespace ATZ.MVVM.Views.Utility.Tests
         }
 
         [Test]
-        [STAThread]
+        [Apartment(ApartmentState.STA)]
         public void ReturnNullIfViewIsNotRegistered()
         {
             var v = new TestView();
@@ -49,7 +50,7 @@ namespace ATZ.MVVM.Views.Utility.Tests
         }
 
         [Test]
-        [STAThread]
+        [Apartment(ApartmentState.STA)]
         public void ReturnProperViewModelIfViewIsRegistered()
         {
             var v = new TestView();
@@ -61,7 +62,7 @@ namespace ATZ.MVVM.Views.Utility.Tests
         }
 
         [Test]
-        [STAThread]
+        [Apartment(ApartmentState.STA)]
         public void NotCrashIfViewModelIsNotSetAndExecuteActionIsCalled()
         {
             var v = new TestView();
@@ -69,7 +70,7 @@ namespace ATZ.MVVM.Views.Utility.Tests
         }
 
         [Test]
-        [STAThread]
+        [Apartment(ApartmentState.STA)]
         public void ProperlyExecuteActionIfViewModelIsSet()
         {
             var v = new TestView();
@@ -80,7 +81,7 @@ namespace ATZ.MVVM.Views.Utility.Tests
         }
 
         [Test]
-        [STAThread]
+        [Apartment(ApartmentState.STA)]
         public void CallBindModelOnView()
         {
             var v = new TestView();
