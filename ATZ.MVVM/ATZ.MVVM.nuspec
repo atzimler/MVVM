@@ -56,8 +56,8 @@
   </metadata>
 
   <files>
-    <file src="**\bin\DebugNET45\ATZ.MVVM.*.*" target="lib\net45" />
-    <file src="**\bin\DebugNET452\ATZ.MVVM.*.*" target="lib\net452" />
+    <file src="bin\DebugNET45\ATZ.MVVM.*.*" target="lib\net45" />
+    <file src="bin\DebugNET452\ATZ.MVVM.*.*" target="lib\net452" />
   </files>
 
 </package>
