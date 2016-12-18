@@ -3,5 +3,6 @@
   <description>Build file for ATZ.MVVM library.</description>
 
   <property name="project.name" value="MVVM" />
+  <property name="build.targetframeworks" value="NET45,NET452" />
   <include buildfile="../NAnt/ATZ.Build.xml" />
 </project>
