@@ -12,15 +12,16 @@
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'DebugNET452|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
+    <OutputPath>bin\DebugNET452\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DocumentationFile>bin\Debug\ATZ.MVVM.Views.Utility.XML</DocumentationFile>
+    <DocumentationFile>bin\DebugNET452\ATZ.MVVM.Views.Utility.XML</DocumentationFile>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -30,21 +31,44 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'DebugNET45|AnyCPU'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\DebugNET45\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DocumentationFile>bin\DebugNET45\ATZ.MVVM.Views.Utility.XML</DocumentationFile>
+    <DebugType>full</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+  </PropertyGroup>
   <ItemGroup>
-    <Reference Include="ATZ.DependencyInjection, Version=1.2.0.27094, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\ATZ.DependencyInjection.1.2.0.27094\lib\net452\ATZ.DependencyInjection.dll</HintPath>
+    <Reference Include="ATZ.DependencyInjection, Version=1.3.2.49, Culture=neutral, processorArchitecture=MSIL" Condition="'$(TargetFrameworkVersion)' == 'v4.5'">
+      <HintPath>..\packages\ATZ.DependencyInjection.1.3.2.49\lib\net45\ATZ.DependencyInjection.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="ATZ.DependencyInjection.System, Version=1.2.0.27095, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\ATZ.DependencyInjection.System.1.2.0.27095\lib\net452\ATZ.DependencyInjection.System.dll</HintPath>
+    <Reference Include="ATZ.DependencyInjection, Version=1.3.2.49, Culture=neutral, processorArchitecture=MSIL" Condition="'$(TargetFrameworkVersion)' == 'v4.5.2'">
+      <HintPath>..\packages\ATZ.DependencyInjection.1.3.2.49\lib\net452\ATZ.DependencyInjection.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="ATZ.Reflection, Version=1.2.0.14240, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\ATZ.Reflection.1.2.0.14240\lib\net452\ATZ.Reflection.dll</HintPath>
+    <Reference Include="ATZ.DependencyInjection.System, Version=1.3.2.49, Culture=neutral, processorArchitecture=MSIL" Condition="'$(TargetFrameworkVersion)' == 'v4.5'">
+      <HintPath>..\packages\ATZ.DependencyInjection.System.1.3.2.49\lib\net45\ATZ.DependencyInjection.System.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="ATZ.DependencyInjection.System, Version=1.3.2.49, Culture=neutral, processorArchitecture=MSIL" Condition="'$(TargetFrameworkVersion)' == 'v4.5.2'">
+      <HintPath>..\packages\ATZ.DependencyInjection.System.1.3.2.49\lib\net452\ATZ.DependencyInjection.System.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Ninject, Version=3.2.0.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL">
-      <HintPath>..\packages\Ninject.3.2.2.0\lib\net45-full\Ninject.dll</HintPath>
+      <HintPath>..\packages\ATZ.DependencyInjection.System.1.3.2.49\lib\net452\Ninject.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="ATZ.Reflection, Version=1.3.1.51, Culture=neutral, processorArchitecture=MSIL" Condition="'$(TargetFrameworkVersion)' == 'v4.5'">
+      <HintPath>..\packages\ATZ.Reflection.1.3.1.51\lib\net45\ATZ.Reflection.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="ATZ.Reflection, Version=1.3.1.51, Culture=neutral, processorArchitecture=MSIL" Condition="'$(TargetFrameworkVersion)' == 'v4.5.2'">
+      <HintPath>..\packages\ATZ.Reflection.1.3.1.51\lib\net452\ATZ.Reflection.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="PresentationCore" />
@@ -60,6 +84,9 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\AssemblyVersion.cs">
+      <Link>AssemblyVersion.cs</Link>
+    </Compile>
     <Compile Include="Bindings.cs" />
     <Compile Include="Connectors\CollectionViewToViewModelConnector.cs" />
     <Compile Include="Connectors\CompositeViewToViewModelConnector.cs" />
