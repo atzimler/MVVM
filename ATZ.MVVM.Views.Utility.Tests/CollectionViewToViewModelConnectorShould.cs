@@ -235,5 +235,25 @@ namespace ATZ.MVVM.Views.Utility.Tests
             Assert.IsNull(view);
             debug.VerifyAll();
         }
+
+        [Test]
+        [Apartment(ApartmentState.STA)]
+        public void BeAbleToConnectToItemCollection()
+        {
+            var lv = new ListView();
+            var vms = new ObservableCollection<IViewModel<TestModel>> { new TestViewModel() };
+            var conn = new TConnector
+            {
+                ViewCollection = lv.Items,
+                ViewModelCollection = vms
+            };
+            Assert.AreEqual(1, lv.Items.Count);
+
+            var v1 = lv.Items[0];
+            conn.ViewModelCollection[0] = new TestViewModel();
+            Assert.AreEqual(1, lv.Items.Count);
+            Assert.AreNotSame(v1, lv.Items[0]);
+        }
+
     }
 }

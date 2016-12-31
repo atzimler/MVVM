@@ -1,6 +1,6 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.ObjectModel;
-using System.Windows.Controls;
 using ATZ.DependencyInjection;
 using ATZ.DependencyInjection.System;
 using ATZ.MVVM.ViewModels.Utility;
@@ -15,14 +15,14 @@ namespace ATZ.MVVM.Views.Utility.Connectors
     /// </summary>
     /// <typeparam name="TView">The type of the View.</typeparam>
     /// <typeparam name="TModel">The type of the Model.</typeparam>
-    public class CollectionViewToViewModelConnector<TView, TModel> : BaseConnector<IViewModel<TModel>, IView<IViewModel<TModel>>, UIElementCollection>
+    public class CollectionViewToViewModelConnector<TView, TModel> : BaseConnector<IViewModel<TModel>, IView<IViewModel<TModel>>, IList>
         where TView : IView<IViewModel<TModel>>
         where TModel : class
     {
         /// <summary>
         /// The View collection.
         /// </summary>
-        public UIElementCollection ViewCollection
+        public IList ViewCollection
         {
             get { return TargetCollection; }
             set { TargetCollection = value; }
