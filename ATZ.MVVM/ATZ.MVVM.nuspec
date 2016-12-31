@@ -18,6 +18,9 @@
     </dependencies>
 
     <releaseNotes>
+3.4.0:
+- Changed UIElementCollection into IList in CollectionViewToViewModelConnector, so that ItemCollection can also be used as ViewCollection.
+      
 3.3.0:
 - Supporting .NET 4.5 target framework.
       
