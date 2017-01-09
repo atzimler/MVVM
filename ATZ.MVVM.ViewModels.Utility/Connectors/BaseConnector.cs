@@ -119,6 +119,11 @@ namespace ATZ.MVVM.ViewModels.Utility.Connectors
             _sourceCollection.Add(sourceItem);
             AddItem(targetItem);
 
+            if (_sourceCollection == null)
+            {
+                return;
+            }
+
             _sourceCollection.CollectionChanged += SourceCollectionChanged;
         }
 

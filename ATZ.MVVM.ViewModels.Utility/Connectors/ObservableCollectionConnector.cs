@@ -13,19 +13,19 @@ namespace ATZ.MVVM.ViewModels.Utility.Connectors
         /// <see cref="ICollectionChangedEventSource{TSourceItem,TCollectionItem}.AddItem"/>
         public override void AddItem(TTarget item)
         {
-            TargetCollection.Add(item);
+            TargetCollection?.Add(item);
         }
 
         /// <see cref="ICollectionChangedEventSource{TSourceItem,TCollectionItem}.InsertItem"/>
         public override void InsertItem(int index, TTarget item)
         {
-            TargetCollection.Insert(index, item);
+            TargetCollection?.Insert(index, item);
         }
 
         /// <see cref="ICollectionChangedEventSource{TSourceItem,TCollectionItem}.MoveItem"/>
         public override void MoveItem(int oldIndex, int newIndex)
         {
-            TargetCollection.Move(oldIndex, newIndex);
+            TargetCollection?.Move(oldIndex, newIndex);
         }
     }
 }

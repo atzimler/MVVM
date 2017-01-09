@@ -1,7 +1,8 @@
-﻿using System;
+﻿using ATZ.DependencyInjection;
+using JetBrains.Annotations;
+using System;
 using System.Collections.ObjectModel;
 using System.Linq;
-using ATZ.DependencyInjection;
 
 namespace ATZ.MVVM.ViewModels.Utility.Connectors
 {
@@ -39,7 +40,7 @@ namespace ATZ.MVVM.ViewModels.Utility.Connectors
         public bool IsValid
         {
             get { return _isValid; }
-            set 
+            set
             {
                 if (_isValid == value)
                 {
@@ -76,19 +77,53 @@ namespace ATZ.MVVM.ViewModels.Utility.Connectors
 
         private void ClearViewModelCollection()
         {
+            if (TargetCollection == null)
+            {
+                return;
+            }
+
             TargetCollection.ToList().ForEach(DetachViewModel);
             TargetCollection.Clear();
         }
 
         private void DetachViewModel(IViewModel<TModel> viewModel)
         {
+            if (viewModel == null)
+            {
+                return;
+            }
+
             viewModel.IsValidChanged -= UpdateValidity;
             UnbindViewModel?.Invoke(viewModel);
         }
 
+        private static void SortCollection([NotNull] ObservableCollection<TModel> collection, [NotNull] Comparison<TModel> comparison)
+        {
+            bool swapped;
+            do
+            {
+                swapped = false;
+                for (var index = 0; index < collection.Count - 1; ++index)
+                {
+                    if (comparison(collection[index], collection[index + 1]) <= 0)
+                    {
+                        continue;
+                    }
+
+                    collection.Move(index + 1, index);
+                    swapped = true;
+                }
+            } while (swapped);
+        }
+
         private void UpdateValidity()
         {
-            IsValid = TargetCollection?.ToList().TrueForAll(vm => vm.IsValid) ?? true;
+            IsValid = TargetCollection?.ToList().TrueForAll(ViewModelIsNullOrValid) ?? true;
+        }
+
+        private static bool ViewModelIsNullOrValid(IViewModel<TModel> vm)
+        {
+            return vm == null || vm.IsValid;
         }
 
         /// <summary>
@@ -104,8 +139,14 @@ namespace ATZ.MVVM.ViewModels.Utility.Connectors
         /// Add the ViewModel to the ViewModel collection and at the same time add the ViewModel's Model to the Model collection.
         /// </summary>
         /// <param name="viewModel">The ViewModel to add to the ViewModel collection.</param>
+        /// <exception cref="ArgumentNullException">viewModel is null.</exception>
         public void Add(IViewModel<TModel> viewModel)
         {
+            if (viewModel == null)
+            {
+                throw new ArgumentNullException(nameof(viewModel));
+            }
+
             Add(viewModel.GetModel(), viewModel);
         }
 
@@ -121,23 +162,21 @@ namespace ATZ.MVVM.ViewModels.Utility.Connectors
         /// Sort the Model collection with the given comparison method.
         /// </summary>
         /// <param name="comparison">The comparison method to compare the Model objects.</param>
+        /// <exception cref="ArgumentNullException">comparison is null.</exception>
         public void Sort(Comparison<TModel> comparison)
         {
-            bool swapped;
-            do
+            if (comparison == null)
             {
-                swapped = false;
-                for (var index = 0; index < SourceCollection.Count - 1; ++index)
-                {
-                    if (comparison(SourceCollection[index], SourceCollection[index + 1]) <= 0)
-                    {
-                        continue;
-                    }
+                throw new ArgumentNullException(nameof(comparison));
+            }
 
-                    SourceCollection.Move(index + 1, index);
-                    swapped = true;
-                }
-            } while (swapped);
+            var collectionSorted = SourceCollection;
+            if (collectionSorted == null)
+            {
+                return;
+            }
+
+            SortCollection(collectionSorted, comparison);
         }
 
         /// <summary>
@@ -158,6 +197,11 @@ namespace ATZ.MVVM.ViewModels.Utility.Connectors
         {
             var viewModel = DependencyResolver.Instance.GetInterface<IViewModel<TModel>>(
                 typeof(IViewModel<>), sourceItem.GetType());
+            if (viewModel == null)
+            {
+                return null;
+            }
+
             viewModel.SetModel(sourceItem);
 
             BindViewModel?.Invoke(viewModel);
@@ -169,15 +213,31 @@ namespace ATZ.MVVM.ViewModels.Utility.Connectors
         /// <see cref="ICollectionChangedEventSource{TSourceItem,TCollectionItem}.RemoveItem"/>
         public override void RemoveItem(int index)
         {
-            DetachViewModel(TargetCollection[index]);
-            TargetCollection.RemoveAt(index);
+            var collection = TargetCollection;
+            if (collection == null)
+            {
+                return;
+            }
+
+            var viewModel = collection[index];
+
+            DetachViewModel(viewModel);
+            collection.RemoveAt(index);
         }
 
         /// <see cref="ICollectionChangedEventSource{TSourceItem,TCollectionItem}.ReplaceItem"/>
         public override void ReplaceItem(int index, IViewModel<TModel> newItem)
         {
-            DetachViewModel(TargetCollection[index]);
-            TargetCollection[index] = newItem;
+            var collection = TargetCollection;
+            if (collection == null)
+            {
+                return;
+            }
+
+            var viewModel = collection[index];
+
+            DetachViewModel(viewModel);
+            collection[index] = newItem;
         }
     }
 }

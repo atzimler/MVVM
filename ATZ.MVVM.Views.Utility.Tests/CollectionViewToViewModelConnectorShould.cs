@@ -1,7 +1,4 @@
-﻿using System.Collections.ObjectModel;
-using System.Threading;
-using System.Windows.Controls;
-using ATZ.DependencyInjection;
+﻿using ATZ.DependencyInjection;
 using ATZ.DependencyInjection.System;
 using ATZ.MVVM.ViewModels.Utility;
 using ATZ.MVVM.ViewModels.Utility.Tests;
@@ -11,6 +8,10 @@ using ATZ.MVVM.Views.Utility.Interfaces;
 using ATZ.MVVM.Views.Utility.Tests.ClassHierarchyTestComponents;
 using Moq;
 using NUnit.Framework;
+using System.Collections.ObjectModel;
+using System.Threading;
+using System.Windows;
+using System.Windows.Controls;
 
 namespace ATZ.MVVM.Views.Utility.Tests
 {
@@ -54,19 +55,27 @@ namespace ATZ.MVVM.Views.Utility.Tests
         [Apartment(ApartmentState.STA)]
         public void ProperlyCreateViewForViewModel()
         {
-            var sp = new StackPanel();
-            var vm = new ObservableCollection<IViewModel<TestModel>>();
+            var stackPanel = new StackPanel();
+            var viewCollection = stackPanel.Children;
+            Assert.IsNotNull(viewCollection);
+
+            var viewModelCollection = new ObservableCollection<IViewModel<TestModel>>();
+
+            // ReSharper disable once UnusedVariable => Connecting the two collections.
             var conn = new TConnector
             {
-                ViewCollection = sp.Children,
-                ViewModelCollection = vm
+                ViewCollection = viewCollection,
+                ViewModelCollection = viewModelCollection
             };
-            Assert.AreEqual(0, sp.Children.Count);
+            Assert.AreEqual(0, viewCollection.Count);
 
             var tvm = new TestViewModel();
-            conn.ViewModelCollection.Add(tvm);
-            Assert.AreEqual(1, sp.Children.Count);
-            Assert.AreSame(tvm, ((TestView)sp.Children[0]).GetViewModel());
+            viewModelCollection.Add(tvm);
+
+            var view = (TestView)viewCollection[0];
+            Assert.IsNotNull(view);
+            Assert.AreEqual(1, viewCollection.Count);
+            Assert.AreSame(tvm, view.GetViewModel());
         }
 
         [Test]
@@ -94,20 +103,25 @@ namespace ATZ.MVVM.Views.Utility.Tests
             var vm2 = new TestViewModel();
 
             var sp = new StackPanel();
-            var vms = new ObservableCollection<IViewModel<TestModel>> {vm1, vm2};
+            var viewCollection = sp.Children;
+            Assert.IsNotNull(viewCollection);
+
+            var viewModelCollection = new ObservableCollection<IViewModel<TestModel>> { vm1, vm2 };
+
+            // ReSharper disable once UnusedVariable => Connecting the two collections.
             var conn = new TConnector
             {
-                ViewCollection = sp.Children,
-                ViewModelCollection = vms
+                ViewCollection = viewCollection,
+                ViewModelCollection = viewModelCollection
             };
-            Assert.AreEqual(2, conn.ViewCollection.Count);
+            Assert.AreEqual(2, viewCollection.Count);
 
-            var v1 = sp.Children[0];
-            var v2 = sp.Children[1];
+            var v1 = viewCollection[0];
+            var v2 = viewCollection[1];
 
-            vms.Move(0, 1);
-            Assert.AreSame(v2, sp.Children[0]);
-            Assert.AreSame(v1, sp.Children[1]);
+            viewModelCollection.Move(0, 1);
+            Assert.AreSame(v2, viewCollection[0]);
+            Assert.AreSame(v1, viewCollection[1]);
         }
 
         [Test]
@@ -115,16 +129,20 @@ namespace ATZ.MVVM.Views.Utility.Tests
         public void ProperlyRemoveViewWhenViewModelIsRemoved()
         {
             var sp = new StackPanel();
-            var vms = new ObservableCollection<IViewModel<TestModel>> {new TestViewModel()};
+            var viewCollection = sp.Children;
+            var viewModelCollection = new ObservableCollection<IViewModel<TestModel>> { new TestViewModel() };
+
+            Assert.IsNotNull(viewCollection);
+            // ReSharper disable once UnusedVariable => Connecting the two collections.
             var conn = new TConnector
             {
                 ViewCollection = sp.Children,
-                ViewModelCollection = vms
+                ViewModelCollection = viewModelCollection
             };
-            Assert.AreEqual(1, conn.ViewCollection.Count);
+            Assert.AreEqual(1, viewCollection.Count);
 
-            vms.RemoveAt(0);
-            Assert.AreEqual(0, sp.Children.Count);
+            viewModelCollection.RemoveAt(0);
+            Assert.AreEqual(0, viewCollection.Count);
         }
 
         [Test]
@@ -132,18 +150,24 @@ namespace ATZ.MVVM.Views.Utility.Tests
         public void ProperlyReplaceViewWhenViewModelIsReplaced()
         {
             var sp = new StackPanel();
-            var vms = new ObservableCollection<IViewModel<TestModel>> {new TestViewModel()};
+            var viewCollection = sp.Children;
+            Assert.IsNotNull(viewCollection);
+
+            var viewModelCollection = new ObservableCollection<IViewModel<TestModel>> { new TestViewModel() };
+
+            // ReSharper disable once UnusedVariable => Connecting the two collections.
             var conn = new TConnector
             {
-                ViewCollection = sp.Children,
-                ViewModelCollection = vms
+                ViewCollection = viewCollection,
+                ViewModelCollection = viewModelCollection
             };
-            Assert.AreEqual(1, sp.Children.Count);
+            Assert.AreEqual(1, viewCollection.Count);
 
-            var v1 = sp.Children[0];
-            conn.ViewModelCollection[0] = new TestViewModel();
-            Assert.AreEqual(1, sp.Children.Count);
-            Assert.AreNotSame(v1, sp.Children[0]);
+            var v1 = viewCollection[0];
+            viewModelCollection[0] = new TestViewModel();
+
+            Assert.AreEqual(1, viewCollection.Count);
+            Assert.AreNotSame(v1, viewCollection[0]);
         }
 
         [Test]
@@ -151,7 +175,7 @@ namespace ATZ.MVVM.Views.Utility.Tests
         public void KeepViewModelCollectionUnchangedIfReplacedWithTheSameObject()
         {
             var sp = new StackPanel();
-            var vms = new ObservableCollectionEventChangeChecker<IViewModel<TestModel>> {new TestViewModel()};
+            var vms = new ObservableCollectionEventChangeChecker<IViewModel<TestModel>> { new TestViewModel() };
             var conn = new TConnector
             {
                 ViewCollection = sp.Children,
@@ -170,16 +194,27 @@ namespace ATZ.MVVM.Views.Utility.Tests
         public void CreateAppropriateTypesDependingOnViewModels()
         {
             var sp = new StackPanel();
-            var vms = new ObservableCollection<IViewModel<TestModel>> {new TestViewModel(), new TestViewModel2()};
+            var viewCollection = sp.Children;
+            Assert.IsNotNull(viewCollection);
+
+            var vms = new ObservableCollection<IViewModel<TestModel>> { new TestViewModel(), new TestViewModel2() };
+
+            // ReSharper disable once UnusedVariable => Connecting the two collections.
             var conn = new TConnector
             {
-                ViewCollection = sp.Children,
+                ViewCollection = viewCollection,
                 ViewModelCollection = vms
             };
 
-            Assert.AreEqual(2, conn.ViewCollection.Count);
-            Assert.AreEqual(typeof(TestView), conn.ViewCollection[0].GetType());
-            Assert.AreEqual(typeof(TestView2), conn.ViewCollection[1].GetType());
+            Assert.AreEqual(2, viewCollection.Count);
+
+            var view1 = viewCollection[0];
+            Assert.IsNotNull(view1);
+            Assert.AreEqual(typeof(TestView), view1.GetType());
+
+            var view2 = viewCollection[1];
+            Assert.IsNotNull(view2);
+            Assert.AreEqual(typeof(TestView2), view2.GetType());
         }
 
         [Test]
@@ -219,6 +254,7 @@ namespace ATZ.MVVM.Views.Utility.Tests
             var debug = new Mock<IDebug>();
             debug.Setup(d => d.WriteLine("IView<ATZ.MVVM.ViewModels.Utility.Tests.TestViewModel> was successfully resolved, "
                 + "but it has no interface of IView<IViewModel<ATZ.MVVM.ViewModels.Utility.Tests.TestModel>>!"));
+            Assert.IsNotNull(debug.Object);
 
             DependencyResolver.Initialize();
             DependencyInjection.System.Bindings.Initialize();
@@ -240,19 +276,62 @@ namespace ATZ.MVVM.Views.Utility.Tests
         [Apartment(ApartmentState.STA)]
         public void BeAbleToConnectToItemCollection()
         {
-            var lv = new ListView();
-            var vms = new ObservableCollection<IViewModel<TestModel>> { new TestViewModel() };
+            var listView = new ListView();
+            var viewCollection = listView.Items;
+            Assert.IsNotNull(viewCollection);
+
+            var viewModelCollection = new ObservableCollection<IViewModel<TestModel>> { new TestViewModel() };
+
+            // ReSharper disable once UnusedVariable => Connecting the two collections.
             var conn = new TConnector
             {
-                ViewCollection = lv.Items,
-                ViewModelCollection = vms
+                ViewCollection = viewCollection,
+                ViewModelCollection = viewModelCollection
             };
-            Assert.AreEqual(1, lv.Items.Count);
+            Assert.AreEqual(1, viewCollection.Count);
 
-            var v1 = lv.Items[0];
-            conn.ViewModelCollection[0] = new TestViewModel();
-            Assert.AreEqual(1, lv.Items.Count);
-            Assert.AreNotSame(v1, lv.Items[0]);
+            var view1 = viewCollection[0];
+            viewModelCollection[0] = new TestViewModel();
+
+            Assert.AreEqual(1, viewCollection.Count);
+            Assert.AreNotSame(view1, viewCollection[0]);
+        }
+
+        [Test]
+        [Apartment(ApartmentState.STA)]
+        public void NotCrashWhenViewCollectionIsNullAndViewModelReplaced()
+        {
+            var conn = new CollectionViewToViewModelNullifier();
+            Assert.AreEqual(1, conn.ViewCollection?.Count);
+
+            Assert.IsNotNull(conn.ViewModelCollection);
+            Assert.DoesNotThrow(() => conn.ViewModelCollection[0] = new TestViewModel());
+        }
+
+        [Test]
+        [Apartment(ApartmentState.STA)]
+        public void NotCrashWhenViewCollectionIsNullAndViewModelMoved()
+        {
+            var conn = new CollectionViewToViewModelNullifier();
+            var viewModelCollection = conn.ViewModelCollection;
+            Assert.IsNotNull(viewModelCollection);
+
+            viewModelCollection.Add(new TestViewModel());
+            Assert.AreEqual(2, viewModelCollection.Count);
+
+            Assert.DoesNotThrow(() => viewModelCollection.Move(0, 1));
+        }
+
+        private class OtherTestView : IView<IViewModel<TestModel>>
+        {
+            public UIElement UIElement { get; } = null;
+            public void BindModel(IViewModel<TestModel> vm)
+            {
+            }
+
+            public void UnbindModel()
+            {
+            }
         }
 
     }

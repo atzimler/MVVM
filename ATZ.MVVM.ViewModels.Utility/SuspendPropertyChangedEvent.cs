@@ -1,4 +1,5 @@
-﻿using System;
+﻿using JetBrains.Annotations;
+using System;
 
 namespace ATZ.MVVM.ViewModels.Utility
 {
@@ -12,13 +13,14 @@ namespace ATZ.MVVM.ViewModels.Utility
         /// </summary>
         public delegate void ResumeEvent();
 
+        [NotNull]
         private readonly ResumeEvent _resumeEvent;
 
         /// <summary>
         /// Constructor.
         /// </summary>
         /// <param name="resumeEvent">The delegate to resume event.</param>
-        public SuspendPropertyChangedEvent(ResumeEvent resumeEvent)
+        internal SuspendPropertyChangedEvent([NotNull] ResumeEvent resumeEvent)
         {
             _resumeEvent = resumeEvent;
         }

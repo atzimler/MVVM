@@ -1,5 +1,6 @@
-﻿using System;
-using ATZ.MVVM.ViewModels.Utility.Connectors;
+﻿using ATZ.MVVM.ViewModels.Utility.Connectors;
+using NUnit.Framework;
+using System;
 
 namespace ATZ.MVVM.ViewModels.Utility.Tests
 {
@@ -16,7 +17,8 @@ namespace ATZ.MVVM.ViewModels.Utility.Tests
 
         protected override void BindModel()
         {
-            _entriesConnector.ModelCollection = Model.Entries;
+            Assert.IsNotNull(_entriesConnector);
+            _entriesConnector.ModelCollection = Model?.Entries;
         }
 
         protected override void InitializeComponent()
@@ -28,6 +30,8 @@ namespace ATZ.MVVM.ViewModels.Utility.Tests
 
         protected override void UnbindModel()
         {
+            Assert.IsNotNull(_entriesConnector);
+            _entriesConnector.ModelCollection = null;
         }
 
         public override void UpdateValidity(object sender, EventArgs e)

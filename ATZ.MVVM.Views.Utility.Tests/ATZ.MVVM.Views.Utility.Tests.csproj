@@ -70,6 +70,10 @@
       <HintPath>..\packages\Castle.Core.3.3.3\lib\net45\Castle.Core.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="JetBrains.Annotations, Version=10.2.1.0, Culture=neutral, PublicKeyToken=1010a0d8d6380325, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\JetBrains.Annotations.10.2.1\lib\net\JetBrains.Annotations.dll</HintPath>
+    </Reference>
     <Reference Include="Moq, Version=4.5.29.0, Culture=neutral, PublicKeyToken=69f491c39445e920, processorArchitecture=MSIL">
       <HintPath>..\packages\Moq.4.5.29\lib\net45\Moq.dll</HintPath>
       <Private>True</Private>
@@ -122,6 +126,7 @@
     <Compile Include="ClassHierarchyTestComponents\DerivedModel.cs" />
     <Compile Include="ClassHierarchyTestComponents\DerivedViewModel.cs" />
     <Compile Include="CollectionViewToViewModelConnectorShould.cs" />
+    <Compile Include="CollectionViewToViewModelNullifier.cs" />
     <Compile Include="CompositeComponents\ComponentModel.cs" />
     <Compile Include="CompositeComponents\ComponentView.cs" />
     <Compile Include="CompositeComponents\ComponentViewModel.cs" />
@@ -131,6 +136,7 @@
     <Compile Include="CompositeViewToViewModelConnectorShould.cs" />
     <Compile Include="MvvmTupleShould.cs" />
     <Compile Include="ObservableCollectionCopierConnectorShould.cs" />
+    <Compile Include="ObservableCollectionCopierTargetCollectionNullifier.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TestView.cs" />
     <Compile Include="TestView2.cs" />

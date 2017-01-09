@@ -1,6 +1,7 @@
-﻿using System;
-using ATZ.MVVM.ViewModels.Utility;
+﻿using ATZ.MVVM.ViewModels.Utility;
 using ATZ.MVVM.Views.Utility.Interfaces;
+using JetBrains.Annotations;
+using System;
 
 namespace ATZ.MVVM.Views.Utility.Connectors
 {
@@ -14,7 +15,7 @@ namespace ATZ.MVVM.Views.Utility.Connectors
     /// <typeparam name="TComponentView">The View of the component object.</typeparam>
     // ReSharper disable UnusedTypeParameter => To simplify usage, we require the MVVM types in pair.
     public class CompositeViewToViewModelConnector<TModel, TView, TComponentModel, TComponentView>
-    // ReSharper restore UnusedTypeParameter
+        // ReSharper restore UnusedTypeParameter
         where TComponentView : IView<IViewModel<TComponentModel>>
         where TComponentModel : class
     {
@@ -28,8 +29,8 @@ namespace ATZ.MVVM.Views.Utility.Connectors
         public CompositeViewToViewModelConnector(
             TComponentView componentView,
             IViewModel<TModel> viewModel,
-            Func<IViewModel<TModel>, IViewModel<TComponentModel>> componentViewModel,
-            Func<IViewModel<TModel>, TComponentModel> componentModel)
+            [NotNull] Func<IViewModel<TModel>, IViewModel<TComponentModel>> componentViewModel,
+            [NotNull] Func<IViewModel<TModel>, TComponentModel> componentModel)
         {
             var cvm = componentViewModel(viewModel);
             cvm?.SetModel(componentModel(viewModel));

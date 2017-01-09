@@ -3,8 +3,8 @@ using ATZ.DependencyInjection.System;
 using ATZ.MVVM.ViewModels.Utility;
 using ATZ.MVVM.ViewModels.Utility.Connectors;
 using ATZ.MVVM.Views.Utility.Interfaces;
+using JetBrains.Annotations;
 using Ninject;
-using System;
 using System.Collections;
 using System.Collections.ObjectModel;
 
@@ -37,16 +37,9 @@ namespace ATZ.MVVM.Views.Utility.Connectors
             set { SourceCollection = value; }
         }
 
-        private static IView<IViewModel<TModel>> CreateViewForViewModel(IViewModel<TModel> viewModel)
+        private static IView<IViewModel<TModel>> CreateViewForViewModel([NotNull] IViewModel<TModel> viewModel)
         {
             var obj = DependencyResolver.Instance.GetInterface(typeof(IView<>), viewModel.GetType());
-            if (obj == null)
-            {
-                DependencyResolver.Instance.Get<IDebug>().WriteLine(
-                    $"IView<{typeof(IViewModel<TModel>).FullName}> created by the DependencyResolver.Instance is not of type {typeof(TView)}!");
-                return Activator.CreateInstance<TView>();
-            }
-
             var view = obj as IView<IViewModel<TModel>>;
             if (view == null)
             {
@@ -60,33 +53,45 @@ namespace ATZ.MVVM.Views.Utility.Connectors
         }
 
         /// <see cref="ICollectionChangedEventSource{TSourceItem,TCollectionItem}.ClearCollection"/>
-        public override void ClearCollection() => TargetCollection.Clear();
+        public override void ClearCollection() => TargetCollection?.Clear();
 
         /// <see cref="ICollectionChangedEventSource{TSourceItem,TCollectionItem}.AddItem"/>
-        public override void AddItem(IView<IViewModel<TModel>> item) => TargetCollection.Add(item.UIElement);
+        public override void AddItem(IView<IViewModel<TModel>> item) => TargetCollection?.Add(item?.UIElement);
 
         /// <see cref="ICollectionChangedEventSource{TSourceItem,TCollectionItem}.CreateItem"/>
         public override IView<IViewModel<TModel>> CreateItem(IViewModel<TModel> sourceItem) => CreateViewForViewModel(sourceItem);
 
         /// <see cref="ICollectionChangedEventSource{TSourceItem,TCollectionItem}.InsertItem"/>
-        public override void InsertItem(int index, IView<IViewModel<TModel>> item) => TargetCollection.Insert(index, item.UIElement);
+        public override void InsertItem(int index, IView<IViewModel<TModel>> item) => TargetCollection?.Insert(index, item?.UIElement);
 
         /// <see cref="ICollectionChangedEventSource{TSourceItem,TCollectionItem}.MoveItem"/>
         public override void MoveItem(int oldIndex, int newIndex)
         {
-            var uiElement = TargetCollection[oldIndex];
-            TargetCollection.RemoveAt(oldIndex);
-            TargetCollection.Insert(newIndex, uiElement);
+            var collection = TargetCollection;
+            if (collection == null)
+            {
+                return;
+            }
+
+            var uiElement = collection[oldIndex];
+            collection.RemoveAt(oldIndex);
+            collection.Insert(newIndex, uiElement);
         }
 
         /// <see cref="ICollectionChangedEventSource{TSourceItem,TCollectionItem}.RemoveItem"/>
-        public override void RemoveItem(int index) => TargetCollection.RemoveAt(index);
+        public override void RemoveItem(int index) => TargetCollection?.RemoveAt(index);
 
         /// <see cref="ICollectionChangedEventSource{TSourceItem,TCollectionItem}.ReplaceItem"/>
         public override void ReplaceItem(int index, IView<IViewModel<TModel>> newItem)
         {
-            TargetCollection.RemoveAt(index);
-            TargetCollection.Insert(index, newItem.UIElement);
+            var collection = TargetCollection;
+            if (collection == null)
+            {
+                return;
+            }
+
+            collection.RemoveAt(index);
+            collection.Insert(index, newItem?.UIElement);
         }
     }
 }

@@ -1,6 +1,5 @@
-﻿using System;
+﻿using NUnit.Framework;
 using System.ComponentModel;
-using NUnit.Framework;
 
 namespace ATZ.MVVM.ViewModels.Utility.Tests
 {
@@ -8,19 +7,18 @@ namespace ATZ.MVVM.ViewModels.Utility.Tests
     public class ObservableObjectShould
     {
         private int _callCounter;
-        private Action<PropertyChangedEventArgs> _callCounterAssertion;
 
         private void CallCounter(object sender, PropertyChangedEventArgs e)
         {
             _callCounter++;
-            _callCounterAssertion(e);
+            Assert.IsNotNull(e);
+            Assert.AreEqual("PropertyRaisingChangeNotification", e.PropertyName);
         }
 
         [SetUp]
         public void SetUp()
         {
             _callCounter = 0;
-            _callCounterAssertion = e => Assert.AreEqual("PropertyRaisingChangeNotification", e.PropertyName);
         }
 
         [Test]
@@ -32,10 +30,12 @@ namespace ATZ.MVVM.ViewModels.Utility.Tests
             var vm = new TestViewModel();
             vm.PropertyChanged += (obj, e) =>
             {
+                Assert.IsNotNull(e);
                 if (e.PropertyName == "A") eventAFired = true;
             };
             vm.PropertyChanged += (obj, e) =>
             {
+                Assert.IsNotNull(e);
                 if (e.PropertyName == "B") eventBFired = true;
             };
 
@@ -53,6 +53,7 @@ namespace ATZ.MVVM.ViewModels.Utility.Tests
             var vm = new TestViewModel();
             vm.PropertyChanged += (obj, e) =>
             {
+                Assert.IsNotNull(e);
                 Assert.AreEqual("SetWith2Parameters", e.PropertyName);
                 eventFired = true;
             };
@@ -67,7 +68,7 @@ namespace ATZ.MVVM.ViewModels.Utility.Tests
         [Test]
         public void NotCrashFromANullableProperty()
         {
-            var value = 13;
+            const int value = 13;
             var oo = new ObservableObjectWithPropertyOfType<int?>();
             Assert.DoesNotThrow(() => oo.Property = value);
 
@@ -77,7 +78,7 @@ namespace ATZ.MVVM.ViewModels.Utility.Tests
         [Test]
         public void NotCrashFromAStringProperty()
         {
-            var value = "Property";
+            const string value = "Property";
             var oo = new ObservableObjectWithPropertyOfType<string>();
             Assert.DoesNotThrow(() => oo.Property = value);
 

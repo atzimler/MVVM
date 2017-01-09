@@ -1,9 +1,10 @@
-﻿using System.Collections.Generic;
-using NUnit.Framework;
-using System.Collections.ObjectModel;
-using ATZ.DependencyInjection;
+﻿using ATZ.DependencyInjection;
 using ATZ.MVVM.ViewModels.Utility.Connectors;
 using ATZ.MVVM.ViewModels.Utility.Tests.TestHelpers;
+using JetBrains.Annotations;
+using NUnit.Framework;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 
 namespace ATZ.MVVM.ViewModels.Utility.Tests
 {
@@ -12,18 +13,24 @@ namespace ATZ.MVVM.ViewModels.Utility.Tests
     [TestFixture]
     public class CollectionViewModelToModelConnectorShould
     {
-        private void CheckValidity(IReadOnlyList<bool> viewModelValidities, bool validity)
+        private static void CheckValidity([NotNull] IReadOnlyList<bool> viewModelValidities, bool validity)
         {
+            var modelCollection = new ObservableCollection<TestModel>();
+            var viewModelCollection = new ObservableCollection<IViewModel<TestModel>>();
+
             var connector = new TConnector
             {
-                ModelCollection = new ObservableCollection<TestModel>(),
-                ViewModelCollection = new ObservableCollection<IViewModel<TestModel>>()
+                ModelCollection = modelCollection,
+                ViewModelCollection = viewModelCollection
             };
 
             for (var model = 0; model < viewModelValidities.Count; ++model)
             {
-                connector.ModelCollection.Add(new TestModel());
-                connector.ViewModelCollection[model].IsValid = viewModelValidities[model];
+                modelCollection.Add(new TestModel());
+                var modelObject = viewModelCollection[model];
+
+                Assert.IsNotNull(modelObject);
+                modelObject.IsValid = viewModelValidities[model];
             }
 
             Assert.AreEqual(connector.IsValid, validity);
@@ -103,10 +110,13 @@ namespace ATZ.MVVM.ViewModels.Utility.Tests
         [Test]
         public void ModelAndViewModelCanBeAddedAtTheSameTime()
         {
+            var modelCollection = new ObservableCollection<TestModel>();
+            var viewModelCollection = new ObservableCollection<IViewModel<TestModel>>();
+
             var connector = new TConnector
             {
-                ModelCollection = new ObservableCollection<TestModel>(),
-                ViewModelCollection = new ObservableCollection<IViewModel<TestModel>>()
+                ModelCollection = modelCollection,
+                ViewModelCollection = viewModelCollection
             };
 
             var m = new TestModel();
@@ -114,30 +124,33 @@ namespace ATZ.MVVM.ViewModels.Utility.Tests
 
             connector.Add(m, vm);
 
-            Assert.AreEqual(1, connector.ModelCollection.Count);
-            Assert.AreEqual(1, connector.ViewModelCollection.Count);
-            Assert.AreSame(m, connector.ModelCollection[0]);
-            Assert.AreSame(vm, connector.ViewModelCollection[0]);
+            Assert.AreEqual(1, modelCollection.Count);
+            Assert.AreEqual(1, viewModelCollection.Count);
+            Assert.AreSame(m, modelCollection[0]);
+            Assert.AreSame(vm, viewModelCollection[0]);
         }
 
         [Test]
         public void ModelAndViewModelCanBeAddedAtTheSameTimeWithSimplifiedSyntaxIfTheyAreAlreadyConnected()
         {
+            var modelCollection = new ObservableCollection<TestModel>();
+            var viewModelCollection = new ObservableCollection<IViewModel<TestModel>>();
+
             var connector = new TConnector
             {
-                ModelCollection = new ObservableCollection<TestModel>(),
-                ViewModelCollection = new ObservableCollection<IViewModel<TestModel>>()
+                ModelCollection = modelCollection,
+                ViewModelCollection = viewModelCollection
             };
 
             var m = new TestModel();
-            var vm = new TestViewModel {Model = m};
+            var vm = new TestViewModel { Model = m };
 
             connector.Add(vm);
 
-            Assert.AreEqual(1, connector.ModelCollection.Count);
-            Assert.AreEqual(1, connector.ViewModelCollection.Count);
-            Assert.AreSame(m, connector.ModelCollection[0]);
-            Assert.AreSame(vm, connector.ViewModelCollection[0]);
+            Assert.AreEqual(1, modelCollection.Count);
+            Assert.AreEqual(1, viewModelCollection.Count);
+            Assert.AreSame(m, modelCollection[0]);
+            Assert.AreSame(vm, viewModelCollection[0]);
         }
 
         [Test]
@@ -215,35 +228,44 @@ namespace ATZ.MVVM.ViewModels.Utility.Tests
         [Test]
         public void BindViewModelIsCalledProperly()
         {
+            var modelCollection = new ObservableCollection<TestModel>();
+            var viewModelCollection = new ObservableCollection<IViewModel<TestModel>>();
+
             var binderCalled = false;
+
+            // ReSharper disable once UnusedVariable => The object is going to connect the two observable collections.
             var connector = new TConnector
             {
-                BindViewModel = (vm) => { binderCalled = true; },
-                ModelCollection = new ObservableCollection<TestModel>(),
-                ViewModelCollection = new ObservableCollection<IViewModel<TestModel>>()
+                BindViewModel = vm => { binderCalled = true; },
+                ModelCollection = modelCollection,
+                ViewModelCollection = viewModelCollection
             };
 
             Assert.IsFalse(binderCalled);
 
-            connector.ModelCollection.Add(new TestModel());
+            modelCollection.Add(new TestModel());
             Assert.IsTrue(binderCalled);
         }
 
         [Test]
         public void ViewModelCollectionIsNotChangedIfSetToTheSame()
         {
-            var vmc = new ObservableCollection<IViewModel<TestModel>>();
+            var modelCollection = new ObservableCollection<TestModel>();
+            var viewModelCollection = new ObservableCollection<IViewModel<TestModel>>();
+
             var connector = new TConnector
             {
-                ModelCollection = new ObservableCollection<TestModel>(),
-                ViewModelCollection = vmc
+                ModelCollection = modelCollection,
+                ViewModelCollection = viewModelCollection
             };
 
             var collectionChanged = false;
-            connector.ModelCollection.Add(new TestModel());
-            connector.ViewModelCollection.CollectionChanged += (sender, args) => { collectionChanged = true; };
+            modelCollection.Add(new TestModel());
 
-            connector.ViewModelCollection = vmc;
+            // This lambda expression should be excluded from the coverage, because its only purpose is verification that it has not been executed.
+            viewModelCollection.CollectionChanged += (sender, args) => { collectionChanged = true; };
+
+            connector.ViewModelCollection = viewModelCollection;
             Assert.IsFalse(collectionChanged);
         }
 
@@ -277,56 +299,67 @@ namespace ATZ.MVVM.ViewModels.Utility.Tests
         [Test]
         public void BeAbleToHandleCollectionItemReplace()
         {
+            var modelCollection = new ObservableCollection<TestModel>();
+            var viewModelCollection = new ObservableCollection<IViewModel<TestModel>>();
+
+            // ReSharper disable once UnusedVariable => The object is going to connect the two observable collections.
             var connector = new TConnector
             {
-                ModelCollection = new ObservableCollection<TestModel>(),
-                ViewModelCollection = new ObservableCollection<IViewModel<TestModel>>()
+                ModelCollection = modelCollection,
+                ViewModelCollection = viewModelCollection
             };
-            connector.ModelCollection.Add(new TestModel());
+            modelCollection.Add(new TestModel());
 
-            var vm = connector.ViewModelCollection[0];
+            var vm = viewModelCollection[0];
 
-            connector.ModelCollection[0] = new TestModel();
-            Assert.AreNotSame(vm, connector.ViewModelCollection[0]);
+            modelCollection[0] = new TestModel();
+            Assert.AreNotSame(vm, viewModelCollection[0]);
         }
 
         [Test]
         public void BeAbleToHandleCollectionItemRemove()
         {
+            var modelCollection = new ObservableCollection<TestModel>();
+            var viewModelCollection = new ObservableCollection<IViewModel<TestModel>>();
+
+            // ReSharper disable once UnusedVariable => The object is going to connect the two observable collections.
             var connector = new TConnector
             {
-                ModelCollection = new ObservableCollection<TestModel>(),
-                ViewModelCollection = new ObservableCollection<IViewModel<TestModel>>()
+                ModelCollection = modelCollection,
+                ViewModelCollection = viewModelCollection
             };
-            connector.ModelCollection.Add(new TestModel());
-            Assert.AreEqual(1, connector.ModelCollection.Count);
-            Assert.AreEqual(1, connector.ViewModelCollection.Count);
+            modelCollection.Add(new TestModel());
+            Assert.AreEqual(1, modelCollection.Count);
+            Assert.AreEqual(1, viewModelCollection.Count);
 
-            connector.ModelCollection.RemoveAt(0);
-            Assert.AreEqual(0, connector.ModelCollection.Count);
-            Assert.AreEqual(0, connector.ViewModelCollection.Count);
+            modelCollection.RemoveAt(0);
+            Assert.AreEqual(0, modelCollection.Count);
+            Assert.AreEqual(0, viewModelCollection.Count);
         }
 
         [Test]
         public void BeAbleToHandleCollectionItemReset()
         {
+            var modelCollection = new ObservableCollection<TestModel>();
+            var viewModelCollection = new ObservableCollection<IViewModel<TestModel>>();
+
             var connector = new TConnector
             {
-                ModelCollection = new ObservableCollection<TestModel>(),
-                ViewModelCollection = new ObservableCollection<IViewModel<TestModel>>()
+                ModelCollection = modelCollection,
+                ViewModelCollection = viewModelCollection
             };
-            connector.ModelCollection.Add(new TestModel());
-            Assert.AreEqual(1, connector.ModelCollection.Count);
-            Assert.AreEqual(1, connector.ViewModelCollection.Count);
+            modelCollection.Add(new TestModel());
+            Assert.AreEqual(1, modelCollection.Count);
+            Assert.AreEqual(1, viewModelCollection.Count);
 
-            var vm = connector.ViewModelCollection[0];
+            var vm = viewModelCollection[0];
             var m = new TestModel();
-            var mc2 = new ObservableCollection<TestModel> {m};
+            var mc2 = new ObservableCollection<TestModel> { m };
 
             connector.ModelCollection = mc2;
             Assert.AreEqual(1, connector.ModelCollection.Count);
-            Assert.AreEqual(1, connector.ViewModelCollection.Count);
-            Assert.AreNotSame(vm, connector.ViewModelCollection[0]);
+            Assert.AreEqual(1, viewModelCollection.Count);
+            Assert.AreNotSame(vm, viewModelCollection[0]);
         }
 
         [Test]
@@ -334,33 +367,42 @@ namespace ATZ.MVVM.ViewModels.Utility.Tests
         {
             var m1 = new TestModel();
             var m2 = new TestModel();
+
+            var modelCollection = new ObservableCollection<TestModel> { m1, m2 };
+            var viewModelCollection = new ObservableCollection<IViewModel<TestModel>>();
+
+            // ReSharper disable once UnusedVariable => The object is going to connect the two observable collections.
             var connector = new TConnector
             {
-                ModelCollection = new ObservableCollection<TestModel> {m1, m2},
-                ViewModelCollection = new ObservableCollection<IViewModel<TestModel>>()
+                ModelCollection = modelCollection,
+                ViewModelCollection = viewModelCollection
             };
-            Assert.AreEqual(2, connector.ViewModelCollection.Count);
-            var vm1 = connector.ViewModelCollection[0];
-            var vm2 = connector.ViewModelCollection[1];
+            Assert.AreEqual(2, viewModelCollection.Count);
+            var vm1 = viewModelCollection[0];
+            var vm2 = viewModelCollection[1];
 
-            connector.ModelCollection.Move(0, 1);
-            Assert.AreSame(vm2, connector.ViewModelCollection[0]);
-            Assert.AreSame(vm1, connector.ViewModelCollection[1]);
+            modelCollection.Move(0, 1);
+            Assert.AreSame(vm2, viewModelCollection[0]);
+            Assert.AreSame(vm1, viewModelCollection[1]);
         }
 
         [Test]
         public void UnbindViewModelProperly()
         {
             var m = new TestModel();
+            var modelCollection = new ObservableCollection<TestModel> { m };
+
+
             var unbindCalled = false;
+            // ReSharper disable once UnusedVariable => The object is going to connect the two observable collections.
             var connector = new TConnector
             {
-                ModelCollection = new ObservableCollection<TestModel> {m},
+                ModelCollection = modelCollection,
                 ViewModelCollection = new ObservableCollection<IViewModel<TestModel>>(),
                 UnbindViewModel = vm => unbindCalled = true
             };
 
-            connector.ModelCollection.RemoveAt(0);
+            modelCollection.RemoveAt(0);
             Assert.IsTrue(unbindCalled);
         }
 
@@ -369,15 +411,17 @@ namespace ATZ.MVVM.ViewModels.Utility.Tests
         {
             var m1 = new TestModel();
             var m2 = new TestModel();
+            var modelCollection = new ObservableCollection<TestModel> { m1, m2 };
+
             var connector = new TConnector
             {
-                ModelCollection = new ObservableCollection<TestModel> {m1, m2},
+                ModelCollection = modelCollection,
                 ViewModelCollection = new ObservableCollection<IViewModel<TestModel>>()
             };
 
             connector.Sort((o1, o2) => o1 == m1 && o2 == m2 ? -1 : 1);
-            Assert.AreSame(m1, connector.ModelCollection[0]);
-            Assert.AreSame(m2, connector.ModelCollection[1]);
+            Assert.AreSame(m1, modelCollection[0]);
+            Assert.AreSame(m2, modelCollection[1]);
         }
 
         [Test]
@@ -385,32 +429,37 @@ namespace ATZ.MVVM.ViewModels.Utility.Tests
         {
             var m1 = new TestModel();
             var m2 = new TestModel();
+            var modelCollection = new ObservableCollection<TestModel> { m1, m2 };
+
             var connector = new TConnector
             {
-                ModelCollection = new ObservableCollection<TestModel> {m1, m2},
+                ModelCollection = modelCollection,
                 ViewModelCollection = new ObservableCollection<IViewModel<TestModel>>()
             };
 
-            connector.Sort((o1, o2) => o1 == m1 && o2 == m2? 1:-1);
-            Assert.AreSame(m2, connector.ModelCollection[0]);
-            Assert.AreSame(m1, connector.ModelCollection[1]);
+            connector.Sort((o1, o2) => o1 == m1 && o2 == m2 ? 1 : -1);
+            Assert.AreSame(m2, modelCollection[0]);
+            Assert.AreSame(m1, modelCollection[1]);
         }
 
         [Test]
         public void ClearAllViewModelBindingsCorrectly()
         {
+            var viewModelCollection = new ObservableCollection<IViewModel<TestModel>>();
+
             var m = new TestModel();
             var unbindCalled = false;
+
             var connector = new TConnector
             {
-                ModelCollection = new ObservableCollection<TestModel> {m},
-                ViewModelCollection = new ObservableCollection<IViewModel<TestModel>>(),
+                ModelCollection = new ObservableCollection<TestModel> { m },
+                ViewModelCollection = viewModelCollection,
                 UnbindViewModel = vm => unbindCalled = true
             };
-            Assert.AreEqual(1, connector.ViewModelCollection.Count);
+            Assert.AreEqual(1, viewModelCollection.Count);
 
             connector.ClearAllViewModelBindings();
-            Assert.AreEqual(1, connector.ViewModelCollection.Count);
+            Assert.AreEqual(1, viewModelCollection.Count);
             Assert.IsTrue(unbindCalled);
         }
 
@@ -418,16 +467,20 @@ namespace ATZ.MVVM.ViewModels.Utility.Tests
         public void BindViewModelToTheModelProperlyWhenAddingNewModel()
         {
             var m = new TestModel();
+            var modelCollection = new ObservableCollection<TestModel>();
+            var viewModelCollection = new ObservableCollection<IViewModel<TestModel>>();
+
+            // ReSharper disable once UnusedVariable => The object is going to connect the two observable collections.
             var connector = new TConnector
             {
-                ModelCollection = new ObservableCollection<TestModel>(),
-                ViewModelCollection = new ObservableCollection<IViewModel<TestModel>>()
+                ModelCollection = modelCollection,
+                ViewModelCollection = viewModelCollection
             };
-            connector.ModelCollection.Add(m);
+            modelCollection.Add(m);
 
-            Assert.AreEqual(1, connector.ViewModelCollection.Count);
+            Assert.AreEqual(1, viewModelCollection.Count);
 
-            var vm = connector.ViewModelCollection[0] as TestViewModel;
+            var vm = viewModelCollection[0] as TestViewModel;
             Assert.IsNotNull(vm);
             Assert.IsTrue(vm.BindModelCalled);
         }

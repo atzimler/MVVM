@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using JetBrains.Annotations;
+using System.Collections.Generic;
 
 namespace ATZ.MVVM.ViewModels.Utility
 {
@@ -30,7 +31,7 @@ namespace ATZ.MVVM.ViewModels.Utility
         /// </summary>
         /// <param name="sourceItem">The source item for which the item should be associated with.</param>
         /// <returns>The item associated with the source item.</returns>
-        TCollectionItem CreateItem(TSourceItem sourceItem);
+        TCollectionItem CreateItem([NotNull] TSourceItem sourceItem);
 
         /// <summary>
         /// Insert an item at the specified index into the mirror collection.

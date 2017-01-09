@@ -1,4 +1,5 @@
-﻿using ATZ.MVVM.Views.Utility.Connectors;
+﻿using ATZ.MVVM.ViewModels.Utility;
+using ATZ.MVVM.Views.Utility.Connectors;
 using ATZ.MVVM.Views.Utility.Tests.CompositeComponents;
 using NUnit.Framework;
 
@@ -9,16 +10,28 @@ namespace ATZ.MVVM.Views.Utility.Tests
     [TestFixture]
     public class CompositeViewToViewModelConnectorShould
     {
+        private static ComponentModel ComponentModel(IViewModel<MainModel> vm)
+        {
+            var mvm = (MainViewModel)vm;
+            return mvm?.ComponentModel;
+        }
+
+        private static ComponentViewModel ComponentViewModel(IViewModel<MainModel> vm)
+        {
+            var mvm = (MainViewModel)vm;
+            return mvm?.ComponentViewModel;
+        }
+
         [Test]
         public void SetUpCompositeInformationProperly()
         {
             var cvm = new ComponentViewModel();
             var cm = new ComponentModel();
-            var mvm = new MainViewModel {ComponentViewModel = cvm, ComponentModel = cm};
+            var mvm = new MainViewModel { ComponentViewModel = cvm, ComponentModel = cm };
             var cv = new ComponentView();
 
             // ReSharper disable once UnusedVariable => variable needed to correctly create the connector that will set up the MVVM components.
-            var conn = new TConnector(cv, mvm, vm => ((MainViewModel)vm).ComponentViewModel, vm => ((MainViewModel)vm).ComponentModel);
+            var conn = new TConnector(cv, mvm, ComponentViewModel, ComponentModel);
             Assert.AreSame(cm, cvm.Model);
             Assert.AreSame(cvm, cv.GetViewModel());
         }

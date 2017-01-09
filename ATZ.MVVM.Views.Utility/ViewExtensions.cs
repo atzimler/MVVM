@@ -1,6 +1,7 @@
-﻿using System;
+﻿using ATZ.MVVM.Views.Utility.Interfaces;
+using JetBrains.Annotations;
+using System;
 using System.Collections.Generic;
-using ATZ.MVVM.Views.Utility.Interfaces;
 
 namespace ATZ.MVVM.Views.Utility
 {
@@ -9,7 +10,8 @@ namespace ATZ.MVVM.Views.Utility
     /// </summary>
     public static class ViewExtensions
     {
-        private static readonly Dictionary<object, object> Registry = new Dictionary<object,object>();
+        [NotNull]
+        private static readonly Dictionary<object, object> Registry = new Dictionary<object, object>();
 
         /// <summary>
         /// Execute a method on the ViewModel associated with the View.
@@ -17,7 +19,7 @@ namespace ATZ.MVVM.Views.Utility
         /// <typeparam name="TViewModel"></typeparam>
         /// <param name="view">The view.</param>
         /// <param name="action">The action to execute, usually a method call on the ViewModel.</param>
-        public static void ExecuteViewModelMethod<TViewModel>(this IView<TViewModel> view, Action<TViewModel> action)
+        public static void ExecuteViewModelMethod<TViewModel>(this IView<TViewModel> view, [NotNull] Action<TViewModel> action)
             where TViewModel : class
         {
             var vm = view.GetViewModel();
@@ -57,7 +59,7 @@ namespace ATZ.MVVM.Views.Utility
         public static TViewModel GetViewModel<TViewModel>(this IView<TViewModel> view)
             where TViewModel : class
         {
-            return GetViewModel<TViewModel>((object) view);
+            return GetViewModel<TViewModel>((object)view);
         }
 
         /// <summary>

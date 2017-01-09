@@ -1,13 +1,21 @@
-﻿using System.Threading;
+﻿using ATZ.MVVM.ViewModels.Utility;
 using ATZ.MVVM.ViewModels.Utility.Tests;
 using ATZ.MVVM.Views.Utility.Interfaces;
 using NUnit.Framework;
+using System.Threading;
 
 namespace ATZ.MVVM.Views.Utility.Tests
 {
     [TestFixture]
     public class ViewExtensionShould
     {
+        private void CallViewModelExecute(IViewModel<TestModel> vm)
+        {
+            var tvm = (TestViewModel)vm;
+            Assert.IsNotNull(tvm);
+            tvm.Execute();
+        }
+
         [Test]
         [Apartment(ApartmentState.STA)]
         public void NotBindViewModelWhenTheSameModelIsSet()
@@ -44,7 +52,7 @@ namespace ATZ.MVVM.Views.Utility.Tests
         public void ReturnNullIfViewIsNotRegistered()
         {
             var v = new TestView();
-            var o = (object) v;
+            var o = (object)v;
             Assert.IsNull(o.GetViewModel<TestViewModel>());
         }
 
@@ -54,7 +62,7 @@ namespace ATZ.MVVM.Views.Utility.Tests
         {
             var v = new TestView();
             var vm = new TestViewModel();
-            var o = (object) v;
+            var o = (object)v;
             v.SetViewModel(vm);
 
             Assert.AreSame(vm, o.GetViewModel<TestViewModel>());
@@ -65,7 +73,7 @@ namespace ATZ.MVVM.Views.Utility.Tests
         public void NotCrashIfViewModelIsNotSetAndExecuteActionIsCalled()
         {
             var v = new TestView();
-            Assert.DoesNotThrow(() => v.ExecuteViewModelMethod(vm => ((TestViewModel)vm).Execute()));
+            Assert.DoesNotThrow(() => v.ExecuteViewModelMethod(CallViewModelExecute));
         }
 
         [Test]
@@ -75,7 +83,7 @@ namespace ATZ.MVVM.Views.Utility.Tests
             var v = new TestView();
             var tvm = new TestViewModel();
             v.SetViewModel(tvm);
-            v.ExecuteViewModelMethod(vm => ((TestViewModel)vm).Execute());
+            v.ExecuteViewModelMethod(CallViewModelExecute);
             Assert.IsTrue(tvm.ExecuteCalled);
         }
 

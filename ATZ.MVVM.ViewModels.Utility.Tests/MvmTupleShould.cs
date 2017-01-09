@@ -1,6 +1,6 @@
-﻿using System;
-using ATZ.DependencyInjection;
+﻿using ATZ.DependencyInjection;
 using NUnit.Framework;
+using System;
 
 namespace ATZ.MVVM.ViewModels.Utility.Tests
 {
@@ -30,44 +30,46 @@ namespace ATZ.MVVM.ViewModels.Utility.Tests
         [Test]
         public void ProperlyDetermineViewModelInterfaceType()
         {
-            var tuple = new MvmTuple {Model = typeof(int)};
+            var tuple = new MvmTuple { Model = typeof(int) };
             Assert.AreEqual(typeof(IViewModel<int>), tuple.IViewModelTModel);
         }
 
         [Test]
         public void RetainModel()
         {
-            var tuple = new MvmTuple {Model = typeof(int)};
+            var tuple = new MvmTuple { Model = typeof(int) };
             Assert.AreEqual(typeof(int), tuple.Model);
         }
 
         [Test]
         public void RetainViewModel()
         {
-            var tuple = new MvmTuple {ViewModel = typeof(double)};
+            var tuple = new MvmTuple { ViewModel = typeof(double) };
             Assert.AreEqual(typeof(double), tuple.ViewModel);
         }
 
         [Test]
         public void ThrowExceptionWhenTryingToRegisterNullModel()
         {
-            var tuple = new MvmTuple {Model = null};
+            var tuple = new MvmTuple { Model = null };
             var ex = Assert.Throws<ArgumentNullException>(() => tuple.RegisterBindings());
+            Assert.IsNotNull(ex);
             Assert.AreEqual("Model", ex.ParamName);
         }
 
         [Test]
         public void ThrowExceptionWhenTryingToRegisterNullViewModel()
         {
-            var tuple = new MvmTuple {Model = typeof(int), ViewModel = null};
+            var tuple = new MvmTuple { Model = typeof(int), ViewModel = null };
             var ex = Assert.Throws<ArgumentNullException>(() => tuple.RegisterBindings());
+            Assert.IsNotNull(ex);
             Assert.AreEqual("ViewModel", ex.ParamName);
         }
 
         [Test]
         public void ProperlyRegisterBindings()
         {
-            var tuple = new MvmTuple {Model = typeof(TestModel), ViewModel = typeof(TestViewModel)};
+            var tuple = new MvmTuple { Model = typeof(TestModel), ViewModel = typeof(TestViewModel) };
             tuple.RegisterBindings();
 
             BindingVerification.VerifyBinding<IViewModel<TestModel>, TestViewModel>();

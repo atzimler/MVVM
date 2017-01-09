@@ -1,7 +1,8 @@
-﻿using System;
-using System.Collections.ObjectModel;
-using ATZ.MVVM.ViewModels.Utility;
+﻿using ATZ.MVVM.ViewModels.Utility;
 using ATZ.MVVM.ViewModels.Utility.Connectors;
+using JetBrains.Annotations;
+using System;
+using System.Collections.ObjectModel;
 
 namespace ATZ.MVVM.Views.Utility.Connectors
 {
@@ -30,27 +31,37 @@ namespace ATZ.MVVM.Views.Utility.Connectors
             set { base.TargetCollection = value; }
         }
 
+        [NotNull]
         private readonly Func<TSource, TTarget> _transformSourceToTarget;
 
         /// <summary>
         /// Constructor.
         /// </summary>
         /// <param name="transformSourceToTarget">The transformation from the source item to the mirror item.</param>
-        public ObservableCollectionCopierConnector(Func<TSource, TTarget> transformSourceToTarget)
+        public ObservableCollectionCopierConnector([NotNull] Func<TSource, TTarget> transformSourceToTarget)
         {
             _transformSourceToTarget = transformSourceToTarget;
         }
 
         /// <see cref="ICollectionChangedEventSource{TSourceItem,TCollectionItem}.ClearCollection"/>
-        public override void ClearCollection() => TargetCollection.Clear();
+        public override void ClearCollection() => TargetCollection?.Clear();
 
         /// <see cref="ICollectionChangedEventSource{TSourceItem,TCollectionItem}.CreateItem"/>
         public override TTarget CreateItem(TSource sourceItem) => _transformSourceToTarget(sourceItem);
 
         /// <see cref="ICollectionChangedEventSource{TSourceItem,TCollectionItem}.RemoveItem"/>
-        public override void RemoveItem(int index) => TargetCollection.RemoveAt(index);
+        public override void RemoveItem(int index) => TargetCollection?.RemoveAt(index);
 
         /// <see cref="ICollectionChangedEventSource{TSourceItem,TCollectionItem}.ReplaceItem"/>
-        public override void ReplaceItem(int index, TTarget newItem) => TargetCollection[index] = newItem;
+        public override void ReplaceItem(int index, TTarget newItem)
+        {
+            var collection = TargetCollection;
+            if (collection == null)
+            {
+                return;
+            }
+
+            collection[index] = newItem;
+        }
     }
 }

@@ -1,8 +1,8 @@
-﻿using System;
-using ATZ.DependencyInjection;
+﻿using ATZ.DependencyInjection;
 using ATZ.MVVM.ViewModels.Utility;
 using ATZ.MVVM.Views.Utility.Interfaces;
 using ATZ.Reflection;
+using System;
 
 namespace ATZ.MVVM.Views.Utility
 {
@@ -47,19 +47,20 @@ namespace ATZ.MVVM.Views.Utility
         /// <summary>
         /// Registers the bindings between the types into the static instance of the Ninject kernel.
         /// </summary>
-        /// <exception cref="ArgumentNullException">Any of the Model, View or the ViewModel types is null.</exception>
+        /// <exception cref="InvalidOperationException">Any of the Model, View or the ViewModel types is null.</exception>
         // API v3.2
         public override void RegisterBindings()
         {
-            if (View == null)
+            var view = View;
+            if (view == null)
             {
-                throw new ArgumentNullException(nameof(View));
+                throw new InvalidOperationException("Trying to register an MvvmTupple while MvvmTuple.View == null!");
             }
 
             base.RegisterBindings();
 
-            DependencyResolver.Instance.Bind(IViewTViewModel).To(View);
-            DependencyResolver.Instance.Bind(IViewTIViewModel).To(View);
+            DependencyResolver.Instance.Bind(IViewTViewModel).To(view);
+            DependencyResolver.Instance.Bind(IViewTIViewModel).To(view);
         }
     }
 }

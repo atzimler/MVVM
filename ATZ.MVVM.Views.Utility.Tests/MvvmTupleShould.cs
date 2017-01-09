@@ -1,10 +1,10 @@
-﻿using System;
-using System.Threading;
-using ATZ.DependencyInjection;
+﻿using ATZ.DependencyInjection;
 using ATZ.MVVM.ViewModels.Utility;
 using ATZ.MVVM.ViewModels.Utility.Tests;
 using ATZ.MVVM.Views.Utility.Interfaces;
 using NUnit.Framework;
+using System;
+using System.Threading;
 
 namespace ATZ.MVVM.Views.Utility.Tests
 {
@@ -27,7 +27,7 @@ namespace ATZ.MVVM.Views.Utility.Tests
         [Test]
         public void RetainView()
         {
-            var tuple = new MvvmTuple {View = typeof(double)};
+            var tuple = new MvvmTuple { View = typeof(double) };
             Assert.AreEqual(typeof(double), tuple.View);
         }
 
@@ -48,23 +48,24 @@ namespace ATZ.MVVM.Views.Utility.Tests
         [Test]
         public void ProperlyCalculateViewModelInterface()
         {
-            var tuple = new MvvmTuple {ViewModel = typeof(TestViewModel)};
+            var tuple = new MvvmTuple { ViewModel = typeof(TestViewModel) };
             Assert.AreEqual(typeof(IView<TestViewModel>), tuple.IViewTViewModel);
         }
 
         [Test]
         public void ProperlyCalculateModelInterface()
         {
-            var tuple = new MvvmTuple {Model = typeof(TestModel)};
+            var tuple = new MvvmTuple { Model = typeof(TestModel) };
             Assert.AreEqual(typeof(IView<IViewModel<TestModel>>), tuple.IViewTIViewModel);
         }
 
         [Test]
         public void ThrowExceptionWhenTryingToRegisterNullView()
         {
-            var tuple = new MvvmTuple {View = null};
-            var ex = Assert.Throws<ArgumentNullException>(() => tuple.RegisterBindings());
-            Assert.AreEqual("View", ex.ParamName);
+            var tuple = new MvvmTuple { View = null };
+            var ex = Assert.Throws<InvalidOperationException>(() => tuple.RegisterBindings());
+            Assert.IsNotNull(ex);
+            Assert.AreEqual("Trying to register an MvvmTupple while MvvmTuple.View == null!", ex.Message);
         }
 
         [Test]
@@ -98,8 +99,9 @@ namespace ATZ.MVVM.Views.Utility.Tests
         [Test]
         public void ThrowExceptionWhenTryingToRegisterNullModel()
         {
-            var tuple = new MvvmTuple { Model = null, View = typeof(TestView), ViewModel = typeof(TestViewModel)};
+            var tuple = new MvvmTuple { Model = null, View = typeof(TestView), ViewModel = typeof(TestViewModel) };
             var ex = Assert.Throws<ArgumentNullException>(() => tuple.RegisterBindings());
+            Assert.IsNotNull(ex);
             Assert.AreEqual("Model", ex.ParamName);
         }
 
@@ -108,6 +110,7 @@ namespace ATZ.MVVM.Views.Utility.Tests
         {
             var tuple = new MvvmTuple { Model = typeof(int), ViewModel = null, View = typeof(TestView) };
             var ex = Assert.Throws<ArgumentNullException>(() => tuple.RegisterBindings());
+            Assert.IsNotNull(ex);
             Assert.AreEqual("ViewModel", ex.ParamName);
         }
 

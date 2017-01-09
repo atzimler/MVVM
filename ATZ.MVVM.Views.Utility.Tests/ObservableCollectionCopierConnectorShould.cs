@@ -1,15 +1,16 @@
-﻿using System.Collections.Generic;
+﻿using ATZ.MVVM.Views.Utility.Connectors;
+using JetBrains.Annotations;
+using NUnit.Framework;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using ATZ.MVVM.Views.Utility.Connectors;
-using NUnit.Framework;
 
 namespace ATZ.MVVM.Views.Utility.Tests
 {
     [TestFixture]
     public class ObservableCollectionCopierConnectorShould
     {
-        private static void AssertCollectionsAreEqual<T>(IEnumerable<T> c1, IEnumerable<T> c2)
+        private static void AssertCollectionsAreEqual<T>([NotNull] IEnumerable<T> c1, [NotNull] IEnumerable<T> c2)
         {
             var l1 = c1.ToList();
             var l2 = c2.ToList();
@@ -18,7 +19,7 @@ namespace ATZ.MVVM.Views.Utility.Tests
             Assert.AreEqual(CollectionItems(l1), CollectionItems(l2));
         }
 
-        private static string CollectionItems<T>(IEnumerable<T> collection)
+        private static string CollectionItems<T>([NotNull] IEnumerable<T> collection)
         {
             return string.Join(",", collection.ToList().ConvertAll(item => item.ToString()));
         }
@@ -29,52 +30,55 @@ namespace ATZ.MVVM.Views.Utility.Tests
             var sc = new ObservableCollection<int>();
             var tc = new ObservableCollection<int>();
 
-            var conn = new ObservableCollectionCopierConnector<int, int>(n => n) {SourceCollection = sc, TargetCollection = tc};
+            // ReSharper disable once UnusedVariable => variable needed to correctly create the connector that will set up the MVVM components.
+            var conn = new ObservableCollectionCopierConnector<int, int>(n => n) { SourceCollection = sc, TargetCollection = tc };
             sc.Add(1);
 
-            AssertCollectionsAreEqual(conn.SourceCollection, conn.TargetCollection);
+            AssertCollectionsAreEqual(sc, tc);
         }
 
         [Test]
         public void ClearTargetCollectionWhenSourceIsCleared()
         {
-            var sc = new ObservableCollection<int> {1};
+            var sc = new ObservableCollection<int> { 1 };
             var tc = new ObservableCollection<int>();
 
+            // ReSharper disable once UnusedVariable => variable needed to correctly create the connector that will set up the MVVM components.
             var conn = new ObservableCollectionCopierConnector<int, int>(n => n)
             {
                 SourceCollection = sc,
                 TargetCollection = tc
             };
-            AssertCollectionsAreEqual(conn.SourceCollection, conn.TargetCollection);
+            AssertCollectionsAreEqual(sc, tc);
 
-            conn.SourceCollection.Clear();
+            sc.Clear();
 
-            AssertCollectionsAreEqual(conn.SourceCollection, conn.TargetCollection);
+            AssertCollectionsAreEqual(sc, tc);
         }
 
         [Test]
         public void MoveTargetCollectionElementWhenSourceCollectionElementIsMoved()
         {
-            var sc = new ObservableCollection<int> {2, 1};
+            var sc = new ObservableCollection<int> { 2, 1 };
             var tc = new ObservableCollection<int>();
 
+            // ReSharper disable once UnusedVariable => variable needed to correctly create the connector that will set up the MVVM components.
             var conn = new ObservableCollectionCopierConnector<int, int>(n => n)
             {
                 SourceCollection = sc,
                 TargetCollection = tc
             };
-            AssertCollectionsAreEqual(conn.SourceCollection, conn.TargetCollection);
+            AssertCollectionsAreEqual(sc, tc);
 
-            conn.SourceCollection.Move(0, 1);
+            sc.Move(0, 1);
 
-            AssertCollectionsAreEqual(conn.SourceCollection, conn.TargetCollection);
+            AssertCollectionsAreEqual(sc, tc);
         }
 
         [Test]
         public void NotCrashWhenSettingSourceCollection()
         {
-            var sc = new ObservableCollection<int> {1};
+            var sc = new ObservableCollection<int> { 1 };
             var tc = new ObservableCollection<int>();
             var conn = new ObservableCollectionCopierConnector<int, int>(number => number + 1)
             {
@@ -88,12 +92,12 @@ namespace ATZ.MVVM.Views.Utility.Tests
         [Test]
         public void NotCrashWhenSettingSourceCollectionSecondTime()
         {
-            var sc1 = new ObservableCollection<int> {1};
-            var sc2 = new ObservableCollection<int> {2};
+            var sc1 = new ObservableCollection<int> { 1 };
+            var sc2 = new ObservableCollection<int> { 2 };
 
             var tc = new ObservableCollection<int>();
 
-            var conn = new ObservableCollectionCopierConnector<int, int>(number => number + 1) {SourceCollection = sc1, TargetCollection = tc};
+            var conn = new ObservableCollectionCopierConnector<int, int>(number => number + 1) { SourceCollection = sc1, TargetCollection = tc };
             conn.SourceCollection = sc2;
 
             Assert.AreSame(sc2, conn.SourceCollection);
@@ -102,7 +106,7 @@ namespace ATZ.MVVM.Views.Utility.Tests
         [Test]
         public void NotRecalculateTargetCollectionIfTheSameTargetCollectionIsSet()
         {
-            var sc = new ObservableCollection<int> {1};
+            var sc = new ObservableCollection<int> { 1 };
             var tc = new ObservableCollection<int>();
 
             var conn = new ObservableCollectionCopierConnector<int, int>(number => number + 1)
@@ -120,44 +124,46 @@ namespace ATZ.MVVM.Views.Utility.Tests
         [Test]
         public void RemoveItemFromTargetWhenRemovedFromSourceCollection()
         {
-            var sc = new ObservableCollection<int> {1,2,3};
+            var sc = new ObservableCollection<int> { 1, 2, 3 };
             var tc = new ObservableCollection<int>();
 
+            // ReSharper disable once UnusedVariable => variable needed to correctly create the connector that will set up the MVVM components.
             var conn = new ObservableCollectionCopierConnector<int, int>(n => n)
             {
                 SourceCollection = sc,
                 TargetCollection = tc
             };
-            AssertCollectionsAreEqual(conn.SourceCollection, conn.TargetCollection);
+            AssertCollectionsAreEqual(sc, tc);
 
-            conn.SourceCollection.Remove(2);
+            sc.Remove(2);
 
-            AssertCollectionsAreEqual(conn.SourceCollection, conn.TargetCollection);
+            AssertCollectionsAreEqual(sc, tc);
         }
 
         [Test]
         public void ReplaceItemInTargetWhenReplacedInSourceCollection()
         {
-            var sc = new ObservableCollection<int> {1, 2, 3};
+            var sc = new ObservableCollection<int> { 1, 2, 3 };
             var tc = new ObservableCollection<int>();
 
+            // ReSharper disable once UnusedVariable => variable needed to correctly create the connector that will set up the MVVM components.
             var conn = new ObservableCollectionCopierConnector<int, int>(n => n)
             {
                 SourceCollection = sc,
                 TargetCollection = tc
             };
-            AssertCollectionsAreEqual(conn.SourceCollection, conn.TargetCollection);
+            AssertCollectionsAreEqual(sc, tc);
 
-            conn.SourceCollection[0] = 4;
+            sc[0] = 4;
 
-            AssertCollectionsAreEqual(conn.SourceCollection, conn.TargetCollection);
+            AssertCollectionsAreEqual(sc, tc);
         }
 
         [Test]
         public void ProperlyCopyTheObjectsWhenSourceCollectionIsChanged()
         {
-            var sc1 = new ObservableCollection<int> {1, 2, 3};
-            var sc2 = new ObservableCollection<int> {2, 3, 4};
+            var sc1 = new ObservableCollection<int> { 1, 2, 3 };
+            var sc2 = new ObservableCollection<int> { 2, 3, 4 };
             var tc = new ObservableCollection<int>();
 
             var conn = new ObservableCollectionCopierConnector<int, int>(n => n)
@@ -183,5 +189,17 @@ namespace ATZ.MVVM.Views.Utility.Tests
             conn.TargetCollection = tc;
             Assert.AreSame(tc, conn.TargetCollection);
         }
+
+        [Test]
+        public void NotCrashWhenTargetCollectionIsNullAndReplacingAnItem()
+        {
+            var conn = new ObservableCollectionCopierTargetCollectionNullifier();
+            Assert.IsNotNull(conn.SourceCollection);
+            Assert.IsNotNull(conn.TargetCollection);
+            AssertCollectionsAreEqual(conn.SourceCollection, conn.TargetCollection);
+
+            Assert.DoesNotThrow(() => conn.SourceCollection[0] = 4);
+        }
+
     }
 }

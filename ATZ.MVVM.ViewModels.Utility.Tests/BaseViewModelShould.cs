@@ -121,9 +121,9 @@ namespace ATZ.MVVM.ViewModels.Utility.Tests
         [Test]
         public void NotCauseNullReferenceExceptionWhenBindingModel()
         {
-            // ReSharper disable once ObjectCreationAsStatement => Object construction should not cause exception,
-            // so we are not assingning the constructed object to variable.
-            Assert.DoesNotThrow(() => new ModelBinderTestViewModel() );
+            ModelBinderTestViewModel viewModel = null;
+            Assert.DoesNotThrow(() => viewModel = new ModelBinderTestViewModel());
+            Assert.DoesNotThrow(() => viewModel.Model = null);
         }
     }
 }
