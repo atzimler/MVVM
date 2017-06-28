@@ -1,7 +1,9 @@
-﻿using ATZ.DependencyInjection;
+﻿using ATZ.CollectionObservers;
+using ATZ.DependencyInjection;
 using JetBrains.Annotations;
 using System;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Linq;
 
 namespace ATZ.MVVM.ViewModels.Utility.Connectors
@@ -11,7 +13,7 @@ namespace ATZ.MVVM.ViewModels.Utility.Connectors
     /// </summary>
     /// <typeparam name="TModel">The type of the Model.</typeparam>
     // ReSharper disable once ClassWithVirtualMembersNeverInherited.Global => Part of public API.
-    public class CollectionViewModelToModelConnector<TModel> : ObservableCollectionConnector<TModel, IViewModel<TModel>>, IVerifiable
+    public class CollectionViewModelToModelConnector<TModel> : CollectionObserver<TModel, IViewModel<TModel>>, IVerifiable, INotifyPropertyChanged
         where TModel : class
     {
         /// <summary>
@@ -39,7 +41,7 @@ namespace ATZ.MVVM.ViewModels.Utility.Connectors
         /// </summary>
         public bool IsValid
         {
-            get { return _isValid; }
+            get => _isValid;
             set
             {
                 if (_isValid == value)
@@ -62,17 +64,22 @@ namespace ATZ.MVVM.ViewModels.Utility.Connectors
         /// </summary>
         public ObservableCollection<TModel> ModelCollection
         {
-            get { return SourceCollection; }
-            set { SourceCollection = value; }
+            get => SourceCollection;
+            set => SourceCollection = value;
         }
+
+        /// <summary>
+        /// PropertyChanged event for implementing the INotifyPropertyChanged interface.
+        /// </summary>
+        public event PropertyChangedEventHandler PropertyChanged;
 
         /// <summary>
         /// The collection of the ViewModel objects.
         /// </summary>
         public ObservableCollection<IViewModel<TModel>> ViewModelCollection
         {
-            get { return TargetCollection; }
-            set { TargetCollection = value; }
+            get => TargetCollection;
+            set => TargetCollection = value;
         }
 
         private void ClearViewModelCollection()
@@ -132,7 +139,7 @@ namespace ATZ.MVVM.ViewModels.Utility.Connectors
         protected virtual void OnIsValidChanged()
         {
             IsValidChanged?.Invoke(this, EventArgs.Empty);
-            OnPropertyChanged(nameof(IsValid));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsValid)));
         }
 
         /// <summary>
@@ -195,6 +202,11 @@ namespace ATZ.MVVM.ViewModels.Utility.Connectors
         /// <see cref="ICollectionChangedEventSource{TSourceItem,TCollectionItem}.CreateItem"/>
         public override IViewModel<TModel> CreateItem(TModel sourceItem)
         {
+            if (sourceItem == null)
+            {
+                return null;
+            }
+
             var viewModel = DependencyResolver.Instance.GetInterface<IViewModel<TModel>>(
                 typeof(IViewModel<>), sourceItem.GetType());
             if (viewModel == null)

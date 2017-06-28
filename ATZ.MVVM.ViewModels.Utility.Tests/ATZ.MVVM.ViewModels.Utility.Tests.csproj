@@ -42,6 +42,9 @@
   </PropertyGroup>
   <!-- Condition="'$(TargetFrameworkVersion)' == 'v4.5.2'" -->
   <ItemGroup>
+    <Reference Include="ATZ.CollectionObservers, Version=1.0.0.5, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\ATZ.CollectionObservers.1.0.0.5\lib\net45\ATZ.CollectionObservers.dll</HintPath>
+    </Reference>
     <Reference Include="ATZ.DependencyInjection, Version=2.1.1.66, Culture=neutral, processorArchitecture=MSIL" Condition="'$(TargetFrameworkVersion)' == 'v4.5'">
       <HintPath>..\packages\ATZ.DependencyInjection.2.1.1.66\lib\net45\ATZ.DependencyInjection.dll</HintPath>
       <Private>True</Private>

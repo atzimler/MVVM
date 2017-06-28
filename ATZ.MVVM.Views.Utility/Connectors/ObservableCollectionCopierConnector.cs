@@ -1,5 +1,4 @@
-﻿using ATZ.MVVM.ViewModels.Utility;
-using ATZ.MVVM.ViewModels.Utility.Connectors;
+﻿using ATZ.CollectionObservers;
 using JetBrains.Annotations;
 using System;
 using System.Collections.ObjectModel;
@@ -11,15 +10,15 @@ namespace ATZ.MVVM.Views.Utility.Connectors
     /// </summary>
     /// <typeparam name="TSource">The type of the items in the source collection.</typeparam>
     /// <typeparam name="TTarget">The type of the items in the mirror collection.</typeparam>
-    public class ObservableCollectionCopierConnector<TSource, TTarget> : ObservableCollectionConnector<TSource, TTarget>
+    public class ObservableCollectionCopierConnector<TSource, TTarget> : CollectionObserver<TSource, TTarget>
     {
         /// <summary>
         /// The source collection.
         /// </summary>
         public new ObservableCollection<TSource> SourceCollection
         {
-            get { return base.SourceCollection; }
-            set { base.SourceCollection = value; }
+            get => base.SourceCollection;
+            set => base.SourceCollection = value;
         }
 
         /// <summary>
@@ -27,8 +26,8 @@ namespace ATZ.MVVM.Views.Utility.Connectors
         /// </summary>
         public new ObservableCollection<TTarget> TargetCollection
         {
-            get { return base.TargetCollection; }
-            set { base.TargetCollection = value; }
+            get => base.TargetCollection;
+            set => base.TargetCollection = value;
         }
 
         [NotNull]
@@ -43,16 +42,29 @@ namespace ATZ.MVVM.Views.Utility.Connectors
             _transformSourceToTarget = transformSourceToTarget;
         }
 
-        /// <see cref="ICollectionChangedEventSource{TSourceItem,TCollectionItem}.ClearCollection"/>
+        /// <summary>
+        /// Clear the target collection.
+        /// </summary>
         public override void ClearCollection() => TargetCollection?.Clear();
 
-        /// <see cref="ICollectionChangedEventSource{TSourceItem,TCollectionItem}.CreateItem"/>
+        /// <summary>
+        /// Create a new item for the target collection that will be associated with the given item in the source collection.
+        /// </summary>
+        /// <param name="sourceItem">The item in the source collection with which the newly created item should be associated.</param>
+        /// <returns>The newly create item.</returns>
         public override TTarget CreateItem(TSource sourceItem) => _transformSourceToTarget(sourceItem);
 
-        /// <see cref="ICollectionChangedEventSource{TSourceItem,TCollectionItem}.RemoveItem"/>
+        /// <summary>
+        /// Remove an item from the target collection.
+        /// </summary>
+        /// <param name="index">The index of the item to be removed.</param>
         public override void RemoveItem(int index) => TargetCollection?.RemoveAt(index);
 
-        /// <see cref="ICollectionChangedEventSource{TSourceItem,TCollectionItem}.ReplaceItem"/>
+        /// <summary>
+        /// Replace an item in the target collection.
+        /// </summary>
+        /// <param name="index">The index of the current item.</param>
+        /// <param name="newItem">The new item.</param>
         public override void ReplaceItem(int index, TTarget newItem)
         {
             var collection = TargetCollection;

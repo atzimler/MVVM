@@ -1,7 +1,7 @@
-﻿using ATZ.DependencyInjection;
+﻿using ATZ.CollectionObservers;
+using ATZ.DependencyInjection;
 using ATZ.DependencyInjection.System;
 using ATZ.MVVM.ViewModels.Utility;
-using ATZ.MVVM.ViewModels.Utility.Connectors;
 using ATZ.MVVM.Views.Utility.Interfaces;
 using JetBrains.Annotations;
 using Ninject;
@@ -13,19 +13,16 @@ namespace ATZ.MVVM.Views.Utility.Connectors
     /// <summary>
     /// Connector between Views and ViewModels collections.
     /// </summary>
-    /// <typeparam name="TView">The type of the View.</typeparam>
     /// <typeparam name="TModel">The type of the Model.</typeparam>
-    public class CollectionViewToViewModelConnector<TView, TModel> : BaseConnector<IViewModel<TModel>, IView<IViewModel<TModel>>, IList>
-        where TView : IView<IViewModel<TModel>>
-        where TModel : class
+    public class CollectionViewToViewModelConnector<TModel> : CollectionObserverBase<IViewModel<TModel>, IView<IViewModel<TModel>>, IList> where TModel : class
     {
         /// <summary>
         /// The View collection.
         /// </summary>
         public IList ViewCollection
         {
-            get { return TargetCollection; }
-            set { TargetCollection = value; }
+            get => TargetCollection;
+            set => TargetCollection = value;
         }
 
         /// <summary>
@@ -33,8 +30,8 @@ namespace ATZ.MVVM.Views.Utility.Connectors
         /// </summary>
         public ObservableCollection<IViewModel<TModel>> ViewModelCollection
         {
-            get { return SourceCollection; }
-            set { SourceCollection = value; }
+            get => SourceCollection;
+            set => SourceCollection = value;
         }
 
         private static IView<IViewModel<TModel>> CreateViewForViewModel([NotNull] IViewModel<TModel> viewModel)
@@ -52,19 +49,36 @@ namespace ATZ.MVVM.Views.Utility.Connectors
             return view;
         }
 
-        /// <see cref="ICollectionChangedEventSource{TSourceItem,TCollectionItem}.ClearCollection"/>
+        /// <summary>
+        /// Clear the view collection.
+        /// </summary>
         public override void ClearCollection() => TargetCollection?.Clear();
 
-        /// <see cref="ICollectionChangedEventSource{TSourceItem,TCollectionItem}.AddItem"/>
+        /// <summary>
+        /// Add a view into the view collection.
+        /// </summary>
+        /// <param name="item">The item to add to the target collection.</param>
         public override void AddItem(IView<IViewModel<TModel>> item) => TargetCollection?.Add(item?.UIElement);
 
-        /// <see cref="ICollectionChangedEventSource{TSourceItem,TCollectionItem}.CreateItem"/>
-        public override IView<IViewModel<TModel>> CreateItem(IViewModel<TModel> sourceItem) => CreateViewForViewModel(sourceItem);
+        /// <summary>
+        /// Create a new view for the view model.
+        /// </summary>
+        /// <param name="viewModel">The view model for which a view should be created.</param>
+        /// <returns>The newly created view.</returns>
+        public override IView<IViewModel<TModel>> CreateItem(IViewModel<TModel> viewModel) => CreateViewForViewModel(viewModel);
 
-        /// <see cref="ICollectionChangedEventSource{TSourceItem,TCollectionItem}.InsertItem"/>
+        /// <summary>
+        /// Insert a view at the specified location into the view collection.
+        /// </summary>
+        /// <param name="index">The index where the view will be added into the view collection.</param>
+        /// <param name="item">The view that will be added to the view collection.</param>
         public override void InsertItem(int index, IView<IViewModel<TModel>> item) => TargetCollection?.Insert(index, item?.UIElement);
 
-        /// <see cref="ICollectionChangedEventSource{TSourceItem,TCollectionItem}.MoveItem"/>
+        /// <summary>
+        /// Move a view in the view collection from an old position to a new position.
+        /// </summary>
+        /// <param name="oldIndex">The current index of the view.</param>
+        /// <param name="newIndex">The new index of the view.</param>
         public override void MoveItem(int oldIndex, int newIndex)
         {
             var collection = TargetCollection;
@@ -78,10 +92,17 @@ namespace ATZ.MVVM.Views.Utility.Connectors
             collection.Insert(newIndex, uiElement);
         }
 
-        /// <see cref="ICollectionChangedEventSource{TSourceItem,TCollectionItem}.RemoveItem"/>
+        /// <summary>
+        /// Remove a view from the view collection.
+        /// </summary>
+        /// <param name="index">The current index of the view.</param>
         public override void RemoveItem(int index) => TargetCollection?.RemoveAt(index);
 
-        /// <see cref="ICollectionChangedEventSource{TSourceItem,TCollectionItem}.ReplaceItem"/>
+        /// <summary>
+        /// Replace a view in the view collection.
+        /// </summary>
+        /// <param name="index">The index of the current view.</param>
+        /// <param name="newItem">The new view.</param>
         public override void ReplaceItem(int index, IView<IViewModel<TModel>> newItem)
         {
             var collection = TargetCollection;

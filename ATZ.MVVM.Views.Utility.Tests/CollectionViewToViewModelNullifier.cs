@@ -7,7 +7,7 @@ using System.Windows.Controls;
 
 namespace ATZ.MVVM.Views.Utility.Tests
 {
-    public class CollectionViewToViewModelNullifier : CollectionViewToViewModelConnector<TestView, TestModel>
+    public class CollectionViewToViewModelNullifier : CollectionViewToViewModelConnector<TestModel>
     {
         private readonly StackPanel _stackPanel = new StackPanel();
 

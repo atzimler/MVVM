@@ -15,7 +15,7 @@ using System.Windows.Controls;
 
 namespace ATZ.MVVM.Views.Utility.Tests
 {
-    using TConnector = CollectionViewToViewModelConnector<TestView, TestModel>;
+    using TConnector = CollectionViewToViewModelConnector<TestModel>;
 
     [TestFixture]
     public class CollectionViewToViewModelConnectorShould
@@ -264,7 +264,7 @@ namespace ATZ.MVVM.Views.Utility.Tests
 
             DependencyResolver.Instance.Bind<IView<TestViewModel>>().To<TestViewWithoutInterface>();
 
-            var conn = new CollectionViewToViewModelConnector<IView<IViewModel<TestModel>>, TestModel>();
+            var conn = new TConnector();
             var vm = new TestViewModel();
             var view = conn.CreateItem(vm);
 
