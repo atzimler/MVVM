@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ATZ.ObservableObjects;
+using System;
 
 
 namespace ATZ.MVVM.ViewModels.Utility
@@ -35,7 +36,7 @@ namespace ATZ.MVVM.ViewModels.Utility
         /// The validity of the object has changed.
         /// </summary>
         public event EventHandler IsValidChanged;
-  
+
         /// <summary>
         /// The model object associated with the ViewModel.
         /// </summary>

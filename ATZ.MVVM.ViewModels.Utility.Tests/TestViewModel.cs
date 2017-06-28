@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ATZ.ObservableObjects;
+using System;
 using System.ComponentModel;
 
 namespace ATZ.MVVM.ViewModels.Utility.Tests
@@ -16,7 +17,7 @@ namespace ATZ.MVVM.ViewModels.Utility.Tests
         public int A
         {
             get { return _a; }
-            set { Set(ref _a, value, new[] {"B"}); }
+            set { Set(ref _a, value, new[] { "B" }); }
         }
 
         public int PropertyRaisingChangeNotification
