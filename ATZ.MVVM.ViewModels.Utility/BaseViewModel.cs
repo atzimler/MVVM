@@ -87,7 +87,7 @@ namespace ATZ.MVVM.ViewModels.Utility
         /// initialized when passing this point. However, top level constructors could initialize a component that is already too late, because lower level constructor tries
         /// to set the Model on the ViewModel. As a result, NullReferenceExceptions might occur. We are following the solution used in the WPF code and InitializeComponent is
         /// the place to initialize those objects that might be accessed during View/ViewModel interactions.
-        /// To avoid problems, overriden InitializeComponent methods should call base InitializeComponent method, usually as a first operation, but might be exceptions.
+        /// To avoid problems, overridden InitializeComponent methods should call base InitializeComponent method, usually as a first operation, but might be exceptions.
         /// </remarks>
         // ReSharper disable once VirtualMemberNeverOverridden.Global => Part of Public API
         protected virtual void InitializeComponent()
