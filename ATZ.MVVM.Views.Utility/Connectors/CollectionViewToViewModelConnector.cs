@@ -3,7 +3,6 @@ using ATZ.DependencyInjection;
 using ATZ.DependencyInjection.System;
 using ATZ.MVVM.ViewModels.Utility;
 using ATZ.MVVM.Views.Utility.Interfaces;
-using JetBrains.Annotations;
 using Ninject;
 using System.Collections;
 using System.Collections.ObjectModel;
@@ -34,8 +33,14 @@ namespace ATZ.MVVM.Views.Utility.Connectors
             set => SourceCollection = value;
         }
 
-        private static IView<IViewModel<TModel>> CreateViewForViewModel([NotNull] IViewModel<TModel> viewModel)
+        private static IView<IViewModel<TModel>> CreateViewForViewModel(IViewModel<TModel> viewModel)
         {
+            if (viewModel == null)
+            {
+                DependencyResolver.Instance.Get<IDebug>().WriteLine("viewModel == null, cannot resolve appropriate view type without type information!");
+                return null;
+            }
+
             var obj = DependencyResolver.Instance.GetInterface(typeof(IView<>), viewModel.GetType());
             var view = obj as IView<IViewModel<TModel>>;
             if (view == null)

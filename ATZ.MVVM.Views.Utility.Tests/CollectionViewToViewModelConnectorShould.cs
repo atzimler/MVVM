@@ -10,7 +10,6 @@ using Moq;
 using NUnit.Framework;
 using System.Collections.ObjectModel;
 using System.Threading;
-using System.Windows;
 using System.Windows.Controls;
 
 namespace ATZ.MVVM.Views.Utility.Tests
@@ -321,18 +320,5 @@ namespace ATZ.MVVM.Views.Utility.Tests
 
             Assert.DoesNotThrow(() => viewModelCollection.Move(0, 1));
         }
-
-        private class OtherTestView : IView<IViewModel<TestModel>>
-        {
-            public UIElement UIElement { get; } = null;
-            public void BindModel(IViewModel<TestModel> vm)
-            {
-            }
-
-            public void UnbindModel()
-            {
-            }
-        }
-
     }
 }

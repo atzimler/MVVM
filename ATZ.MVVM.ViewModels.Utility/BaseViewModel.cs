@@ -19,7 +19,7 @@ namespace ATZ.MVVM.ViewModels.Utility
         /// </summary>
         public bool IsValid
         {
-            get { return _isValid; }
+            get => _isValid;
             set
             {
                 if (_isValid == value)
@@ -42,7 +42,7 @@ namespace ATZ.MVVM.ViewModels.Utility
         /// </summary>
         public T Model
         {
-            get { return _model; }
+            get => _model;
             // ReSharper disable once MemberCanBeProtected.Global => Part of public API.
             set
             {

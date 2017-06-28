@@ -21,7 +21,7 @@ namespace ATZ.MVVM.Views.Utility.Tests
 
         private static string CollectionItems<T>([NotNull] IEnumerable<T> collection)
         {
-            return string.Join(",", collection.ToList().ConvertAll(item => item.ToString()));
+            return string.Join(",", collection.ToList().ConvertAll(item => item?.ToString()));
         }
 
         [Test]
