@@ -7,7 +7,7 @@ namespace ATZ.MVVM.ViewModels.Utility
     /// <summary>
     /// Base view model class.
     /// </summary>
-    /// <typeparam name="T"></typeparam>
+    /// <typeparam name="T">Type of the Model associated with the ViewModel.</typeparam>
     public abstract class BaseViewModel<T> : ObservableObject, IViewModel<T>
         where T : class
     {
