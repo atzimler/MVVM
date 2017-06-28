@@ -88,9 +88,7 @@
       <Link>AssemblyVersion.cs</Link>
     </Compile>
     <Compile Include="BaseViewModel.cs" />
-    <Compile Include="CollectionChangedEventHandlers.cs" />
     <Compile Include="Connectors\CollectionViewModelToModelConnector.cs" />
-    <Compile Include="ICollectionChangedEventSource.cs" />
     <Compile Include="IVerifiable.cs" />
     <Compile Include="IViewModel.cs" />
     <Compile Include="MvmTuple.cs" />
