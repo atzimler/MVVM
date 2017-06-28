@@ -141,8 +141,6 @@
     <Compile Include="CompositeComponents\MainViewModel.cs" />
     <Compile Include="CompositeViewToViewModelConnectorShould.cs" />
     <Compile Include="MvvmTupleShould.cs" />
-    <Compile Include="ObservableCollectionCopierConnectorShould.cs" />
-    <Compile Include="ObservableCollectionCopierTargetCollectionNullifier.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TestView.cs" />
     <Compile Include="TestView2.cs" />

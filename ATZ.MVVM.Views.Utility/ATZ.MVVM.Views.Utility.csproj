@@ -101,7 +101,6 @@
     <Compile Include="Bindings.cs" />
     <Compile Include="Connectors\CollectionViewToViewModelConnector.cs" />
     <Compile Include="Connectors\CompositeViewToViewModelConnector.cs" />
-    <Compile Include="Connectors\ObservableCollectionCopierConnector.cs" />
     <Compile Include="Interfaces\IModalWindow.cs" />
     <Compile Include="Interfaces\IView.cs" />
     <Compile Include="Interfaces\IWindow.cs" />
