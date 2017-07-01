@@ -48,8 +48,8 @@
     <Reference Include="ATZ.CollectionObservers, Version=1.0.0.5, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\ATZ.CollectionObservers.1.0.0.5\lib\portable45-net45+win8+wp8+wpa81\ATZ.CollectionObservers.dll</HintPath>
     </Reference>
-    <Reference Include="ATZ.DependencyInjection, Version=3.0.0.102, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\ATZ.DependencyInjection.3.0.0.102\lib\portable45-net45+win8+wp8+wpa81\ATZ.DependencyInjection.dll</HintPath>
+    <Reference Include="ATZ.DependencyInjection, Version=3.0.0.103, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\ATZ.DependencyInjection.3.0.0.103\lib\portable45-net45+win8+wp8+wpa81\ATZ.DependencyInjection.dll</HintPath>
     </Reference>
     <Reference Include="ATZ.ObservableObjects, Version=1.0.0.2, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\ATZ.ObservableObjects.1.0.0.2\lib\portable45-net45+win8+wp8+wpa81\ATZ.ObservableObjects.dll</HintPath>
