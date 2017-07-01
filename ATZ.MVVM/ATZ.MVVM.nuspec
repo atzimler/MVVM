@@ -20,6 +20,10 @@
     </dependencies>
 
     <releaseNotes>
+4.0.3:
+- Fixing documentation in XML.
+- Added NotNull to IView.BindModel. The function was not called previously either with null parameter from inside the library, so this is not an API change.
+      
 4.0.2:
 - Still fixing packaging problems.
 
