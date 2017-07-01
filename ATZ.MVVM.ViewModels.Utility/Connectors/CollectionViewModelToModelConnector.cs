@@ -84,13 +84,8 @@ namespace ATZ.MVVM.ViewModels.Utility.Connectors
 
         private void ClearViewModelCollection()
         {
-            if (TargetCollection == null)
-            {
-                return;
-            }
-
-            TargetCollection.ToList().ForEach(DetachViewModel);
-            TargetCollection.Clear();
+            ClearAllViewModelBindings();
+            TargetCollection?.Clear();
         }
 
         private void DetachViewModel(IViewModel<TModel> viewModel)
@@ -162,7 +157,11 @@ namespace ATZ.MVVM.ViewModels.Utility.Connectors
         /// </summary>
         public void ClearAllViewModelBindings()
         {
-            TargetCollection?.ToList().ForEach(DetachViewModel);
+            // ReSharper disable once PossibleNullReferenceException => ToList() does not return null.
+            foreach (var viewModel in TargetCollection.ToList())
+            {
+                DetachViewModel(viewModel);
+            }
         }
 
         /// <summary>

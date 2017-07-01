@@ -22,6 +22,7 @@
     <releaseNotes>
 4.0.0:
 - Removing the code that has been extracted into ATZ.CollectionObservers and ATZ.Observable collections.
+- Changed project types to PCL.
       
 3.4.0:
 - Changed UIElementCollection into IList in CollectionViewToViewModelConnector, so that ItemCollection can also be used as ViewCollection.

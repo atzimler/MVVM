@@ -57,16 +57,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\ATZ.MVVM.ViewModels.Utility\ATZ.MVVM.ViewModels.Utility.csproj">
-      <Project>{1de072d6-6795-4ed1-9ee5-91b7da8c0028}</Project>
-      <Name>ATZ.MVVM.ViewModels.Utility</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\ATZ.MVVM.Views.Utility\ATZ.MVVM.Views.Utility.csproj">
-      <Project>{6b9279a9-c6a6-4cec-b0d1-32e09c8f97a2}</Project>
-      <Name>ATZ.MVVM.Views.Utility</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <None Include="app.config" />
     <None Include="ATZ.MVVM.nuspec">
       <SubType>Designer</SubType>

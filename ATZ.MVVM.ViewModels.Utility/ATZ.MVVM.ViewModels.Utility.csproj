@@ -1,92 +1,42 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">DebugNET452</Configuration>
+    <MinimumVisualStudioVersion>10.0</MinimumVisualStudioVersion>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{1DE072D6-6795-4ED1-9EE5-91B7DA8C0028}</ProjectGuid>
+    <ProjectGuid>{C37D9BDF-B86D-4A31-A35A-9F051E4E261B}</ProjectGuid>
     <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>ATZ.MVVM.ViewModels.Utility</RootNamespace>
     <AssemblyName>ATZ.MVVM.ViewModels.Utility</AssemblyName>
-    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <DefaultLanguage>en-US</DefaultLanguage>
     <FileAlignment>512</FileAlignment>
+    <ProjectTypeGuids>{786C830F-07A1-408B-BD7F-6EE04809D6DB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <TargetFrameworkProfile>Profile259</TargetFrameworkProfile>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'DebugNET452|AnyCPU' ">
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>bin\DebugNET452\</OutputPath>
-    <DefineConstants>TRACE;DEBUG;JETBRAINS_ANNOTATIONS</DefineConstants>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DocumentationFile>bin\DebugNET452\ATZ.MVVM.ViewModels.Utility.XML</DocumentationFile>
-    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE;JETBRAINS_ANNOTATIONS</DefineConstants>
+    <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'DebugNET45|AnyCPU'">
-    <DebugSymbols>true</DebugSymbols>
-    <OutputPath>bin\DebugNET45\</OutputPath>
-    <DefineConstants>TRACE;DEBUG;JETBRAINS_ANNOTATIONS</DefineConstants>
-    <DocumentationFile>bin\DebugNET45\ATZ.MVVM.ViewModels.Utility.XML</DocumentationFile>
-    <DebugType>full</DebugType>
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <ErrorReport>prompt</ErrorReport>
-    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
-  </PropertyGroup>
-  <!-- Condition="'$(TargetFrameworkVersion)' == 'v4.5.2'" -->
   <ItemGroup>
-    <Reference Include="ATZ.CollectionObservers, Version=1.0.0.5, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\ATZ.CollectionObservers.1.0.0.5\lib\net45\ATZ.CollectionObservers.dll</HintPath>
-    </Reference>
-    <Reference Include="ATZ.DependencyInjection, Version=2.1.1.66, Culture=neutral, processorArchitecture=MSIL" Condition="'$(TargetFrameworkVersion)' == 'v4.5'">
-      <HintPath>..\packages\ATZ.DependencyInjection.2.1.1.66\lib\net45\ATZ.DependencyInjection.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="ATZ.DependencyInjection, Version=2.1.1.66, Culture=neutral, processorArchitecture=MSIL" Condition="'$(TargetFrameworkVersion)' == 'v4.5.2'">
-      <HintPath>..\packages\ATZ.DependencyInjection.2.1.1.66\lib\net452\ATZ.DependencyInjection.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="ATZ.ObservableObjects, Version=1.0.0.2, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\ATZ.ObservableObjects.1.0.0.2\lib\portable45-net45+win8+wp8+wpa81\ATZ.ObservableObjects.dll</HintPath>
-    </Reference>
-    <Reference Include="ATZ.Reflection, Version=2.2.0.58, Culture=neutral, processorArchitecture=MSIL" Condition="'$(TargetFrameworkVersion)' == 'v4.5'">
-      <HintPath>..\packages\ATZ.Reflection.2.2.0.58\lib\net45\ATZ.Reflection.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="ATZ.Reflection, Version=2.2.0.58, Culture=neutral, processorArchitecture=MSIL" Condition="'$(TargetFrameworkVersion)' == 'v4.5.2'">
-      <HintPath>..\packages\ATZ.Reflection.2.2.0.58\lib\net452\ATZ.Reflection.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="JetBrains.Annotations, Version=10.4.0.0, Culture=neutral, PublicKeyToken=1010a0d8d6380325, processorArchitecture=MSIL">
-      <HintPath>..\packages\JetBrains.Annotations.10.4.0\lib\net\JetBrains.Annotations.dll</HintPath>
-    </Reference>
-    <Reference Include="Ninject, Version=3.2.0.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL">
-      <HintPath>..\packages\Ninject.3.2.2.0\lib\net45-full\Ninject.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="System" />
-    <Reference Include="System.ComponentModel.Composition" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Net.Http" />
-    <Reference Include="System.Xml" />
+    <!-- A reference to the entire .NET Framework is automatically included -->
+    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\AssemblyVersion.cs">
-      <Link>AssemblyVersion.cs</Link>
-    </Compile>
     <Compile Include="BaseViewModel.cs" />
     <Compile Include="Connectors\CollectionViewModelToModelConnector.cs" />
     <Compile Include="IVerifiable.cs" />
@@ -95,15 +45,21 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="app.config" />
-    <None Include="packages.config" />
+    <Reference Include="ATZ.CollectionObservers, Version=1.0.0.5, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\ATZ.CollectionObservers.1.0.0.5\lib\portable45-net45+win8+wp8+wpa81\ATZ.CollectionObservers.dll</HintPath>
+    </Reference>
+    <Reference Include="ATZ.DependencyInjection, Version=3.0.0.97, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\ATZ.DependencyInjection.3.0.0.97\lib\portable45-net45+win8+wp8+wpa81\ATZ.DependencyInjection.dll</HintPath>
+    </Reference>
+    <Reference Include="ATZ.ObservableObjects, Version=1.0.0.2, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\ATZ.ObservableObjects.1.0.0.2\lib\portable45-net45+win8+wp8+wpa81\ATZ.ObservableObjects.dll</HintPath>
+    </Reference>
+    <Reference Include="ATZ.Reflection, Version=3.0.0.73, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\ATZ.Reflection.3.0.0.73\lib\portable45-net45+win8+wp8+wpa81\ATZ.Reflection.dll</HintPath>
+    </Reference>
+    <Reference Include="JetBrains.Annotations, Version=10.4.0.0, Culture=neutral, PublicKeyToken=1010a0d8d6380325, processorArchitecture=MSIL">
+      <HintPath>..\packages\JetBrains.Annotations.10.4.0\lib\portable-net4+sl5+netcore45+wpa81+wp8+MonoAndroid1+MonoTouch1\JetBrains.Annotations.dll</HintPath>
+    </Reference>
   </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-       Other similar extension points exist, see Microsoft.Common.targets.
-  <Target Name="BeforeBuild">
-  </Target>
-  <Target Name="AfterBuild">
-  </Target>
-  -->
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
 </Project>

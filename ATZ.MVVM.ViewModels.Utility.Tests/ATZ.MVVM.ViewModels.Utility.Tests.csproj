@@ -45,24 +45,17 @@
     <Reference Include="ATZ.CollectionObservers, Version=1.0.0.5, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\ATZ.CollectionObservers.1.0.0.5\lib\net45\ATZ.CollectionObservers.dll</HintPath>
     </Reference>
-    <Reference Include="ATZ.DependencyInjection, Version=2.1.1.66, Culture=neutral, processorArchitecture=MSIL" Condition="'$(TargetFrameworkVersion)' == 'v4.5'">
-      <HintPath>..\packages\ATZ.DependencyInjection.2.1.1.66\lib\net45\ATZ.DependencyInjection.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="ATZ.DependencyInjection, Version=3.0.0.98, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\ATZ.DependencyInjection.3.0.0.98\lib\portable45-net45+win8+wp8+wpa81\ATZ.DependencyInjection.dll</HintPath>
     </Reference>
-    <Reference Include="ATZ.DependencyInjection, Version=2.1.1.66, Culture=neutral, processorArchitecture=MSIL" Condition="'$(TargetFrameworkVersion)' == 'v4.5.2'">
-      <HintPath>..\packages\ATZ.DependencyInjection.2.1.1.66\lib\net452\ATZ.DependencyInjection.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="ATZ.DependencyInjection.NinjectKernel.Net45, Version=3.0.0.98, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\ATZ.DependencyInjection.NinjectKernel.Net45.3.0.0.98\lib\net45\ATZ.DependencyInjection.NinjectKernel.Net45.dll</HintPath>
     </Reference>
     <Reference Include="ATZ.ObservableObjects, Version=1.0.0.2, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\ATZ.ObservableObjects.1.0.0.2\lib\portable45-net45+win8+wp8+wpa81\ATZ.ObservableObjects.dll</HintPath>
     </Reference>
-    <Reference Include="ATZ.Reflection, Version=2.2.0.58, Culture=neutral, processorArchitecture=MSIL" Condition="'$(TargetFrameworkVersion)' == 'v4.5'">
-      <HintPath>..\packages\ATZ.Reflection.2.2.0.58\lib\net45\ATZ.Reflection.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="ATZ.Reflection, Version=2.2.0.58, Culture=neutral, processorArchitecture=MSIL" Condition="'$(TargetFrameworkVersion)' == 'v4.5.2'">
-      <HintPath>..\packages\ATZ.Reflection.2.2.0.58\lib\net452\ATZ.Reflection.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="ATZ.Reflection, Version=3.0.0.73, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\ATZ.Reflection.3.0.0.73\lib\portable45-net45+win8+wp8+wpa81\ATZ.Reflection.dll</HintPath>
     </Reference>
     <Reference Include="JetBrains.Annotations, Version=10.4.0.0, Culture=neutral, PublicKeyToken=1010a0d8d6380325, processorArchitecture=MSIL">
       <HintPath>..\packages\JetBrains.Annotations.10.4.0\lib\net\JetBrains.Annotations.dll</HintPath>
@@ -126,12 +119,8 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\ATZ.MVVM.ViewModels.Utility\ATZ.MVVM.ViewModels.Utility.csproj">
-      <Project>{1de072d6-6795-4ed1-9ee5-91b7da8c0028}</Project>
+      <Project>{c37d9bdf-b86d-4a31-a35a-9f051e4e261b}</Project>
       <Name>ATZ.MVVM.ViewModels.Utility</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\ATZ.MVVM.Views.Utility\ATZ.MVVM.Views.Utility.csproj">
-      <Project>{6b9279a9-c6a6-4cec-b0d1-32e09c8f97a2}</Project>
-      <Name>ATZ.MVVM.Views.Utility</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

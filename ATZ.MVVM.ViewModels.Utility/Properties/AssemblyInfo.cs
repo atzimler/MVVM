@@ -1,7 +1,7 @@
 ﻿using System.Reflection;
-using System.Runtime.InteropServices;
+using System.Resources;
 
-// General Information about an assembly is controlled through the following 
+// General Information about an assembly is controlled through the following
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("ATZ.MVVM.ViewModels.Utility")]
@@ -12,11 +12,4 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyCopyright("Copyright ©  2015")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
-
-// Setting ComVisible to false makes the types in this assembly not visible 
-// to COM components.  If you need to access a type in this assembly from 
-// COM, set the ComVisible attribute to true on that type.
-[assembly: ComVisible(false)]
-
-// The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("1de072d6-6795-4ed1-9ee5-91b7da8c0028")]
+[assembly: NeutralResourcesLanguage("en")]
