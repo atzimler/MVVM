@@ -14,7 +14,7 @@ namespace ATZ.MVVM.Views.Utility.Tests
         [SetUp]
         public void SetUp()
         {
-            DependencyResolver.Initialize();
+            DependencyResolver.Initialize(new NinjectStandardKernel());
         }
 
         [Test]

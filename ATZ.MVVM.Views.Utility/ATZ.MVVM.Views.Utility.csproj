@@ -34,9 +34,41 @@
   </PropertyGroup>
   <ItemGroup>
     <!-- A reference to the entire .NET Framework is automatically included -->
+    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Bindings.cs" />
+    <Compile Include="Connectors\CollectionViewToViewModelConnector.cs" />
+    <Compile Include="Connectors\CompositeViewToViewModelConnector.cs" />
+    <Compile Include="Interfaces\IModalWindow.cs" />
+    <Compile Include="Interfaces\IView.cs" />
+    <Compile Include="Interfaces\IWindow.cs" />
+    <Compile Include="MvvmTuple.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ViewExtensions.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="ATZ.CollectionObservers, Version=1.0.0.5, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\ATZ.CollectionObservers.1.0.0.5\lib\portable45-net45+win8+wp8+wpa81\ATZ.CollectionObservers.dll</HintPath>
+    </Reference>
+    <Reference Include="ATZ.DependencyInjection, Version=3.0.0.102, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\ATZ.DependencyInjection.3.0.0.102\lib\portable45-net45+win8+wp8+wpa81\ATZ.DependencyInjection.dll</HintPath>
+    </Reference>
+    <Reference Include="ATZ.DependencyInjection.System, Version=3.0.0.102, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\ATZ.DependencyInjection.System.3.0.0.102\lib\portable45-net45+win8+wp8+wpa81\ATZ.DependencyInjection.System.dll</HintPath>
+    </Reference>
+    <Reference Include="ATZ.Reflection, Version=3.1.0.74, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\ATZ.Reflection.3.1.0.74\lib\portable45-net45+win8+wp8+wpa81\ATZ.Reflection.dll</HintPath>
+    </Reference>
+    <Reference Include="JetBrains.Annotations, Version=10.4.0.0, Culture=neutral, PublicKeyToken=1010a0d8d6380325, processorArchitecture=MSIL">
+      <HintPath>..\packages\JetBrains.Annotations.10.4.0\lib\portable-net4+sl5+netcore45+wpa81+wp8+MonoAndroid1+MonoTouch1\JetBrains.Annotations.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ATZ.MVVM.ViewModels.Utility\ATZ.MVVM.ViewModels.Utility.csproj">
+      <Project>{c37d9bdf-b86d-4a31-a35a-9f051e4e261b}</Project>
+      <Name>ATZ.MVVM.ViewModels.Utility</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
 </Project>

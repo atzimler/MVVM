@@ -48,14 +48,14 @@
     <Reference Include="ATZ.CollectionObservers, Version=1.0.0.5, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\ATZ.CollectionObservers.1.0.0.5\lib\portable45-net45+win8+wp8+wpa81\ATZ.CollectionObservers.dll</HintPath>
     </Reference>
-    <Reference Include="ATZ.DependencyInjection, Version=3.0.0.97, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\ATZ.DependencyInjection.3.0.0.97\lib\portable45-net45+win8+wp8+wpa81\ATZ.DependencyInjection.dll</HintPath>
+    <Reference Include="ATZ.DependencyInjection, Version=3.0.0.102, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\ATZ.DependencyInjection.3.0.0.102\lib\portable45-net45+win8+wp8+wpa81\ATZ.DependencyInjection.dll</HintPath>
     </Reference>
     <Reference Include="ATZ.ObservableObjects, Version=1.0.0.2, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\ATZ.ObservableObjects.1.0.0.2\lib\portable45-net45+win8+wp8+wpa81\ATZ.ObservableObjects.dll</HintPath>
     </Reference>
-    <Reference Include="ATZ.Reflection, Version=3.0.0.73, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\ATZ.Reflection.3.0.0.73\lib\portable45-net45+win8+wp8+wpa81\ATZ.Reflection.dll</HintPath>
+    <Reference Include="ATZ.Reflection, Version=3.1.0.74, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\ATZ.Reflection.3.1.0.74\lib\portable45-net45+win8+wp8+wpa81\ATZ.Reflection.dll</HintPath>
     </Reference>
     <Reference Include="JetBrains.Annotations, Version=10.4.0.0, Culture=neutral, PublicKeyToken=1010a0d8d6380325, processorArchitecture=MSIL">
       <HintPath>..\packages\JetBrains.Annotations.10.4.0\lib\portable-net4+sl5+netcore45+wpa81+wp8+MonoAndroid1+MonoTouch1\JetBrains.Annotations.dll</HintPath>

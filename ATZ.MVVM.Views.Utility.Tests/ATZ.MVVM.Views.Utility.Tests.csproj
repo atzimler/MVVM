@@ -45,17 +45,20 @@
     <Reference Include="ATZ.CollectionObservers, Version=1.0.0.5, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\ATZ.CollectionObservers.1.0.0.5\lib\net45\ATZ.CollectionObservers.dll</HintPath>
     </Reference>
-    <Reference Include="ATZ.DependencyInjection, Version=3.0.0.97, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\ATZ.DependencyInjection.3.0.0.97\lib\portable45-net45+win8+wp8+wpa81\ATZ.DependencyInjection.dll</HintPath>
+    <Reference Include="ATZ.DependencyInjection, Version=3.0.0.102, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\ATZ.DependencyInjection.3.0.0.102\lib\portable45-net45+win8+wp8+wpa81\ATZ.DependencyInjection.dll</HintPath>
     </Reference>
-    <Reference Include="ATZ.DependencyInjection.System, Version=3.0.0.95, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\ATZ.DependencyInjection.System.3.0.0.95\lib\net45\ATZ.DependencyInjection.System.dll</HintPath>
+    <Reference Include="ATZ.DependencyInjection.NinjectKernel.Net45, Version=3.0.0.102, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\ATZ.DependencyInjection.NinjectKernel.Net45.3.0.0.102\lib\net45\ATZ.DependencyInjection.NinjectKernel.Net45.dll</HintPath>
+    </Reference>
+    <Reference Include="ATZ.DependencyInjection.System, Version=3.0.0.102, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\ATZ.DependencyInjection.System.3.0.0.102\lib\net45\ATZ.DependencyInjection.System.dll</HintPath>
     </Reference>
     <Reference Include="ATZ.ObservableObjects, Version=1.0.0.2, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\ATZ.ObservableObjects.1.0.0.2\lib\portable45-net45+win8+wp8+wpa81\ATZ.ObservableObjects.dll</HintPath>
     </Reference>
-    <Reference Include="ATZ.Reflection, Version=3.0.0.73, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\ATZ.Reflection.3.0.0.73\lib\portable45-net45+win8+wp8+wpa81\ATZ.Reflection.dll</HintPath>
+    <Reference Include="ATZ.Reflection, Version=3.1.0.74, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\ATZ.Reflection.3.1.0.74\lib\portable45-net45+win8+wp8+wpa81\ATZ.Reflection.dll</HintPath>
     </Reference>
     <Reference Include="Castle.Core, Version=3.3.0.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL">
       <HintPath>..\packages\Castle.Core.3.3.3\lib\net45\Castle.Core.dll</HintPath>
@@ -143,6 +146,14 @@
     <ProjectReference Include="..\ATZ.MVVM.ViewModels.Utility.Tests\ATZ.MVVM.ViewModels.Utility.Tests.csproj">
       <Project>{6D8EA9DE-F46B-4B81-805F-0BFBDEAB2F14}</Project>
       <Name>ATZ.MVVM.ViewModels.Utility.Tests</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ATZ.MVVM.ViewModels.Utility\ATZ.MVVM.ViewModels.Utility.csproj">
+      <Project>{C37D9BDF-B86D-4A31-A35A-9F051E4E261B}</Project>
+      <Name>ATZ.MVVM.ViewModels.Utility</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ATZ.MVVM.Views.Utility\ATZ.MVVM.Views.Utility.csproj">
+      <Project>{757CDB84-DE29-4FF2-B2DC-918B97177FB1}</Project>
+      <Name>ATZ.MVVM.Views.Utility</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

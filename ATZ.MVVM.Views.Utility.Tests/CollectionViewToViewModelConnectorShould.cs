@@ -22,6 +22,8 @@ namespace ATZ.MVVM.Views.Utility.Tests
         [OneTimeSetUp]
         public void OneTimeSetUp()
         {
+            DependencyResolver.Initialize(new NinjectStandardKernel());
+
             DependencyResolver.Instance.Bind<IView<TestViewModel>>().To<TestView>();
             DependencyResolver.Instance.Bind<IView<TestViewModel2>>().To<TestView2>();
         }
@@ -255,7 +257,7 @@ namespace ATZ.MVVM.Views.Utility.Tests
                 + "but it has no interface of IView<IViewModel<ATZ.MVVM.ViewModels.Utility.Tests.TestModel>>!"));
             Assert.IsNotNull(debug.Object);
 
-            DependencyResolver.Initialize();
+            DependencyResolver.Initialize(new NinjectStandardKernel());
             DependencyInjection.System.Bindings.Initialize();
 
             DependencyResolver.Instance.Unbind<IDebug>();

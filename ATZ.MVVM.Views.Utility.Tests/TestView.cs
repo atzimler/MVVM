@@ -1,14 +1,13 @@
-﻿using System.Windows;
-using System.Windows.Controls;
-using ATZ.MVVM.ViewModels.Utility;
+﻿using ATZ.MVVM.ViewModels.Utility;
 using ATZ.MVVM.ViewModels.Utility.Tests;
 using ATZ.MVVM.Views.Utility.Interfaces;
+using System.Windows.Controls;
 
 namespace ATZ.MVVM.Views.Utility.Tests
 {
     public class TestView : TextBox, IView<IViewModel<TestModel>>
     {
-        public UIElement UIElement => this;
+        public object UIElement => this;
 
         public bool BindModelCalled { get; set; }
         public bool UnbindModelCalled { get; set; }

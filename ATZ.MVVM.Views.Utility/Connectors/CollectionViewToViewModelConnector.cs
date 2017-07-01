@@ -3,7 +3,6 @@ using ATZ.DependencyInjection;
 using ATZ.DependencyInjection.System;
 using ATZ.MVVM.ViewModels.Utility;
 using ATZ.MVVM.Views.Utility.Interfaces;
-using Ninject;
 using System.Collections;
 using System.Collections.ObjectModel;
 
