@@ -20,6 +20,9 @@
     </dependencies>
 
     <releaseNotes>
+4.0.1:
+- Fixing required package versions.
+      
 4.0.0:
 - Removing the code that has been extracted into ATZ.CollectionObservers and ATZ.Observable collections.
 - Changed project types to PCL.
