@@ -20,6 +20,9 @@
     </dependencies>
 
     <releaseNotes>
+4.0.2:
+- Still fixing packaging problems.
+
 4.0.1:
 - Fixing required package versions.
       
@@ -68,8 +71,7 @@
   </metadata>
 
   <files>
-    <file src="bin\DebugNET45\ATZ.MVVM*.*" target="lib\net45" />
-    <file src="bin\DebugNET452\ATZ.MVVM*.*" target="lib\net452" />
+    <file src="bin\Debug\ATZ.MVVM*.*" target="lib\portable-win+net45+wp80+win81+wpa81+MonoAndroid10+Xamarin.iOS10+xamarinmac20" />
   </files>
 
 </package>
