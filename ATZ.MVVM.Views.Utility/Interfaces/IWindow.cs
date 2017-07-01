@@ -1,6 +1,4 @@
-﻿using System.Windows;
-
-namespace ATZ.MVVM.Views.Utility.Interfaces
+﻿namespace ATZ.MVVM.Views.Utility.Interfaces
 {
     /// <summary>
     /// Window interface
@@ -8,7 +6,9 @@ namespace ATZ.MVVM.Views.Utility.Interfaces
     /// <typeparam name="TViewModel">The ViewModel of the window.</typeparam>
     public interface IWindow<in TViewModel> : IView<TViewModel>
     {
-        /// <see cref="Window.Close"/>
+        /// <summary>
+        /// Close the view. Depending on the type of the view or window, this could mean hiding or closing in case of message boxes.
+        /// </summary>
         void Close();
     }
 }

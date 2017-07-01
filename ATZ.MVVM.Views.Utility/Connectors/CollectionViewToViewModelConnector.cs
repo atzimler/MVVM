@@ -36,7 +36,7 @@ namespace ATZ.MVVM.Views.Utility.Connectors
         {
             if (viewModel == null)
             {
-                DependencyResolver.Instance.Get<IDebug>().WriteLine("viewModel == null, cannot resolve appropriate view type without type information!");
+                DependencyResolver.Instance.Get<IDebug>()?.WriteLine("viewModel == null, cannot resolve appropriate view type without type information!");
                 return null;
             }
 
@@ -44,7 +44,8 @@ namespace ATZ.MVVM.Views.Utility.Connectors
             var view = obj as IView<IViewModel<TModel>>;
             if (view == null)
             {
-                DependencyResolver.Instance.Get<IDebug>().WriteLine(
+                DependencyResolver.Instance.Get<IDebug>()?.WriteLine(
+                    // ReSharper disable once PossibleNullReferenceException => non-null objects always have type.
                     $"IView<{viewModel.GetType().FullName}> was successfully resolved, but it has no interface of IView<IViewModel<{typeof(TModel).FullName}>>!");
                 return null;
             }

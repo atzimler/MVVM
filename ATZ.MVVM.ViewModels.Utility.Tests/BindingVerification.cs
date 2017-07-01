@@ -1,5 +1,4 @@
 ﻿using ATZ.DependencyInjection;
-using Ninject;
 using NUnit.Framework;
 
 namespace ATZ.MVVM.ViewModels.Utility.Tests
@@ -11,6 +10,6 @@ namespace ATZ.MVVM.ViewModels.Utility.Tests
             var implementation = default(TService); // Relaxing the compiler
             Assert.DoesNotThrow(() => implementation = (TService)DependencyResolver.Instance.Get(typeof(TService)));
             Assert.AreEqual(typeof(TImplementation), implementation.GetType());
+        }
     }
-}
 }

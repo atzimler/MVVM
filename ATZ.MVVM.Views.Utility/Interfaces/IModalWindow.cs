@@ -1,6 +1,4 @@
-﻿using System.Windows;
-
-namespace ATZ.MVVM.Views.Utility.Interfaces
+﻿namespace ATZ.MVVM.Views.Utility.Interfaces
 {
     /// <summary>
     /// Modal window interface.
@@ -8,10 +6,15 @@ namespace ATZ.MVVM.Views.Utility.Interfaces
     /// <typeparam name="TViewModel">The ViewModel of the window.</typeparam>
     public interface IModalWindow<in TViewModel> : IWindow<TViewModel>
     {
-        /// <see cref="Window.DialogResult"/>
+        /// <summary>
+        /// Return the result of the modal view.
+        /// </summary>
         bool? DialogResult { get; set; }
 
-        /// <see cref="Window.ShowDialog"/>
+        /// <summary>
+        /// Show the view in modal presentation.
+        /// </summary>
+        /// <returns>The result of the modal view.</returns>
         bool? ShowDialog();
     }
 }

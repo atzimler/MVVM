@@ -120,7 +120,14 @@ namespace ATZ.MVVM.ViewModels.Utility.Connectors
 
         private void UpdateValidity()
         {
-            IsValid = TargetCollection?.ToList().TrueForAll(ViewModelIsNullOrValid) ?? true;
+            var items = TargetCollection?.ToList();
+            if (items == null)
+            {
+                IsValid = true;
+                return;
+            }
+
+            IsValid = items.TrueForAll(ViewModelIsNullOrValid);
         }
 
         private static bool ViewModelIsNullOrValid(IViewModel<TModel> vm)
