@@ -53,6 +53,16 @@
       <SubType>Designer</SubType>
     </None>
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ATZ.MVVM.ViewModels.Utility\ATZ.MVVM.ViewModels.Utility.csproj">
+      <Project>{c37d9bdf-b86d-4a31-a35a-9f051e4e261b}</Project>
+      <Name>ATZ.MVVM.ViewModels.Utility</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ATZ.MVVM.Views.Utility\ATZ.MVVM.Views.Utility.csproj">
+      <Project>{757cdb84-de29-4ff2-b2dc-918b97177fb1}</Project>
+      <Name>ATZ.MVVM.Views.Utility</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
