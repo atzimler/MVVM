@@ -20,6 +20,9 @@
     </dependencies>
 
     <releaseNotes>
+4.0.4:
+- During migration to PCL the definition of the JETBRAINS_ANNOTATIONS symbol for the compilation was lost. Readded.
+      
 4.0.3:
 - Fixing documentation in XML.
 - Added NotNull to IView.BindModel. The function was not called previously either with null parameter from inside the library, so this is not an API change.
