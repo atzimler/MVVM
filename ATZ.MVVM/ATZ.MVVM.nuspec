@@ -20,6 +20,9 @@
     </dependencies>
 
     <releaseNotes>
+4.0.5:
+- Changing the Model was not firing PropertyChanged event from BaseViewModel, which was a bug as it is implementing the INotifyPropertyChanged interface through deriving from ObservableObject.
+
 4.0.4:
 - During migration to PCL the definition of the JETBRAINS_ANNOTATIONS symbol for the compilation was lost. Re-added.
       
