@@ -56,6 +56,7 @@ namespace ATZ.MVVM.ViewModels.Utility
                     UnbindModel();
                 }
                 _model = value;
+                OnPropertyChanged(nameof(Model));
 
                 if (_model == null)
                 {
