@@ -1,4 +1,5 @@
-﻿using NUnit.Framework;
+﻿using FluentAssertions;
+using NUnit.Framework;
 
 namespace ATZ.MVVM.ViewModels.Utility.Tests
 {
@@ -124,6 +125,17 @@ namespace ATZ.MVVM.ViewModels.Utility.Tests
             ModelBinderTestViewModel viewModel = null;
             Assert.DoesNotThrow(() => viewModel = new ModelBinderTestViewModel());
             Assert.DoesNotThrow(() => viewModel.Model = null);
+        }
+
+        [Test]
+        public void RaisePropertyChangedOnModelChange()
+        {
+            var tvm = new TestViewModel();
+
+            tvm.MonitorEvents();
+            tvm.Model = new TestModel();
+
+            tvm.ShouldRaisePropertyChangeFor(v => v.Model);
         }
     }
 }

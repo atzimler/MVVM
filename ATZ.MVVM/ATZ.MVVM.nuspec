@@ -21,7 +21,7 @@
 
     <releaseNotes>
 4.0.4:
-- During migration to PCL the definition of the JETBRAINS_ANNOTATIONS symbol for the compilation was lost. Readded.
+- During migration to PCL the definition of the JETBRAINS_ANNOTATIONS symbol for the compilation was lost. Re-added.
       
 4.0.3:
 - Fixing documentation in XML.
