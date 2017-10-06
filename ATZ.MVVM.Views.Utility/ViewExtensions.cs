@@ -1,7 +1,10 @@
-﻿using ATZ.MVVM.Views.Utility.Interfaces;
+﻿using ATZ.MVVM.ViewModels.Utility;
+using ATZ.MVVM.Views.Utility.Interfaces;
+using ATZ.Reflection;
 using JetBrains.Annotations;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 
 namespace ATZ.MVVM.Views.Utility
 {
@@ -11,7 +14,27 @@ namespace ATZ.MVVM.Views.Utility
     public static class ViewExtensions
     {
         [NotNull]
-        private static readonly Dictionary<object, object> Registry = new Dictionary<object, object>();
+        private static readonly Dictionary<object, object> ViewToViewModel = new Dictionary<object, object>();
+
+        [NotNull]
+        private static readonly Dictionary<object, ValueTuple<object, Type>> ViewModelToView = new Dictionary<object, ValueTuple<object, Type>>();
+
+        private static void RebindModelOnChange(object sender, [NotNull] PropertyChangedEventArgs e)
+        {
+            if (!string.IsNullOrEmpty(e.PropertyName) && e.PropertyName != nameof(BaseViewModel<object>.Model))
+            {
+                return;
+            }
+
+            (var view, var modelType) = ViewModelToView[sender];
+            var viewModelType = typeof(IViewModel<>).CloseTemplate(new[] { modelType });
+            var viewType = typeof(IView<>).CloseTemplate(new[] { viewModelType });
+            var unbindModel = viewType.IntrospectionGetMethod(nameof(IView<int>.UnbindModel), new Type[] { });
+            var bindModel = viewType.IntrospectionGetMethod(nameof(IView<int>.BindModel), new[] { viewModelType });
+
+            unbindModel?.Invoke(view, new object[] { });
+            bindModel?.Invoke(view, new[] { sender });
+        }
 
         /// <summary>
         /// Execute a method on the ViewModel associated with the View.
@@ -43,11 +66,11 @@ namespace ATZ.MVVM.Views.Utility
                 return null;
             }
 
-            if (!Registry.ContainsKey(view))
+            if (!ViewToViewModel.ContainsKey(view))
             {
                 return null;
             }
-            return (TViewModel)Registry[view];
+            return (TViewModel)ViewToViewModel[view];
         }
 
         /// <summary>
@@ -65,11 +88,11 @@ namespace ATZ.MVVM.Views.Utility
         /// <summary>
         /// Associate the ViewModel with the View.
         /// </summary>
-        /// <typeparam name="TViewModel">The type of the ViewModel.</typeparam>
+        /// <typeparam name="TModel">The type of the Model.</typeparam>
         /// <param name="view">The View.</param>
         /// <param name="vm">The ViewModel.</param>
-        public static void SetViewModel<TViewModel>(this IView<TViewModel> view, TViewModel vm)
-            where TViewModel : class
+        public static void SetViewModel<TModel>(this IView<IViewModel<TModel>> view, IViewModel<TModel> vm)
+            where TModel : class
         {
             if (view == null)
             {
@@ -84,15 +107,20 @@ namespace ATZ.MVVM.Views.Utility
 
             if (currentViewModel != null)
             {
+                currentViewModel.PropertyChanged -= RebindModelOnChange;
                 view.UnbindModel();
             }
 
-            Registry[view] = vm;
+            ViewToViewModel[view] = vm;
+            ViewModelToView[vm] = (view, typeof(TModel));
 
-            if (vm != null)
+            if (vm == null)
             {
-                view.BindModel(vm);
+                return;
             }
+
+            vm.PropertyChanged += RebindModelOnChange;
+            view.BindModel(vm);
         }
     }
 }

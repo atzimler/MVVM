@@ -20,6 +20,9 @@
     </dependencies>
 
     <releaseNotes>
+5.0.0:
+- Changing the SetViewModel&lt;TViewModel&gt;(IView&lt;TViewModel&gt;, TViewModel) extension method to SetViewModel&lt;TModel&gt;(IView&lt;IViewModel&lt;TModel&gt;&gt;, IViewModel&lt;TModel&gt;). This change is required to support the implementation of the feature automatically call UnbindModel and BindModel methods on the view if the view model changes its model object.
+      
 4.0.5:
 - Changing the Model was not firing PropertyChanged event from BaseViewModel, which was a bug as it is implementing the INotifyPropertyChanged interface through deriving from ObservableObject.
 

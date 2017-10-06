@@ -107,9 +107,47 @@ namespace ATZ.MVVM.Views.Utility.Tests
         [Test]
         public void NotCrashWhenTryingToSetViewModelOnANullView()
         {
-            IView<TestViewModel> vm = null;
+            IView<IViewModel<TestModel>> vm = null;
             // ReSharper disable once ExpressionIsAlwaysNull => Yes, that is what we are testing.
             Assert.DoesNotThrow(() => vm.SetViewModel(new TestViewModel()));
+        }
+
+        [Test]
+        [Apartment(ApartmentState.STA)]
+        public void RebindViewWhenModelOnViewModelIsChanged()
+        {
+            var v = new TestView();
+            var vm = new TestViewModel();
+            var m = new TestModel();
+
+            v.SetViewModel(vm);
+            Assert.AreNotSame(vm.Model, m);
+            v.BindModelCalled = false;
+            v.UnbindModelCalled = false;
+            Assert.IsFalse(v.BindModelCalled);
+            Assert.IsFalse(v.UnbindModelCalled);
+
+            vm.Model = m;
+            Assert.IsTrue(v.UnbindModelCalled);
+            Assert.IsTrue(v.BindModelCalled);
+        }
+
+        [Test]
+        [Apartment(ApartmentState.STA)]
+        public void NotRebindWhenOtherThanModelPropertyOfTheViewModelIsChanged()
+        {
+            var v = new TestView();
+            var vm = new TestViewModel();
+
+            v.SetViewModel(vm);
+            v.BindModelCalled = false;
+            v.UnbindModelCalled = false;
+            Assert.IsFalse(v.BindModelCalled);
+            Assert.IsFalse(v.UnbindModelCalled);
+
+            vm.PropertyRaisingChangeNotification = 42;
+            Assert.IsFalse(v.UnbindModelCalled);
+            Assert.IsFalse(v.BindModelCalled);
         }
     }
 }
